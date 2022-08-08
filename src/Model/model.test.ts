@@ -1,47 +1,70 @@
 import Model from "./Model";
+import initialState from './state'
 
 
-describe('Model tests', () => {
-
-  const state = {
-    min: 0,
-    max: 100,
-    value: 50,
-    step: 1,
-  };
+describe('The model tests', () => {
 
   let model: Model;
 
   beforeEach(() => {
-    const { min, max, value, step } = state
-    model = new Model(min, max, value, step);
+    model = new Model(initialState);
   })
 
-  test('Model must be an object', () => {
+  test('The model must be an object', () => {
     expect(model).toBeInstanceOf(Model);
   });
 
-  test('Model must be an instance of Model', () => {
+  test('The model must be an instance of Model', () => {
     expect(model).toBeInstanceOf(Model);
   });
 
-  test('Model must have defined min', () => {
-    expect(model.min).toBeDefined();
+  test('The model must have defined min', () => {
+    expect(model.getValue('min')).toBeDefined();
   });
 
-  test('Model must have defined max', () => {
-    expect(model.max).toBeDefined();
+  test('The model must have defined max', () => {
+    expect(model.getValue('max')).toBeDefined();
   });
 
-  test('Model must have defined value', () => {
-    expect(model.value).toBeDefined();
+  test('The model must have defined value', () => {
+    expect(model.getValue('value')).toBeDefined();
   });
 
-  test('Model must have defined step', () => {
-    expect(model.step).toBeDefined();
+  test('The model must have defined step', () => {
+    expect(model.getValue('step')).toBeDefined();
   });
 
-  test('Model should be equal state', () => {
-    expect(model).toEqual(state);
+  test('The model state should be equal initialState', () => {
+    expect(model.getState()).toEqual(initialState);
+  });
+
+
+  test('The model increment method should be defined', () => {
+    expect(model.increment).toBeDefined();
+  });
+
+  test('The model should incremented the value after increment', () => {
+    const incrementVal = initialState.value + 1;
+    model.increment();
+    expect(model.getValue('value')).toEqual(incrementVal);
+  });
+
+
+  test('The model decrement method should be defined', () => {
+    expect(model.increment).toBeDefined();
+  });
+
+  test('The model should decremented the value after decrement', () => {
+    const decrementVal = initialState.value - 1;
+    model.decrement();
+    expect(model.getValue('value')).toEqual(decrementVal);
+  });
+
+  test('The model should return correct percent of curr. val', () => {
+    const { value, min, max } = initialState;
+    const range = max - min;
+    const percent = Number(((value / range) * 100).toFixed(3));
+
+    expect(model.getPercentVal()).toEqual(percent);
   });
 })
