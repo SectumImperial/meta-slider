@@ -50,7 +50,7 @@ module.exports = {
     clean: true,
   },
   devServer: {
-    open: '/test.html',
+    open: '/index.html',
     static: {	
       directory: './src',	
       watch: true,	
@@ -63,7 +63,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'src/test.pug',
+      template: 'src/index.pug',
     }),
     new MiniCssExtractPlugin({
       filename: filename('css'),
