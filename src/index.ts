@@ -1,2 +1,2 @@
-import './styles.scss'
-import './Model/Model'
+import './styles.scss';
+import './Model/ModelFacade';

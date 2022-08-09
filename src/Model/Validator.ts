@@ -9,13 +9,16 @@ class Validator {
   private resultObject: ModelInterface;
 
   constructor(data: ModelInterface) {
+    this.setData(data);
+    this.resultObject = initialState;
+  }
+
+  public setData(data: ModelInterface) {
     const { min, max, value, step } = data;
     this.min = min;
     this.max = max;
     this.value = value;
     this.step = step;
-
-    this.resultObject = initialState;
   }
 
   public validateData() {

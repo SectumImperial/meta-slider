@@ -1,4 +1,5 @@
 import Model from "./Model";
+import ModelFacade from "./ModelFacade";
 import initialState from './state'
 
 
@@ -7,12 +8,8 @@ describe('The model tests', () => {
   let model: Model;
 
   beforeEach(() => {
-    model = new Model(initialState);
+    model = new ModelFacade(initialState).getModel();
   })
-
-  test('The model must be an object', () => {
-    expect(model).toBeInstanceOf(Model);
-  });
 
   test('The model must be an instance of Model', () => {
     expect(model).toBeInstanceOf(Model);
