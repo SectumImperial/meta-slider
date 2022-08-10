@@ -1,23 +1,22 @@
 .slider {
-
-  position: relative;
+  display: flex;
+  justify-content: center;
 
   &__scale {
-    position: absolute;
-
-    border-radius: 5px;
+    position: relative;
     background: white;
     width: 310px;
-    height: 15px;
-    margin: 5px;
+    height: 5px;
+    border-radius: 10px;
   }
   
   &__thumb {
     position: absolute;
     top: 50%;
-    width: 10px;
-    height: 25px;
-    border-radius: 3px;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
     left: 10px;
     background: red;
     cursor: pointer;

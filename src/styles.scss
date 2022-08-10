@@ -13,6 +13,9 @@
   min-height: 100vh;
 
   &__slider {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 700px;
     height: 350px;
     border: 1px solid red;

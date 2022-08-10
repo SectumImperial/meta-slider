@@ -13,7 +13,7 @@ class Validator {
     this.resultObject = initialState;
   }
 
-  public setData(data: ModelInterface) {
+  public setData(data: ModelInterface): void {
     const { min, max, value, step } = data;
     this.min = min;
     this.max = max;
@@ -21,7 +21,7 @@ class Validator {
     this.step = step;
   }
 
-  public validateData() {
+  public validateData(): ModelInterface {
     this.checkRange();
     this.checkStep();
     this.checkValue();
@@ -29,7 +29,7 @@ class Validator {
     return this.resultObject;
   }
 
-  private checkRange() {
+  private checkRange(): void {
     if (this.min === this.max) {
       this.max = this.min + this.step;
     }
@@ -41,7 +41,7 @@ class Validator {
     this.resultObject.max = this.max;
   }
 
-  private checkStep() {
+  private checkStep(): void {
     const allRange = this.max - this.min;
 
     if (this.step > allRange) {
@@ -50,7 +50,7 @@ class Validator {
     this.resultObject.step = this.step;
   }
 
-  private checkValue() {
+  private checkValue(): void {
     if (this.value > this.max) {
       this.value = this.max;
     }
