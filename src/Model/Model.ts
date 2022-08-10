@@ -3,33 +3,33 @@ import initialState from "./state";
 
 class Model {
 
-  state: ModelInterface = initialState;
+  private state: ModelInterface = initialState;
 
   constructor(state: ModelInterface) {
     this.setState(state);
   }
 
-  setState(state: ModelInterface) {
+  public setState(state: ModelInterface) {
     this.state = { ...state };
   }
 
-  getState(): ModelInterface {
+  public getState(): ModelInterface {
     return this.state;
   }
 
-  getValue(val: modelVal): number {
+  public getValue(val: modelVal): number {
     return this.state[`${val}`];
   }
 
-  increment(): void {
-    this.state.value += 1;
+  public increment(): void {
+    if (this.state.value !== this.state.max) this.state.value += 1;
   }
 
-  decrement(): void {
-    this.state.value -= 1;
+  public decrement(): void {
+    if (this.state.value !== this.state.min) this.state.value -= 1;
   }
 
-  getPercentVal(): number {
+  public getPercentVal(): number {
     const { value, min, max } = this.state;
     const range: number = max - min;
     const percent: number = Number(((value / range) * 100).toFixed(3));

@@ -1,0 +1,25 @@
+.slider {
+
+  position: relative;
+
+  &__scale {
+    position: absolute;
+
+    border-radius: 5px;
+    background: white;
+    width: 310px;
+    height: 15px;
+    margin: 5px;
+  }
+  
+  &__thumb {
+    position: absolute;
+    top: 50%;
+    width: 10px;
+    height: 25px;
+    border-radius: 3px;
+    left: 10px;
+    background: red;
+    cursor: pointer;
+  }
+}
