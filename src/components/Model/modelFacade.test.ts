@@ -1,7 +1,7 @@
 import ModelFacade from "./ModelFacade";
 import Model from "./Model";
 import Validator from './Validator';
-import initialState from './state';
+import initialState from '../../state';
 
 describe('The modelFacede tests', () => {
 

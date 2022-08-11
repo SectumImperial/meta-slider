@@ -1,9 +1,22 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import View from "./View";
 
-
 describe('The View component tests', () => {
-  const root = document.querySelector('.page__slider') as HTMLElement;
-  const view = new View(root);
+  let root: HTMLElement;
+  let view: View;
+
+  beforeEach(() => {
+    root = document.createElement('div');
+    root.className = 'slider__wrapper';
+    view = new View(root);
+  })
+
+  afterEach(() => {
+    root.innerHTML = '';
+  })
 
   test('The view must be istance of the View', () => {
     expect(view).toBeInstanceOf(View);

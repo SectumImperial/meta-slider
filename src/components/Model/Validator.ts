@@ -1,5 +1,5 @@
 import { ModelInterface } from "./modelInterface";
-import initialState from "./state";
+import initialState from "../../state";
 
 class Validator {
   private min!: number;

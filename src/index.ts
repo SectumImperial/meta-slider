@@ -1,6 +1,8 @@
 import './styles.scss';
-import './Model/ModelFacade';
-import View from './View/View';
+import Presenter from './components/Presenter/Presenter';
+import state from './state'
 
-const sliderCont = document.querySelector('.page__slider');
-new View(sliderCont as Element);
+
+const contianer = document.querySelector('.page__slider') as HTMLElement;
+const presenter = new Presenter(contianer, state);
+console.log(presenter);

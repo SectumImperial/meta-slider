@@ -1,5 +1,5 @@
 import { ModelInterface, modelVal } from "./modelInterface";
-import initialState from "./state";
+import initialState from "../../state";
 
 class Model {
 

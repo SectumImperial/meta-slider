@@ -1,6 +1,6 @@
 import Model from "./Model";
 import ModelFacade from "./ModelFacade";
-import initialState from './state'
+import initialState from '../../state'
 
 
 describe('The model tests', () => {
