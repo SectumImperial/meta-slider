@@ -7,5 +7,9 @@ interface ModelInterface {
 
 type modelVal = 'min' | 'max' | 'value' | 'step';
 
+interface SliderInterface extends ModelInterface {
+  thumbPercent: number;
+}
 
-export { ModelInterface, modelVal };
+
+export { ModelInterface, modelVal, SliderInterface };

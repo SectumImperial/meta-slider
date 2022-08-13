@@ -1,4 +1,8 @@
+import Presenter from './components/Presenter/Presenter';
+import initialState from './state';
 import './styles.scss';
-import Observer from './Observer/Observer';
 
-console.log(Observer);
+
+let element = document.querySelector('.page__slider') as HTMLAnchorElement;
+let slider = new Presenter(element, initialState);
+console.log(slider);

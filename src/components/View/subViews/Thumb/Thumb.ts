@@ -1,45 +1,41 @@
-class Thumb {
-  root: HTMLDivElement;
-  positionPercent: number;
-  thumb!: HTMLDivElement;
+import { SliderInterface } from "../../../Interfaces";
+import SliderComponents from "../SliderComponents/SliderComponents";
+
+class Thumb extends SliderComponents {
   shiftX!: number;
+  thumbPercent!: number;
+  thumbElement!: HTMLDivElement;
 
-  constructor(root: HTMLDivElement, positionPercent: number) {
-    this.root = root;
-    this.positionPercent = positionPercent;
-    this.init();
+  constructor(root: HTMLDivElement, state: SliderInterface) {
+    super(root, state);
+    this.thumbPercent = state.thumbPercent;
+    this.initThumb();
   }
 
-  public setPosition(positionPercent: number): void {
-    this.positionPercent = positionPercent;
-    this.thumb.style.left = this.positionPercent + '%';
+  public setPosition(thumbPercent: number): void {
+    this.thumbElement.style.left = thumbPercent + '%';
   }
 
-  private init(): void {
-    this.thumb = this.createThumb();
-    this.root.append(this.thumb);
-    this.setPosition(this.positionPercent);
+  private initThumb(): void {
+    this.thumbElement = this.createThumbElement();
+    this.root.append(this.thumbElement);
+    this.setPosition(this.thumbPercent);
     this.addListeners();
   }
 
   private addListeners() {
-    this.thumb.addEventListener('mousedown', this.mouseDown.bind(this));
-    this.thumb.addEventListener('mousemove', this.mouseMove.bind(this));
+    this.thumbElement.addEventListener('mousedown', this.mouseDown.bind(this));
   }
 
-  private createThumb(): HTMLDivElement {
+  private createThumbElement(): HTMLDivElement {
     const element = document.createElement('div');
     element.className = 'slider__thumb'
     return element;
   }
 
   private mouseDown(e: MouseEvent): void {
-    this.shiftX = e.clientX - this.thumb.getBoundingClientRect().left;
-  }
-
-  private mouseMove(e: MouseEvent) {
-    let newLeft = e.clientX - this.shiftX - this.root.getBoundingClientRect().left;
-    console.log(newLeft);
+    this.shiftX = e.clientX - this.thumbElement.getBoundingClientRect().left;
+    super.performMouseMove(this.shiftX);
   }
 }
 

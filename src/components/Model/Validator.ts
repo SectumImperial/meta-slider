@@ -1,4 +1,4 @@
-import { ModelInterface } from "./modelInterface";
+import { ModelInterface } from "../Interfaces";
 import initialState from "../../state";
 
 class Validator {

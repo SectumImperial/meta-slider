@@ -1,6 +1,6 @@
 import Model from "./Model";
 import Validator from "./Validator";
-import { ModelInterface } from "./modelInterface";
+import { ModelInterface } from "../Interfaces";
 
 class ModelFacade {
   private state: ModelInterface;

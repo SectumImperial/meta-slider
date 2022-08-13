@@ -1,11 +1,13 @@
-import { ModelInterface, modelVal } from "./modelInterface";
+import { ModelInterface, modelVal } from "../Interfaces";
 import initialState from "../../state";
+import Observer from "../../Observer/Observer";
 
-class Model {
+class Model extends Observer {
 
   private state: ModelInterface = initialState;
 
   constructor(state: ModelInterface) {
+    super();
     this.setState(state);
   }
 
@@ -15,6 +17,12 @@ class Model {
 
   public getState(): ModelInterface {
     return this.state;
+  }
+
+  public update(data: object) {
+    const state = this.state;
+    const newState = { ...state, ...data };
+    this.setState(newState);
   }
 
   public getValue(val: modelVal): number {
