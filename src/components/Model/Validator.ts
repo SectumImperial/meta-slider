@@ -1,4 +1,4 @@
-import { ModelInterface } from "../Interfaces";
+import { ModelInterface, ValidateSliderData } from "../Interfaces";
 import initialState from "../../state";
 
 class Validator {
@@ -6,6 +6,7 @@ class Validator {
   private max!: number;
   private value!: number;
   private step!: number;
+  thumbPercent!: number;
   private resultObject: ModelInterface;
 
   constructor(data: ModelInterface) {
@@ -14,11 +15,12 @@ class Validator {
   }
 
   public setData(data: ModelInterface): void {
-    const { min, max, value, step } = data;
+    const { min, max, value, step, thumbPercent } = data;
     this.min = min;
     this.max = max;
     this.value = value;
     this.step = step;
+    this.thumbPercent = thumbPercent;
   }
 
   public validateData(): ModelInterface {
@@ -27,6 +29,15 @@ class Validator {
     this.checkValue();
 
     return this.resultObject;
+  }
+
+  public performMoveToercent(data: ValidateSliderData): number {
+    const { coordsMove, scaleWidth } = data;
+    const percent = scaleWidth / 100;
+    let percentMove = Number((coordsMove / percent).toFixed(3))
+    if (percentMove < 0) percentMove = 0;
+    if (percentMove > 100) percentMove = 100;
+    return percentMove;
   }
 
   private checkRange(): void {

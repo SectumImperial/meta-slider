@@ -11,12 +11,14 @@ describe('The validation of data tests', () => {
     max: 10,
     value: 0,
     step: 11,
+    thumbPercent: 0,
   }
   const dataValWrong = {
     min: 0,
     max: 10,
     value: 11,
     step: 1,
+    thumbPercent: 110,
   }
 
   const dataValSmallWrong = {
@@ -24,6 +26,7 @@ describe('The validation of data tests', () => {
     max: 10,
     value: -1,
     step: 1,
+    thumbPercent: -10,
   }
 
   const dataRangeWrong = {
@@ -31,6 +34,7 @@ describe('The validation of data tests', () => {
     max: 0,
     value: 0,
     step: 1,
+    thumbPercent: 0,
   }
 
   const dataMinMaxWrong = {
@@ -38,6 +42,7 @@ describe('The validation of data tests', () => {
     max: 0,
     value: 0,
     step: 1,
+    thumbPercent: 0,
   }
 
 
@@ -47,6 +52,7 @@ describe('The validation of data tests', () => {
     max: 10,
     value: 0,
     step: 10,
+    thumbPercent: 0,
   }
 
   const dataValCorrect = {
@@ -54,6 +60,7 @@ describe('The validation of data tests', () => {
     max: 10,
     value: 10,
     step: 1,
+    thumbPercent: 100,
   }
 
   const dataValSmallCorrect = {
@@ -61,6 +68,7 @@ describe('The validation of data tests', () => {
     max: 10,
     value: 0,
     step: 1,
+    thumbPercent: 0,
   }
 
   const dataRangeCorrect = {
@@ -68,6 +76,7 @@ describe('The validation of data tests', () => {
     max: 1,
     value: 0,
     step: 1,
+    thumbPercent: 0,
   }
 
   const dataMinMaxCorrect = {
@@ -75,6 +84,7 @@ describe('The validation of data tests', () => {
     max: 10,
     value: 0,
     step: 1,
+    thumbPercent: 0,
   }
 
   test('Step can not be bigger than all range', () => {

@@ -1,14 +1,17 @@
 import Model from "./Model";
 import Validator from "./Validator";
-import { ModelInterface } from "../Interfaces";
+import { ModelInterface, ValidateSliderData } from "../Interfaces";
+import Observer from "../../Observer/Observer";
+import { MODEL_EVENTS } from "../Presenter/events";
 
-class ModelFacade {
+class ModelFacade extends Observer {
   private state: ModelInterface;
   private model: Model;
   private validator: Validator;
   private validState: ModelInterface;
 
   constructor(state: ModelInterface) {
+    super();
     this.state = state;
     this.validator = new Validator(this.state);
     this.validState = this.validator.validateData()
@@ -31,6 +34,13 @@ class ModelFacade {
 
   public getValidator(): Validator {
     return this.validator;
+  }
+
+  public update(data: ValidateSliderData, event: string) {
+    if (event === MODEL_EVENTS.VALUE_CHANGED) {
+      const movedTo = this.validator.performMoveToercent(data);
+      console.log(movedTo);
+    }
   }
 }
 

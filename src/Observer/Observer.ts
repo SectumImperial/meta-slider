@@ -1,5 +1,5 @@
 interface ValueObserverEntry {
-  update(data: object): void;
+  update(data: object, event: string): void;
 }
 
 interface Observers {
@@ -7,7 +7,7 @@ interface Observers {
 }
 
 abstract class Observer {
-  private observers: Observers = {};
+  public observers: Observers = {};
 
   public addSubscriber(event: string, observer: ValueObserverEntry): void {
     if (this.observers[event]) {
@@ -24,7 +24,9 @@ abstract class Observer {
 
   public emit(event: string, data: object): void {
     const observers = this.observers[event] || [];
-    observers.forEach((observer) => observer.update(data))
+    observers.forEach((observer) => {
+      observer.update(data, event);
+    })
   }
 }
 

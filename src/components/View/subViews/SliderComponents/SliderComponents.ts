@@ -1,6 +1,6 @@
-// import Thumb from "../Thumb/Thumb";
 import Observer from "../../../../Observer/Observer";
 import { SliderInterface } from "../../../Interfaces";
+import { SLIDER_EVENTS } from "../../../Presenter/events";
 
 class SliderComponents extends Observer {
   protected scaleElement!: HTMLDivElement;
@@ -13,18 +13,18 @@ class SliderComponents extends Observer {
     this.state = state;
   }
 
-
   public update(data: object) {
-    console.log(`Get data ${data}`)
+    console.log(`SC Get data ${data}`)
   }
 
 
   protected performMouseMove(thumbPos: number) {
-    console.log(this.root.getBoundingClientRect());
     const mouseMove = (e: MouseEvent) => {
       e.preventDefault();
       const newLeft = e.clientX - thumbPos - this.root.getBoundingClientRect().left;
-      console.log(newLeft);
+      this.emit(SLIDER_EVENTS.VALUE_START_CHANGE, {
+        coordsMove: newLeft
+      })
     }
 
     const mouseUp = () => {

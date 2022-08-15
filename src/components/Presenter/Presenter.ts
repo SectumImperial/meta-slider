@@ -1,22 +1,39 @@
-import Model from "../Model/Model";
 import { ModelInterface } from "../Interfaces";
 import View from "../View/View";
+import Observer from "../../Observer/Observer";
+import { MODEL_EVENTS, SLIDER_EVENTS } from './events'
+import ModelFacade from "../Model/ModelFacade";
 
-class Presenter {
-  model: Model;
+
+// const testState = {
+//   min: 0,
+//   max: 100,
+//   value: 0,
+//   step: 1,
+//   thumbPercent: 0,
+// }
+
+class Presenter extends Observer {
+  modelFacade: ModelFacade;
   view: View;
   root: HTMLElement;
 
   constructor(root: HTMLElement, state: ModelInterface) {
+    super()
     this.root = root;
-    this.model = new Model(state);
     this.view = new View(root);
-    // this.subscribeModel();
+    this.modelFacade = new ModelFacade(state);
+    this.subscribeModel();
+    this.subscribeSlider();
   }
 
-  // private subscribeModel() {
-  //   this.model.addSubscriber('')
-  // }
+  private subscribeSlider() {
+    this.view.addSubscriber(SLIDER_EVENTS.VALUE_CHANGED, this.modelFacade);
+  }
+
+  private subscribeModel() {
+    this.modelFacade.addSubscriber(MODEL_EVENTS.VALUE_CHANGED, this.view);
+  }
 }
 
 export default Presenter;

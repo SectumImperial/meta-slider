@@ -1,13 +1,12 @@
 import { ModelInterface, modelVal } from "../Interfaces";
 import initialState from "../../state";
-import Observer from "../../Observer/Observer";
+// import Observer from "../../Observer/Observer";
 
-class Model extends Observer {
+class Model {
 
   private state: ModelInterface = initialState;
 
   constructor(state: ModelInterface) {
-    super();
     this.setState(state);
   }
 
@@ -19,11 +18,12 @@ class Model extends Observer {
     return this.state;
   }
 
-  public update(data: object) {
-    const state = this.state;
-    const newState = { ...state, ...data };
-    this.setState(newState);
-  }
+  // public update(data: object) {
+  //   const state = this.state;
+  //   const newState = { ...state, ...data };
+  //   this.setState(newState);
+  //   console.log(this.state);
+  // }
 
   public getValue(val: modelVal): number {
     return this.state[`${val}`];
@@ -45,7 +45,6 @@ class Model extends Observer {
   }
 
 }
-
 
 export default Model;
 

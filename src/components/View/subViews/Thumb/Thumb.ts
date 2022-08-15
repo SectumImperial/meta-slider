@@ -6,7 +6,7 @@ class Thumb extends SliderComponents {
   thumbPercent!: number;
   thumbElement!: HTMLDivElement;
 
-  constructor(root: HTMLDivElement, state: SliderInterface) {
+  constructor(root: HTMLElement, state: SliderInterface) {
     super(root, state);
     this.thumbPercent = state.thumbPercent;
     this.initThumb();
