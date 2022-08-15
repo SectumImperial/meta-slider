@@ -1,11 +1,10 @@
 import SliderComponents from "../SliderComponents/SliderComponents";
-import { SliderInterface } from "../../../Interfaces";
 
 class Scale extends SliderComponents {
   scale!: HTMLDivElement;
 
-  constructor(root: HTMLDivElement, state: SliderInterface) {
-    super(root, state);
+  constructor(root: HTMLDivElement) {
+    super(root);
     this.init();
   }
 

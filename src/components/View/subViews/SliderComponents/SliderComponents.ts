@@ -1,16 +1,13 @@
 import Observer from "../../../../Observer/Observer";
-import { SliderInterface } from "../../../Interfaces";
 import { SLIDER_EVENTS } from "../../../Presenter/events";
 
 class SliderComponents extends Observer {
   protected scaleElement!: HTMLDivElement;
   protected readonly root: Element;
-  protected readonly state: SliderInterface;
 
-  constructor(root: Element, state: SliderInterface) {
+  constructor(root: Element) {
     super()
     this.root = root;
-    this.state = state;
   }
 
   public update(data: object) {

@@ -21,6 +21,9 @@ class View extends Observer {
       const sliderData = data;
       this.emit(SLIDER_EVENTS.VALUE_CHANGED, sliderData);
     }
+    if (event === SLIDER_EVENTS.VALUE_CHANGED) {
+      this.emit(SLIDER_EVENTS.VALUE_CHANGED, data);
+    }
   }
 
   public getThumb(): Thumb {
@@ -30,6 +33,7 @@ class View extends Observer {
   private addSubscribeSlider() {
     this.getThumb().addSubscriber(SLIDER_EVENTS.VALUE_START_CHANGE, this.slider);
     this.slider.addSubscriber(SLIDER_EVENTS.DATA_COLLECTED, this);
+    this.addSubscriber(SLIDER_EVENTS.VALUE_CHANGED, this.slider);
   }
 }
 

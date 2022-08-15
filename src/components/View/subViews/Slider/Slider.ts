@@ -28,7 +28,13 @@ class Slider extends Observer {
       const sliderData = { ...data, scaleWidth: scaleWidth };
       this.emit(SLIDER_EVENTS.DATA_COLLECTED, sliderData);
     }
+
+    if (event === SLIDER_EVENTS.VALUE_CHANGED) {
+      console.log(this);
+      console.log('slider');
+    }
   }
+
 
   private init(): void {
     this.slider = this.createSlider();
@@ -48,9 +54,9 @@ class Slider extends Observer {
   }
 
   private createlements() {
-    this.scale = new Scale(this.slider, this.testState);
+    this.scale = new Scale(this.slider);
     this.scaleElement = this.scale.getScale()
-    this.thumb = new Thumb(this.scaleElement, this.testState);
+    this.thumb = new Thumb(this.scaleElement, 50);
     this.addElements(this.scaleElement);
   }
 

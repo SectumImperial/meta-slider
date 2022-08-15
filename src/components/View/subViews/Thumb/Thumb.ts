@@ -1,14 +1,13 @@
-import { SliderInterface } from "../../../Interfaces";
 import SliderComponents from "../SliderComponents/SliderComponents";
 
 class Thumb extends SliderComponents {
   shiftX!: number;
-  thumbPercent!: number;
+  thumbPercent: number;
   thumbElement!: HTMLDivElement;
 
-  constructor(root: HTMLElement, state: SliderInterface) {
-    super(root, state);
-    this.thumbPercent = state.thumbPercent;
+  constructor(root: HTMLElement, thumbPercent = 0) {
+    super(root);
+    this.thumbPercent = thumbPercent;
     this.initThumb();
   }
 

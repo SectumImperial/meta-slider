@@ -2,7 +2,7 @@ const initialState = {
   min: 0,
   max: 100,
   value: 30,
-  step: 1,
+  step: 10,
   thumbPercent: 30,
 };
 
