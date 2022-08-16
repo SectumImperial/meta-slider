@@ -1,9 +1,9 @@
 const initialState = {
   min: 0,
   max: 100,
-  value: 20,
-  step: 20,
-  thumbPercent: 20,
+  value: 10,
+  step: 10,
+  thumbPercent: 10,
   scaleMarks: true,
 };
 

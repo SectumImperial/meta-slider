@@ -24,41 +24,44 @@ class Model {
   }
 
   public updateState(movedTo: number) {
-    const { min, step, value } = this.state;
+    const { step, value, thumbPercent } = this.state;
     let half: number;
+    let prevVal = value;
+    let nextVal = value + step;
     let newValue = value
-    let minVal = min;
-    let maxVal = minVal + step;
+    let currentPercent = thumbPercent;
 
-    for (let value of this.mapSteps.keys()) {
+    if (movedTo >= currentPercent) {
+      prevVal = newValue;
+      nextVal = newValue + step;
+    }
 
-      if (movedTo > minVal && movedTo < maxVal) {
+    if (movedTo < currentPercent) {
+      prevVal = newValue - step;
+      nextVal = newValue;
+    }
 
-        half = this.findHalf(minVal, maxVal);
+    half = this.findHalf(this.mapSteps.get(prevVal) as number, this.mapSteps.get(nextVal) as number)
 
-        minVal = maxVal;
-        maxVal = value;
-
-        if (movedTo <= half) newValue = minVal;
-        if (movedTo > half) newValue = maxVal;
-
-
-        const resultObj = {
-          value: newValue,
-          thumbPercent: this.mapSteps.get(newValue),
-        }
-        this.setState(resultObj);
-        return
+    if (movedTo >= half) {
+      const resultObj = {
+        value: nextVal,
+        thumbPercent: this.mapSteps.get(nextVal),
       }
-
-      minVal = maxVal;
-      maxVal = value;
+      this.setState(resultObj);
+      return
+    } else {
+      const resultObj = {
+        value: prevVal,
+        thumbPercent: this.mapSteps.get(prevVal),
+      }
+      this.setState(resultObj);
+      return
     }
   }
 
   private findHalf(min: number, max: number): number {
     const result = (min + (max - min) / 2);
-    console.log(min, max);
     return result;
   }
 

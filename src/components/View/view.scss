@@ -1,11 +1,12 @@
 .slider {
   display: flex;
   justify-content: center;
+  position: relative;
 
   &__scale {
-    position: relative;
+    position: absolute;
     background: white;
-    width: 310px;
+    width: 1000px;
     height: 5px;
     border-radius: 10px;
   }
@@ -20,7 +21,11 @@
     border-radius: 50%;
     left: 10px;
     background: red;
-    cursor: pointer;
+    cursor: grab;
+
+    &:active {
+      cursor: grabbing;
+    }
   }
 
   &__mark {
@@ -28,16 +33,20 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
 
-    transform: translateX(-50%);
-    color: white;
     padding-top: 15px;
+
+    color: white;
+    font-size: 13px;
   }
 
   &__mark-line {
     width: 1px;
     height: 6px;
     background-color: white;
+  }
+
+  &__mark-value {
+    transform: translateX(-50%);
   }
 }

@@ -49,6 +49,7 @@ class ModelFacade extends Observer {
       const movedTo = this.validator.performMoveToercent(data);
       this.model.updateState(movedTo);
       const newState = this.model.getState()
+      console.log(newState);
       if (newState.scaleMarks) {
         this.emit(MODEL_EVENTS.VALUE_CHANGED, { ...newState, scaleMap: this.model.mapSteps });
       } else {
