@@ -3,7 +3,7 @@ const initialState = {
   max: 100,
   value: 10,
   step: 10,
-  thumbPercent: 10,
+  thumbPercent: 90,
   scaleMarks: false,
 };
 

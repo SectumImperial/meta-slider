@@ -49,11 +49,13 @@ class ModelFacade extends Observer {
   public update(data: ValidateSliderData, event: string) {
     if (event === MODEL_EVENTS.VALUE_CHANGED) {
       const movedTo = this.validator.performMoveToercent(data);
+
       if (movedTo === this.prevMove) return
+
       this.prevMove = movedTo;
       this.model.updateState(movedTo);
       const newState = this.model.getState()
-      // console.log(newState);
+
       if (newState.scaleMarks) {
         this.emit(MODEL_EVENTS.VALUE_CHANGED, { ...newState, scaleMap: this.model.mapSteps });
       } else {

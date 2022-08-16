@@ -27,6 +27,7 @@ class Validator {
     this.checkRange();
     this.checkStep();
     this.checkValue();
+    this.checkPercent();
 
     return this.resultObject;
   }
@@ -53,12 +54,17 @@ class Validator {
   }
 
   private checkStep(): void {
-    const allRange = this.max - this.min;
+    const allRange = this.findRange();
 
     if (this.step > allRange) {
       this.step = allRange
     }
     this.resultObject.step = this.step;
+  }
+
+  private findRange(): number {
+    const result = this.max - this.min;
+    return result;
   }
 
   private checkValue(): void {
@@ -71,6 +77,11 @@ class Validator {
     }
 
     this.resultObject.value = this.value;
+  }
+
+  private checkPercent(): void {
+    const currentPercent = (this.value / (this.findRange() / 100))
+    this.resultObject.thumbPercent = currentPercent;
   }
 }
 
