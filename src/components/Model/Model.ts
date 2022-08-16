@@ -23,57 +23,59 @@ class Model {
     return this.state;
   }
 
-  public updateState(movedTo: number) {
-    const { step, value, thumbPercent } = this.state;
-    let half: number;
-    let prevVal = value;
-    let nextVal = value + step;
-    let newValue = value
-    let currentPercent = thumbPercent;
+  public updateState(movedTo: number): void {
+    const { step } = this.state;
+    const nearestCountStep: number = Math.floor(movedTo / (step / this.findPercent()))
+    const nearStep: number = nearestCountStep * step;
+    const halfStep: number = step / 2;
+    const halfMove: number = Number((movedTo % (step / this.findPercent())).toFixed(2));
 
-    if (movedTo >= currentPercent) {
-      prevVal = newValue;
-      nextVal = newValue + step;
-    }
-
-    if (movedTo < currentPercent) {
-      prevVal = newValue - step;
-      nextVal = newValue;
-    }
-
-    half = this.findHalf(this.mapSteps.get(prevVal) as number, this.mapSteps.get(nextVal) as number)
-
-    if (movedTo >= half) {
-      const resultObj = {
-        value: nextVal,
-        thumbPercent: this.mapSteps.get(nextVal),
-      }
-      this.setState(resultObj);
-      return
-    } else {
-      const resultObj = {
-        value: prevVal,
-        thumbPercent: this.mapSteps.get(prevVal),
-      }
-      this.setState(resultObj);
+    if (halfMove < halfStep) {
+      const val = nearStep;
+      const percent = this.mapSteps.get(val);
+      if (percent !== undefined) this.updateMoved(val, percent);
       return
     }
+
+    if (halfMove >= halfStep) {
+      const val = nearStep + step;
+      const percent = this.mapSteps.get(val);
+      if (percent !== undefined) this.updateMoved(val, percent);
+      return
+    }
+    return
   }
 
-  private findHalf(min: number, max: number): number {
-    const result = (min + (max - min) / 2);
-    return result;
+
+  private updateMoved(val: number, percent: number) {
+    if (isNaN(val) || percent === undefined) throw new Error('Somethnig wrong in setting new values');
+
+    this.setState({
+      value: val,
+      thumbPercent: percent,
+    });
   }
 
   private createSteps(): StepsMap {
-    const { min, max, step } = this.state;
+    const { step } = this.state;
     const mapSteps: StepsMap = new Map();
-    const range = max - min;
-    const percent = range / 100;
+    const range = this.findRange();
+    const percent = this.findPercent();
     for (let i = 0; i <= range; i += step) {
       mapSteps.set(i, i / percent);
     }
     return mapSteps;
+  }
+
+  private findPercent() {
+    const range = this.findRange();
+    const percent = range / 100;
+    return percent;
+  }
+
+  private findRange() {
+    const range = this.state.max - this.state.min;
+    return range;
   }
 
 

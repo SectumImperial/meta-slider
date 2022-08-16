@@ -34,7 +34,7 @@ class Validator {
   public performMoveToercent(data: ValidateSliderData): number {
     const { coordsMove, scaleWidth } = data;
     const percent = scaleWidth / 100;
-    let percentMove = Number((coordsMove / percent).toFixed(3))
+    let percentMove = Number((coordsMove / percent).toFixed(2))
     if (percentMove < 0) percentMove = 0;
     if (percentMove > 100) percentMove = 100;
     return percentMove;

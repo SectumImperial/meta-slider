@@ -4,7 +4,7 @@ const initialState = {
   value: 10,
   step: 10,
   thumbPercent: 10,
-  scaleMarks: true,
+  scaleMarks: false,
 };
 
 export default initialState;
