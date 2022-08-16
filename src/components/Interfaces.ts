@@ -3,13 +3,14 @@ interface ModelInterface {
   max: number,
   value: number,
   step: number,
-  thumbPercent: number;
+  thumbPercent: number,
+  scaleMarks: boolean,
 }
 
 type modelVal = 'min' | 'max' | 'value' | 'step';
 
 interface SliderInterface extends ModelInterface {
-  thumbPercent: number;
+  scaleMap?: Map<number, number>
 }
 
 interface ValidateSliderData {

@@ -30,7 +30,7 @@ class Model {
     let minVal = min;
     let maxVal = minVal + step;
 
-    for (let [value, percent] of this.mapSteps) {
+    for (let value of this.mapSteps.keys()) {
 
       if (movedTo > minVal && movedTo < maxVal) {
 
@@ -39,13 +39,13 @@ class Model {
         minVal = maxVal;
         maxVal = value;
 
-        if (movedTo < half) newValue = minVal;
-        if (movedTo >= half) newValue = maxVal;
+        if (movedTo <= half) newValue = minVal;
+        if (movedTo > half) newValue = maxVal;
 
 
         const resultObj = {
           value: newValue,
-          thumbPercent: percent,
+          thumbPercent: this.mapSteps.get(newValue),
         }
         this.setState(resultObj);
         return
@@ -58,6 +58,7 @@ class Model {
 
   private findHalf(min: number, max: number): number {
     const result = (min + (max - min) / 2);
+    console.log(min, max);
     return result;
   }
 
@@ -72,23 +73,17 @@ class Model {
     return mapSteps;
   }
 
-  // public update(data: object) {
-  //   const state = this.state;
-  //   const newState = { ...state, ...data };
-  //   this.setState(newState);
-  //   console.log(this.state);
-  // }
 
   public getValue(val: modelVal): number {
     return this.state[`${val}`];
   }
 
   public increment(): void {
-    if (this.state.value !== this.state.max) this.state.value += 1;
+    if (this.state.value !== this.state.max) this.state.value += this.state.step;
   }
 
   public decrement(): void {
-    if (this.state.value !== this.state.min) this.state.value -= 1;
+    if (this.state.value !== this.state.min) this.state.value -= this.state.step;
   }
 
   public getPercentVal(): number {

@@ -12,6 +12,7 @@
   
   &__thumb {
     position: absolute;
+    z-index: 5;
     top: 50%;
     transform: translate(-50%, -50%);
     width: 20px;
@@ -20,5 +21,23 @@
     left: 10px;
     background: red;
     cursor: pointer;
+  }
+
+  &__mark {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    transform: translateX(-50%);
+    color: white;
+    padding-top: 15px;
+  }
+
+  &__mark-line {
+    width: 1px;
+    height: 6px;
+    background-color: white;
   }
 }

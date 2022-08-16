@@ -1,8 +1,8 @@
 import Observer from "../../../../Observer/Observer";
-import initialState from "../../../../state";
 import { SliderInterface } from "../../../Interfaces";
 import { SLIDER_EVENTS } from "../../../Presenter/events";
 import Scale from "../Scale/Scale";
+import ScaleMarks from "../ScaleMarks/ScaleMarks";
 import Thumb from "../Thumb/Thumb";
 
 class Slider extends Observer {
@@ -10,15 +10,16 @@ class Slider extends Observer {
   slider!: HTMLDivElement;
   thumb!: Thumb;
   scale!: Scale;
-  protected readonly testState: SliderInterface;
   scaleElement!: HTMLDivElement;
+  thumbPercent!: number;
+  scaleMarks!: ScaleMarks;
+  protected readonly state!: SliderInterface;
+  scaleMap: Map<number, number> | undefined;
 
 
   constructor(root: Element) {
     super()
     this.root = root;
-    // this.state = state;
-    this.testState = initialState;
     this.init();
   }
 
@@ -28,15 +29,35 @@ class Slider extends Observer {
       const sliderData = { ...data, scaleWidth: scaleWidth };
       this.emit(SLIDER_EVENTS.DATA_COLLECTED, sliderData);
     }
+  }
 
-    if (event === SLIDER_EVENTS.VALUE_CHANGED) {
-      console.log(this);
-      console.log('slider');
+  public setState(data: SliderInterface) {
+    const {
+      thumbPercent,
+      scaleMap
+    } = data;
+
+    this.thumbPercent = thumbPercent;
+    this.scaleMap = scaleMap;
+
+    if (scaleMap) {
+      this.scaleMarks = new ScaleMarks(this.scaleElement, scaleMap)
     }
+
+    this.thumb.setPosition(this.thumbPercent);
+  }
+
+  public getNewState(data: SliderInterface) {
+    const {
+      thumbPercent,
+    } = data;
+    this.thumbPercent = thumbPercent;
+    this.thumb.setPosition(this.thumbPercent);
   }
 
 
   private init(): void {
+
     this.slider = this.createSlider();
     this.createlements();
 
@@ -56,7 +77,7 @@ class Slider extends Observer {
   private createlements() {
     this.scale = new Scale(this.slider);
     this.scaleElement = this.scale.getScale()
-    this.thumb = new Thumb(this.scaleElement, 50);
+    this.thumb = new Thumb(this.scaleElement, this.thumbPercent);
     this.addElements(this.scaleElement);
   }
 

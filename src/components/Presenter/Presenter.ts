@@ -5,14 +5,6 @@ import { MODEL_EVENTS, SLIDER_EVENTS } from './events'
 import ModelFacade from "../Model/ModelFacade";
 
 
-// const testState = {
-//   min: 0,
-//   max: 100,
-//   value: 0,
-//   step: 1,
-//   thumbPercent: 0,
-// }
-
 class Presenter extends Observer {
   modelFacade: ModelFacade;
   view: View;
@@ -23,6 +15,7 @@ class Presenter extends Observer {
     this.root = root;
     this.view = new View(root);
     this.modelFacade = new ModelFacade(state);
+    this.view.setSliderState(this.modelFacade.getState());
     this.subscribeModel();
     this.subscribeSlider();
   }

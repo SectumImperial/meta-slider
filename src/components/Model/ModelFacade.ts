@@ -1,6 +1,6 @@
 import Model from "./Model";
 import Validator from "./Validator";
-import { ModelInterface, ValidateSliderData } from "../Interfaces";
+import { ModelInterface, SliderInterface, ValidateSliderData } from "../Interfaces";
 import Observer from "../../Observer/Observer";
 import { MODEL_EVENTS } from "../Presenter/events";
 
@@ -24,8 +24,16 @@ class ModelFacade extends Observer {
     this.model.setState(validState);
   }
 
-  public getState(): ModelInterface {
-    return this.model.getState();
+  public getState(): SliderInterface {
+    if (this.model.getState().scaleMarks) {
+      return {
+        ...this.model.getState(),
+        scaleMap: this.model.mapSteps,
+      }
+    } else {
+      return this.model.getState();
+    }
+
   }
 
   public getModel(): Model {
@@ -41,7 +49,12 @@ class ModelFacade extends Observer {
       const movedTo = this.validator.performMoveToercent(data);
       this.model.updateState(movedTo);
       const newState = this.model.getState()
-      this.emit(MODEL_EVENTS.VALUE_CHANGED, newState);
+      if (newState.scaleMarks) {
+        this.emit(MODEL_EVENTS.VALUE_CHANGED, { ...newState, scaleMap: this.model.mapSteps });
+      } else {
+        this.emit(MODEL_EVENTS.VALUE_CHANGED, newState);
+      }
+
     }
   }
 }
