@@ -19,8 +19,7 @@ class ScaleMarks extends SliderComponents {
   }
 
   private createMark(value: number, percent: number) {
-    const mark = document.createElement('div');
-    mark.className = 'slider__mark';
+    const mark = this.createElement('slider__mark');
     mark.style.left = `${percent}%`;
 
     const line = document.createElement('div');

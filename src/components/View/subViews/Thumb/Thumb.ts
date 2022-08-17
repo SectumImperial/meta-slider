@@ -20,7 +20,7 @@ class Thumb extends SliderComponents {
   }
 
   private initThumb(): void {
-    this.thumbElement = this.createThumbElement();
+    this.thumbElement = this.createElement('slider__thumb');
     this.root.append(this.thumbElement);
     this.setPosition(this.thumbPercent);
     this.addListeners();
@@ -30,11 +30,7 @@ class Thumb extends SliderComponents {
     this.thumbElement.addEventListener('mousedown', this.mouseDown.bind(this));
   }
 
-  private createThumbElement(): HTMLDivElement {
-    const element = document.createElement('div');
-    element.className = 'slider__thumb'
-    return element;
-  }
+
 
   private mouseDown(e: MouseEvent): void {
     this.shiftX = e.clientX - this.thumbElement.getBoundingClientRect().left;

@@ -1,4 +1,6 @@
+import initialState from '../../state';
 import Validator from './Validator'
+
 
 
 describe('The validation of data tests', () => {
@@ -7,104 +9,84 @@ describe('The validation of data tests', () => {
 
   //  Wrong cases
   const dataStepWrong = {
+    ...initialState,
     min: 0,
     max: 10,
     value: 0,
     step: 11,
-    thumbPercent: 0,
-    scaleMarks: false,
-    isTip: false,
   }
   const dataValWrong = {
+    ...initialState,
     min: 0,
     max: 10,
     value: 11,
     step: 1,
-    thumbPercent: 110,
-    scaleMarks: false,
-    isTip: false,
   }
 
   const dataValSmallWrong = {
+    ...initialState,
     min: 0,
     max: 10,
     value: -1,
     step: 1,
-    thumbPercent: -10,
-    scaleMarks: false,
-    isTip: false,
   }
 
   const dataRangeWrong = {
+    ...initialState,
     min: 0,
     max: 0,
     value: 0,
     step: 1,
-    thumbPercent: 0,
-    scaleMarks: false,
-    isTip: false,
   }
 
   const dataMinMaxWrong = {
+    ...initialState,
     min: 10,
     max: 0,
     value: 0,
     step: 1,
-    thumbPercent: 0,
-    scaleMarks: false,
-    isTip: false,
   }
 
 
   // Correct cases
   const dataStepCorrect = {
+    ...initialState,
     min: 0,
     max: 10,
     value: 0,
     step: 10,
-    thumbPercent: 0,
-    scaleMarks: false,
-    isTip: false,
   }
 
   const dataValCorrect = {
+    ...initialState,
     min: 0,
     max: 10,
     value: 10,
     step: 1,
-    thumbPercent: 100,
-    scaleMarks: false,
-    isTip: false,
   }
 
   const dataValSmallCorrect = {
+    ...initialState,
     min: 0,
     max: 10,
     value: 0,
     step: 1,
-    thumbPercent: 0,
-    scaleMarks: false,
-    isTip: false,
   }
 
   const dataRangeCorrect = {
+    ...initialState,
     min: 0,
     max: 1,
     value: 0,
     step: 1,
-    thumbPercent: 0,
-    scaleMarks: false,
-    isTip: false,
   }
 
   const dataMinMaxCorrect = {
+    ...initialState,
     min: 0,
     max: 10,
     value: 0,
     step: 1,
-    thumbPercent: 0,
-    scaleMarks: false,
-    isTip: false,
   }
 
   test('Step can not be bigger than all range', () => {

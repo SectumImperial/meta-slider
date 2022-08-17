@@ -14,6 +14,12 @@ class SliderComponents extends Observer {
     console.log(`SC Get data ${data}`)
   }
 
+  protected createElement(className: string): HTMLDivElement {
+    const element = document.createElement('div');
+    element.className = className;
+    return element;
+  }
+
 
   protected performMouseMove(thumbPos: number) {
     const mouseMove = (e: MouseEvent) => {

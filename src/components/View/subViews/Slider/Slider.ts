@@ -1,6 +1,7 @@
 import Observer from "../../../../Observer/Observer";
 import { SliderInterface } from "../../../Interfaces";
 import { SLIDER_EVENTS } from "../../../Presenter/events";
+import Progress from "../Progress/Progress";
 import Scale from "../Scale/Scale";
 import ScaleMarks from "../ScaleMarks/ScaleMarks";
 import Thumb from "../Thumb/Thumb";
@@ -21,16 +22,19 @@ class Slider extends Observer {
   protected readonly isTip: boolean;
   thumbElement!: HTMLDivElement;
   tip?: Tip;
+  isProgress: boolean;
+  progress?: Progress;
 
 
 
 
   constructor(root: Element, state: SliderInterface) {
     super()
-    const { isTip, value, thumbPercent } = state;
+    const { isTip, value, thumbPercent, isProgress } = state;
     this.thumbPercent = thumbPercent;
     this.isTip = isTip;
     this.tipValue = value;
+    this.isProgress = isProgress;
     this.root = root;
     this.init();
     this.setState(state);
@@ -79,6 +83,10 @@ class Slider extends Observer {
       this.tipValue = value;
       this.tip.setPosition(this.thumbPercent, this.tipValue);
     }
+
+    if (this.isProgress && this.progress) {
+      this.progress.setProgressPosition(0, this.thumbPercent)
+    }
   }
 
   private addSlider(): void {
@@ -97,6 +105,7 @@ class Slider extends Observer {
     this.thumb = new Thumb(this.scaleElement, this.thumbPercent);
     this.thumbElement = this.thumb.getThumb();
     if (this.isTip) this.tip = new Tip(this.scaleElement, this.thumbPercent, this.tipValue);
+    if (this.isProgress) this.progress = new Progress(this.scaleElement, 0, this.thumbPercent);
   }
 }
 

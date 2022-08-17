@@ -8,23 +8,20 @@ describe('The modelFacede tests', () => {
   let modelFacede: ModelFacade;
 
   const dataWrong = {
+    ...initialState,
     min: 10,
     max: 10,
     value: 14,
     step: 11,
     thumbPercent: 140,
-    scaleMarks: false,
-    isTip: false,
   }
 
   const dataCorrect = {
+    ...initialState,
     min: 10,
     max: 21,
     value: 14,
     step: 11,
-    thumbPercent: 55,
-    scaleMarks: false,
-    isTip: false,
   }
 
   beforeEach(() => {

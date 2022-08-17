@@ -9,19 +9,13 @@ class Scale extends SliderComponents {
   }
 
   private init(): void {
-    this.scale = this.createScale();
+    this.scale = this.createElement('slider__scale');
     this.addScale()
   }
 
   public getScale() {
-    if (this.scale) return this.scale;
-    return this.createScale();
-  }
-
-  private createScale(): HTMLDivElement {
-    const element = document.createElement('div');
-    element.className = 'slider__scale'
-    return element;
+    if (!this.scale) this.scale = this.createElement('slider__scale');
+    return this.scale;
   }
 
   private addScale() {

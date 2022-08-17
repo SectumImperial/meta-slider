@@ -7,6 +7,7 @@ interface ModelInterface {
   scaleMarks: boolean,
   scaleGap?: number,
   isTip: boolean,
+  isProgress: boolean,
 }
 
 type modelVal = 'min' | 'max' | 'value' | 'step';
