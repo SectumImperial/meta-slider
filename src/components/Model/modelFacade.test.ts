@@ -14,6 +14,7 @@ describe('The modelFacede tests', () => {
     step: 11,
     thumbPercent: 140,
     scaleMarks: false,
+    isTip: false,
   }
 
   const dataCorrect = {
@@ -23,6 +24,7 @@ describe('The modelFacede tests', () => {
     step: 11,
     thumbPercent: 55,
     scaleMarks: false,
+    isTip: false,
   }
 
   beforeEach(() => {

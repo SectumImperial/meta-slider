@@ -9,10 +9,13 @@ class View extends Observer {
   root: Element;
   slider: Slider;
 
-  constructor(root: Element) {
+  protected readonly state!: SliderInterface;
+
+  constructor(root: Element, state: SliderInterface) {
     super();
     this.root = root;
-    this.slider = new Slider(root);
+    this.slider = new Slider(root, state);
+    this.setSliderState(state);
     this.addSubscribeSlider();
   }
 
@@ -20,7 +23,7 @@ class View extends Observer {
     this.slider.getNewState(data);
   }
 
-  public setSliderState(data: SliderInterface) {
+  private setSliderState(data: SliderInterface) {
     this.slider.setState(data);
   }
 

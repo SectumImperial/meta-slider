@@ -3,6 +3,7 @@
  */
 
 import View from "./View";
+import state from '../../state'
 
 describe('The View component tests', () => {
   let root: HTMLElement;
@@ -11,7 +12,7 @@ describe('The View component tests', () => {
   beforeEach(() => {
     root = document.createElement('div');
     root.className = 'slider__wrapper';
-    view = new View(root);
+    view = new View(root, state);
   })
 
   afterEach(() => {

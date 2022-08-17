@@ -6,6 +6,7 @@ interface ModelInterface {
   thumbPercent: number,
   scaleMarks: boolean,
   scaleGap?: number,
+  isTip: boolean,
 }
 
 type modelVal = 'min' | 'max' | 'value' | 'step';

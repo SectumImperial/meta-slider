@@ -4,6 +4,7 @@ import { SLIDER_EVENTS } from "../../../Presenter/events";
 import Scale from "../Scale/Scale";
 import ScaleMarks from "../ScaleMarks/ScaleMarks";
 import Thumb from "../Thumb/Thumb";
+import Tip from "../Tip/Tip";
 
 class Slider extends Observer {
   root: Element;
@@ -11,16 +12,36 @@ class Slider extends Observer {
   thumb!: Thumb;
   scale!: Scale;
   scaleElement!: HTMLDivElement;
-  thumbPercent!: number;
+  thumbPercent: number;
+  scaleMap: Map<number, number> | undefined;
+  tipValue: number;
+
   scaleMarks!: ScaleMarks;
   protected readonly state!: SliderInterface;
-  scaleMap: Map<number, number> | undefined;
+  protected readonly isTip: boolean;
+  thumbElement!: HTMLDivElement;
+  tip?: Tip;
 
 
-  constructor(root: Element) {
+
+
+  constructor(root: Element, state: SliderInterface) {
     super()
+    const { isTip, value, thumbPercent } = state;
+    this.thumbPercent = thumbPercent;
+    this.isTip = isTip;
+    this.tipValue = value;
     this.root = root;
     this.init();
+    this.setState(state);
+  }
+
+  private init(): void {
+
+    this.slider = this.createSlider();
+    this.createlements();
+
+    this.addSlider();
   }
 
   public update(data: object, event: string): void {
@@ -50,18 +71,14 @@ class Slider extends Observer {
   public getNewState(data: SliderInterface) {
     const {
       thumbPercent,
+      value
     } = data;
     this.thumbPercent = thumbPercent;
     this.thumb.setPosition(this.thumbPercent);
-  }
-
-
-  private init(): void {
-
-    this.slider = this.createSlider();
-    this.createlements();
-
-    this.addSlider();
+    if (this.isTip && this.tip) {
+      this.tipValue = value;
+      this.tip.setPosition(this.thumbPercent, this.tipValue);
+    }
   }
 
   private addSlider(): void {
@@ -78,12 +95,8 @@ class Slider extends Observer {
     this.scale = new Scale(this.slider);
     this.scaleElement = this.scale.getScale()
     this.thumb = new Thumb(this.scaleElement, this.thumbPercent);
-    this.addElements(this.scaleElement);
-  }
-
-
-  private addElements(scaleElement: HTMLDivElement) {
-    this.slider.append(scaleElement);
+    this.thumbElement = this.thumb.getThumb();
+    if (this.isTip) this.tip = new Tip(this.scaleElement, this.thumbPercent, this.tipValue);
   }
 }
 

@@ -5,7 +5,7 @@ class Thumb extends SliderComponents {
   thumbPercent: number;
   thumbElement!: HTMLDivElement;
 
-  constructor(root: HTMLElement, thumbPercent = 0) {
+  constructor(root: HTMLElement, thumbPercent: number = 0) {
     super(root);
     this.thumbPercent = thumbPercent;
     this.initThumb();
@@ -13,6 +13,10 @@ class Thumb extends SliderComponents {
 
   public setPosition(thumbPercent: number): void {
     this.thumbElement.style.left = thumbPercent + '%';
+  }
+
+  public getThumb(): HTMLDivElement {
+    return this.thumbElement;
   }
 
   private initThumb(): void {

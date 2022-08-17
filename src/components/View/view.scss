@@ -19,7 +19,6 @@
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    left: 10px;
     background: red;
     cursor: grab;
 
@@ -48,5 +47,35 @@
 
   &__mark-value {
     transform: translateX(-50%);
+  }
+
+  &__tip {
+    position: absolute;
+    top: -40px;
+    min-width: 20px;
+    min-height: 20px;
+
+    padding: 2px;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: white;
+    color: black;
+
+    border-radius: 3px;
+    border: 1px solid black;
+
+    transform: translateX(-50%);
+
+    &::before {
+      content: '';
+      position: absolute;
+      background-color: transparent;
+      border: 10px solid transparent; 
+      border-top: 10px solid white;
+      top: 19px;
+    }
   }
 }

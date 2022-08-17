@@ -13,9 +13,9 @@ class Presenter extends Observer {
   constructor(root: HTMLElement, state: ModelInterface) {
     super()
     this.root = root;
-    this.view = new View(root);
+
     this.modelFacade = new ModelFacade(state);
-    this.view.setSliderState(this.modelFacade.getState());
+    this.view = new View(root, this.modelFacade.getState());
     this.subscribeModel();
     this.subscribeSlider();
   }
