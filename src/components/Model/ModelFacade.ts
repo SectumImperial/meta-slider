@@ -28,9 +28,11 @@ class ModelFacade extends Observer {
 
   public getState(): SliderInterface {
     if (this.model.getState().scaleMarks) {
+      const sliderMarks = this.validator.validateMarks(this.model.mapSteps, 5);
+      console.log(sliderMarks);
       return {
         ...this.model.getState(),
-        scaleMap: this.model.mapSteps,
+        scaleMap: sliderMarks,
       }
     } else {
       return this.model.getState();

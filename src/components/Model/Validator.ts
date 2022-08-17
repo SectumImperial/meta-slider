@@ -8,9 +8,11 @@ class Validator {
   private step!: number;
   thumbPercent!: number;
   private resultObject: ModelInterface;
+  stepPercent: number;
 
   constructor(data: ModelInterface) {
     this.setData(data);
+    this.stepPercent = this.step / (this.findRange() / 100);
     this.resultObject = initialState;
   }
 
@@ -39,6 +41,29 @@ class Validator {
     if (percentMove < 0) percentMove = 0;
     if (percentMove > 100) percentMove = 100;
     return percentMove;
+  }
+
+  public validateMarks(mapSteps: Map<number, number>, percentEdge: number): Map<number, number> {
+    const resultMap = new Map<number, number>();
+    let prevPercent = 0;
+    let nextPercent = percentEdge;
+
+    for (let [value, percent] of mapSteps) {
+
+      if (percent === 0 || percent === 100) {
+        resultMap.set(value, percent);
+      }
+
+      if ((nextPercent - prevPercent) >= percentEdge && percent === nextPercent) {
+
+        resultMap.set(value, percent);
+        prevPercent = percent;
+        nextPercent += percentEdge;
+
+        console.log(prevPercent, nextPercent);
+      }
+    }
+    return resultMap;
   }
 
   private checkRange(): void {
@@ -73,6 +98,10 @@ class Validator {
     }
 
     if (this.value < this.min) {
+      this.value = this.min;
+    }
+
+    if (this.value % this.step !== 0) {
       this.value = this.min;
     }
 

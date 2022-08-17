@@ -1,10 +1,10 @@
 const initialState = {
   min: 0,
-  max: 100,
-  value: 10,
-  step: 10,
+  max: 100000,
+  value: 1,
+  step: 1,
   thumbPercent: 90,
-  scaleMarks: false,
+  scaleMarks: true,
 };
 
 export default initialState;
