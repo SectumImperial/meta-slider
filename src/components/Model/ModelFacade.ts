@@ -28,8 +28,8 @@ class ModelFacade extends Observer {
 
   public getState(): SliderInterface {
     if (this.model.getState().scaleMarks) {
-      const sliderMarks = this.validator.validateMarks(this.model.mapSteps, 5);
-      console.log(sliderMarks);
+      const gap = this.model.getState().scaleGap || 20;
+      const sliderMarks = this.validator.validateMarks(this.model.mapSteps, gap);
       return {
         ...this.model.getState(),
         scaleMap: sliderMarks,
@@ -50,7 +50,7 @@ class ModelFacade extends Observer {
 
   public update(data: ValidateSliderData, event: string) {
     if (event === MODEL_EVENTS.VALUE_CHANGED) {
-      const movedTo = this.validator.performMoveToercent(data);
+      const movedTo = this.validator.performMoveToPercent(data);
 
       if (movedTo === this.prevMove) return
 

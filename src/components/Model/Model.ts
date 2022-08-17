@@ -24,11 +24,12 @@ class Model {
   }
 
   public updateState(movedTo: number): void {
-    const { step } = this.state;
+    const { step, max } = this.state;
     const nearestCountStep: number = Math.floor(movedTo / (step / this.findPercent()))
     const nearStep: number = nearestCountStep * step;
     const halfStep: number = step / 2;
     const halfMove: number = Number((movedTo % (step / this.findPercent())).toFixed(2));
+
 
     if (halfMove < halfStep) {
       const val = nearStep;
@@ -38,7 +39,7 @@ class Model {
     }
 
     if (halfMove >= halfStep) {
-      const val = nearStep + step;
+      const val = nearStep + step <= max ? nearStep + step : max;
       const percent = this.mapSteps.get(val);
       if (percent !== undefined) this.updateMoved(val, percent);
       return
@@ -57,12 +58,15 @@ class Model {
   }
 
   private createSteps(): StepsMap {
-    const { step } = this.state;
+    const { step, max } = this.state;
     const mapSteps: StepsMap = new Map();
     const range = this.findRange();
     const percent = this.findPercent();
     for (let i = 0; i <= range; i += step) {
       mapSteps.set(i, i / percent);
+    }
+    if (range % step !== 0) {
+      mapSteps.set(max, 100);
     }
     return mapSteps;
   }

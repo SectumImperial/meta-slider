@@ -2,6 +2,8 @@ import { ModelInterface, ValidateSliderData } from "../Interfaces";
 import initialState from "../../state";
 
 class Validator {
+  private DEFAULT_GAP: number = 20;
+
   private min!: number;
   private max!: number;
   private value!: number;
@@ -34,7 +36,7 @@ class Validator {
     return this.resultObject;
   }
 
-  public performMoveToercent(data: ValidateSliderData): number {
+  public performMoveToPercent(data: ValidateSliderData): number {
     const { coordsMove, scaleWidth } = data;
     const percent = scaleWidth / 100;
     let percentMove = Number((coordsMove / percent).toFixed(2))
@@ -43,7 +45,8 @@ class Validator {
     return percentMove;
   }
 
-  public validateMarks(mapSteps: Map<number, number>, percentEdge: number): Map<number, number> {
+  public validateMarks(mapSteps: Map<number, number>, basisPercent: number = this.DEFAULT_GAP): Map<number, number> {
+    const percentEdge = this.validateGap(basisPercent);
     const resultMap = new Map<number, number>();
     let prevPercent = 0;
     let nextPercent = percentEdge;
@@ -54,16 +57,20 @@ class Validator {
         resultMap.set(value, percent);
       }
 
-      if ((nextPercent - prevPercent) >= percentEdge && percent === nextPercent) {
-
+      if (Math.round(nextPercent) - Math.round(prevPercent) >= percentEdge && percent >= nextPercent) {
         resultMap.set(value, percent);
         prevPercent = percent;
-        nextPercent += percentEdge;
-
-        console.log(prevPercent, nextPercent);
+        nextPercent = percent + percentEdge;
       }
     }
+
     return resultMap;
+  }
+
+  private validateGap(basisPercent: number): number {
+    let result = basisPercent;
+    if (result < 0 || result > 100) basisPercent = this.DEFAULT_GAP
+    return result;
   }
 
   private checkRange(): void {
@@ -84,8 +91,10 @@ class Validator {
     if (this.step > allRange) {
       this.step = allRange
     }
+    if (!this.step) this.step = 1;
     this.resultObject.step = this.step;
   }
+
 
   private findRange(): number {
     const result = this.max - this.min;
