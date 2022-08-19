@@ -15,7 +15,9 @@ class Thumb extends SliderComponents {
   }
 
   public setPosition(thumbPercent: number): void {
-    this.thumbElement.style.left = thumbPercent + '%';
+    this.thumbPercent = thumbPercent;
+    this.checkZInd();
+    this.thumbElement.style.left = this.thumbPercent + '%';
   }
 
   public getThumb(): HTMLDivElement {
@@ -28,10 +30,29 @@ class Thumb extends SliderComponents {
 
   private initThumb(): void {
     this.thumbElement = this.createElement('slider__thumb');
-
+    this.thumbElement.id = this.thumbId;
     this.root.append(this.thumbElement);
     this.setPosition(this.thumbPercent);
     this.addListeners();
+  }
+
+  private checkZInd(): void {
+
+    if (this.thumbId === 'valueFrom' && this.thumbPercent === 100) {
+      this.thumbElement.style.zIndex = '10';
+    }
+
+    if (this.thumbId === 'valueFrom' && this.thumbPercent < 100) {
+      this.thumbElement.style.zIndex = '5';
+    }
+
+    if (this.thumbId === 'valueTo' && this.thumbPercent === 0) {
+      this.thumbElement.style.zIndex = '10';
+    }
+
+    if (this.thumbId === 'valueTo' && this.thumbPercent > 0) {
+      this.thumbElement.style.zIndex = '5';
+    }
   }
 
   private addListeners() {
@@ -42,6 +63,7 @@ class Thumb extends SliderComponents {
 
   private mouseDown(e: MouseEvent): void {
     this.shiftX = e.clientX - this.thumbElement.getBoundingClientRect().left;
+    this.checkZInd();
     super.performMouseMove(this.shiftX, this.thumbId);
   }
 }
