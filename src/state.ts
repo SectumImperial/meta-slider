@@ -1,15 +1,16 @@
 const initialState = {
-  min: -100,
+  min: 0,
   max: 100,
-  valueFrom: 1,
-  valueTo: 50,
+  valueFrom: 50,
+  valueTo: 90,
   step: 1,
-  thumbPercent: 90,
-  scaleGap: 5,
+  thumbPercentFrom: 50,
+  thumbPercentTo: 90,
+  scalePercentGap: 5,
   scaleMarks: true,
   isTip: true,
   isProgress: true,
-  isRange: false,
+  isRange: true,
 };
 
 export default initialState;

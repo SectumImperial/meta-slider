@@ -10,34 +10,48 @@ import Tip from "../Tip/Tip";
 class Slider extends Observer {
   root: Element;
   slider!: HTMLDivElement;
-  thumb!: Thumb;
+  thumbFrom!: Thumb;
+  thumbTo?: Thumb;
   scale!: Scale;
   scaleElement!: HTMLDivElement;
-  thumbPercent: number;
+  thumbPercentFrom: number;
   scaleMap: Map<number, number> | undefined;
-  tipValue: number;
+  tipValueFrom: number;
 
   scaleMarks!: ScaleMarks;
-  protected readonly state!: SliderInterface;
   protected readonly isTip: boolean;
-  thumbElement!: HTMLDivElement;
-  tip?: Tip;
+  tipFrom?: Tip;
   isProgress: boolean;
   progress?: Progress;
+  isRange: boolean;
+  thumbPercentTo?: number;
+  tipTo?: Tip;
+  tipValueTo?: number;
 
-
-
-
-  constructor(root: Element, state: SliderInterface) {
+  constructor(root: Element, protected readonly state: SliderInterface) {
     super()
-    const { isTip, valueFrom, thumbPercent, isProgress } = state;
-    this.thumbPercent = thumbPercent;
+    const {
+      isTip,
+      valueFrom,
+      thumbPercentFrom,
+      thumbPercentTo,
+      isProgress,
+      isRange,
+      scaleMap
+    } = state;
+    this.thumbPercentFrom = thumbPercentFrom;
+    if (thumbPercentTo) this.thumbPercentTo = thumbPercentTo;
+
     this.isTip = isTip;
-    this.tipValue = valueFrom;
+    this.tipValueFrom = valueFrom;
     this.isProgress = isProgress;
+    this.isRange = isRange;
     this.root = root;
     this.init();
     this.setState(state);
+    if (scaleMap) {
+      this.scaleMarks = new ScaleMarks(this.scaleElement, scaleMap)
+    }
   }
 
   private init(): void {
@@ -58,34 +72,32 @@ class Slider extends Observer {
 
   public setState(data: SliderInterface) {
     const {
-      thumbPercent,
-      scaleMap
+      thumbPercentFrom,
+      valueFrom,
+      isRange,
+      thumbPercentTo,
+      valueTo,
     } = data;
+    this.thumbPercentFrom = thumbPercentFrom;
+    this.thumbFrom.setPosition(this.thumbPercentFrom);
 
-    this.thumbPercent = thumbPercent;
-    this.scaleMap = scaleMap;
-
-    if (scaleMap) {
-      this.scaleMarks = new ScaleMarks(this.scaleElement, scaleMap)
+    if (isRange && typeof thumbPercentTo === 'number' && this.thumbTo) {
+      this.thumbPercentTo = thumbPercentTo;
+      this.thumbTo.setPosition(this.thumbPercentTo);
     }
 
-    this.thumb.setPosition(this.thumbPercent);
-  }
+    if (this.isTip && this.tipFrom) {
+      this.tipValueFrom = valueFrom;
+      this.tipFrom.setPosition(this.thumbPercentFrom, this.tipValueFrom);
+    }
 
-  public getNewState(data: SliderInterface) {
-    const {
-      thumbPercent,
-      valueFrom
-    } = data;
-    this.thumbPercent = thumbPercent;
-    this.thumb.setPosition(this.thumbPercent);
-    if (this.isTip && this.tip) {
-      this.tipValue = valueFrom;
-      this.tip.setPosition(this.thumbPercent, this.tipValue);
+    if (isRange && this.tipTo && valueTo && this.thumbPercentTo) {
+      this.tipValueTo = valueTo;
+      this.tipTo.setPosition(this.thumbPercentTo, this.tipValueTo);
     }
 
     if (this.isProgress && this.progress) {
-      this.progress.setProgressPosition(0, this.thumbPercent)
+      this.progress.setProgressPosition(0, this.thumbPercentFrom)
     }
   }
 
@@ -102,10 +114,12 @@ class Slider extends Observer {
   private createlements() {
     this.scale = new Scale(this.slider);
     this.scaleElement = this.scale.getScale()
-    this.thumb = new Thumb(this.scaleElement, this.thumbPercent);
-    this.thumbElement = this.thumb.getThumb();
-    if (this.isTip) this.tip = new Tip(this.scaleElement, this.thumbPercent, this.tipValue);
-    if (this.isProgress) this.progress = new Progress(this.scaleElement, 0, this.thumbPercent);
+    this.thumbFrom = new Thumb(this.scaleElement, this.thumbPercentFrom, 'valueFrom');
+
+    if (this.isRange) this.thumbTo = new Thumb(this.scaleElement, 95, 'valueTo');
+    if (this.isTip, this.thumbPercentTo) this.tipTo = new Tip(this.scaleElement, this.thumbPercentTo, this.tipValueFrom);
+    if (this.isTip) this.tipFrom = new Tip(this.scaleElement, this.thumbPercentFrom, this.tipValueFrom);
+    if (this.isProgress) this.progress = new Progress(this.scaleElement, 0, this.thumbPercentFrom);
   }
 }
 

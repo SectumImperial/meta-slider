@@ -21,12 +21,13 @@ class SliderComponents extends Observer {
   }
 
 
-  protected performMouseMove(thumbPos: number) {
+  protected performMouseMove(thumbPos: number, id: string) {
     const mouseMove = (e: MouseEvent) => {
       e.preventDefault();
       const newLeft = e.clientX - thumbPos - this.root.getBoundingClientRect().left;
       this.emit(SLIDER_EVENTS.VALUE_START_CHANGE, {
-        coordsMove: newLeft
+        coordsMove: newLeft,
+        thumbId: id,
       })
     }
 

@@ -1,4 +1,4 @@
-import { ModelInterface, ValidateSliderData } from "../Interfaces";
+import { ModelInterface, ThumbID, ValidateSliderData } from "../Interfaces";
 import initialState from "../../state";
 
 class Validator {
@@ -8,11 +8,12 @@ class Validator {
   private max!: number;
   private valueFrom!: number;
   private step!: number;
-  thumbPercent!: number;
+  thumbPercentFrom!: number;
+  thumbPercentTo?: number;
   private resultObject: ModelInterface;
   stepPercent: number;
   isRange!: boolean;
-  valueTo?: number;
+  valueTo!: number;
 
   constructor(data: ModelInterface) {
     this.setData(data);
@@ -21,21 +22,25 @@ class Validator {
   }
 
   public setData(data: ModelInterface): void {
-    const { min, max, valueFrom, step, thumbPercent, isRange, valueTo } = data;
+    const { min, max, valueFrom, step, thumbPercentFrom, thumbPercentTo, isRange, valueTo } = data;
     this.min = min;
     this.max = max;
     this.valueFrom = valueFrom;
     this.step = step;
-    this.thumbPercent = thumbPercent;
+    this.thumbPercentFrom = thumbPercentFrom;
+
     this.isRange = isRange;
-    if (this.isRange && valueTo) this.valueTo = valueTo;
+    if (this.isRange && valueTo) {
+      this.valueTo = valueTo;
+      this.thumbPercentTo = thumbPercentTo || 100;
+    }
   }
 
   public validateData(): ModelInterface {
     this.checkRange();
     this.checkStep();
     this.checkValues();
-    this.checkPercent();
+    this.checkPercents();
 
     return this.resultObject;
   }
@@ -61,7 +66,7 @@ class Validator {
         resultMap.set(percent, value);
       }
 
-      if (Math.round(nextPercent) - Math.round(prevPercent) >= percentEdge && percent >= nextPercent) {
+      if (this.isGetGap(nextPercent, prevPercent, percent, percentEdge)) {
         resultMap.set(percent, value);
         prevPercent = percent;
         nextPercent = percent + percentEdge;
@@ -69,6 +74,10 @@ class Validator {
     }
 
     return resultMap;
+  }
+
+  private isGetGap(nextPercent: number, prevPercent: number, percent: number, percentEdge: number): boolean {
+    return Math.round(nextPercent) - Math.round(prevPercent) >= percentEdge && percent >= nextPercent && (100 - percentEdge) >= nextPercent
   }
 
   private validateGap(basisPercent: number): number {
@@ -113,7 +122,7 @@ class Validator {
     }
 
     if (this.valueTo && this.valueFrom > this.valueTo) {
-      this.valueFrom = this.valueTo;
+      [this.valueFrom, this.valueTo] = [this.valueTo, this.valueFrom]
       this.resultObject.valueTo = this.valueTo;
     }
 
@@ -138,10 +147,15 @@ class Validator {
     return value;
   }
 
-  private checkPercent(): void {
-    const valOfRange = this.valueFrom - this.min;
+  private checkPercents(): void {
+    this.resultObject.thumbPercentFrom = this.checkPercent('valueFrom');
+    if (this.isRange) this.resultObject.thumbPercentTo = this.checkPercent('valueTo');
+  }
+
+  private checkPercent(value: ThumbID = 'valueFrom'): number {
+    const valOfRange = this[value] - this.min;
     const currentPercent = (valOfRange / (this.findRange() / 100))
-    this.resultObject.thumbPercent = currentPercent;
+    return currentPercent;
   }
 }
 

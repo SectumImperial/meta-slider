@@ -1,4 +1,4 @@
-import { ModelInterface, modelVal } from "../Interfaces";
+import { ModelInterface, modelVal, ThumbID, ThumbValPercent } from "../Interfaces";
 import initialState from "../../state";
 // import Observer from "../../Observer/Observer";
 
@@ -30,8 +30,9 @@ class Model {
     return this.state;
   }
 
-  public updateState(movedTo: number): void {
-    const { step } = this.state;
+  public updateState(movedTo: number, thumb: ThumbID): void {
+    const { step, valueTo, valueFrom, isRange, thumbPercentTo, thumbPercentFrom } = this.state;
+
     const nearestCountStep: number = Math.floor(movedTo / (step / this.findPercent()))
     const nearStepPercent: number = nearestCountStep * this.stepPercent;
     const halfStep: number = step / 2;
@@ -40,26 +41,117 @@ class Model {
     if (halfMove < halfStep) {
       const val = this.mapSteps.get(nearStepPercent);
       const percent = nearStepPercent;
-      if (val !== undefined) this.updateMoved(val, percent);
-      return
+
+      this.handleMove({
+        isRange,
+        val,
+        valueFrom,
+        valueTo,
+        thumb,
+        percent,
+        thumbPercentTo,
+        thumbPercentFrom,
+      })
+
     }
 
     if (halfMove >= halfStep) {
-      const val = nearStepPercent + this.stepPercent <= 100 ? this.stepPercent + step : 100;
+      const val = nearStepPercent + this.stepPercent <= 100 ? this.mapSteps.get(nearStepPercent) : this.mapSteps.get(100);
       const percent = nearStepPercent;
-      if (percent !== undefined) this.updateMoved(val, percent);
-      return
+
+      this.handleMove({
+        isRange,
+        val,
+        valueFrom,
+        valueTo,
+        thumb,
+        percent,
+        thumbPercentTo,
+        thumbPercentFrom,
+      })
     }
+
     return
   }
 
+  private handleMove(values: {
+    isRange: boolean,
+    val: number | undefined,
+    valueFrom: number,
+    valueTo: number | undefined,
+    thumb: ThumbID,
+    percent: number,
+    thumbPercentTo: number | undefined,
+    thumbPercentFrom: number,
+  }) {
 
-  private updateMoved(val: number, percent: number) {
+    const { isRange, val, valueFrom, valueTo, thumb, percent, thumbPercentTo, thumbPercentFrom } = values;
+
+    if (thumb === 'valueFrom') {
+      this.handleMoveFrom({
+        isRange,
+        val,
+        valueTo,
+        thumb,
+        percent,
+        thumbPercentTo,
+      })
+    }
+
+    if (thumb === 'valueTo') {
+      this.handleMoveTo({
+        isRange,
+        val,
+        valueFrom,
+        thumb,
+        percent,
+        thumbPercentFrom,
+      })
+    }
+  }
+
+  private handleMoveFrom(values: {
+    isRange: boolean,
+    val: number | undefined,
+    valueTo: number | undefined,
+    thumb: ThumbID,
+    percent: number,
+    thumbPercentTo: number | undefined,
+  }) {
+    const { isRange, val, valueTo, thumb, percent, thumbPercentTo } = values
+
+    if (isRange && val && valueTo && thumb === 'valueFrom' && val > valueTo && thumbPercentTo) {
+      this.updateMoved(valueTo, thumbPercentTo, thumb)
+    } else {
+      if (val !== undefined) this.updateMoved(val, percent, thumb);
+    }
+  }
+
+  private handleMoveTo(values: {
+    isRange: boolean,
+    val: number | undefined,
+    valueFrom: number | undefined,
+    thumb: ThumbID,
+    percent: number,
+    thumbPercentFrom: number,
+  }) {
+    const { isRange, val, valueFrom, thumb, percent, thumbPercentFrom } = values
+
+    if (isRange && val && valueFrom && thumb === 'valueTo' && val < valueFrom && thumbPercentFrom) {
+      this.updateMoved(valueFrom, thumbPercentFrom, thumb)
+    } else {
+      if (val !== undefined) this.updateMoved(val, percent, thumb);
+    }
+  }
+
+
+  private updateMoved(val: number, percent: number, thumb: ThumbID) {
     if (isNaN(val) || percent === undefined) throw new Error('Somethnig wrong in setting new values');
+    const thumbPecent = ThumbValPercent[thumb]
 
     this.setState({
-      valueFrom: val,
-      thumbPercent: percent,
+      [thumb]: val,
+      [thumbPecent]: percent,
     });
   }
 

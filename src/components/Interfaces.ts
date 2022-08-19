@@ -3,16 +3,15 @@ interface ModelInterface {
   max: number,
   valueFrom: number,
   valueTo?: number,
+  thumbPercentFrom: number,
+  thumbPercentTo?: number,
   step: number,
-  thumbPercent: number,
   scaleMarks: boolean,
-  scaleGap?: number,
+  scalePercentGap?: number,
   isTip: boolean,
   isProgress: boolean,
   isRange: boolean,
 }
-
-type modelVal = 'min' | 'max' | 'valueFrom' | 'step' | 'valueTo';
 
 interface SliderInterface extends ModelInterface {
   scaleMap?: Map<number, number>
@@ -21,7 +20,17 @@ interface SliderInterface extends ModelInterface {
 interface ValidateSliderData {
   coordsMove: number,
   scaleWidth: number,
+  thumbId: string,
+}
+
+type modelVal = 'min' | 'max' | 'valueFrom' | 'step' | 'valueTo';
+
+type ThumbID = 'valueFrom' | 'valueTo'
+
+const ThumbValPercent = {
+  valueFrom: 'thumbPercentFrom',
+  valueTo: 'thumbPercentTo',
 }
 
 
-export { ModelInterface, modelVal, SliderInterface, ValidateSliderData };
+export { ModelInterface, modelVal, SliderInterface, ValidateSliderData, ThumbID, ThumbValPercent };

@@ -1,6 +1,6 @@
 import Model from "./Model";
 import Validator from "./Validator";
-import { ModelInterface, SliderInterface, ValidateSliderData } from "../Interfaces";
+import { ModelInterface, SliderInterface, ThumbID, ValidateSliderData } from "../Interfaces";
 import Observer from "../../Observer/Observer";
 import { MODEL_EVENTS } from "../Presenter/events";
 
@@ -28,7 +28,7 @@ class ModelFacade extends Observer {
 
   public getState(): SliderInterface {
     if (this.model.getState().scaleMarks) {
-      const gap = this.model.getState().scaleGap || 20;
+      const gap = this.model.getState().scalePercentGap || 20;
       const sliderMarks = this.validator.validateMarks(this.model.mapSteps, gap);
       return {
         ...this.model.getState(),
@@ -50,12 +50,12 @@ class ModelFacade extends Observer {
 
   public update(data: ValidateSliderData, event: string) {
     if (event === MODEL_EVENTS.VALUE_CHANGED) {
+      const { thumbId } = data;
       const movedTo = this.validator.performMoveToPercent(data);
 
       if (movedTo === this.prevMove) return
-
       this.prevMove = movedTo;
-      this.model.updateState(movedTo);
+      this.model.updateState(movedTo, thumbId as ThumbID);
       const newState = this.model.getState()
 
       if (newState.scaleMarks) {
