@@ -11,7 +11,7 @@ describe('The modelFacede tests', () => {
     ...initialState,
     min: 10,
     max: 10,
-    value: 14,
+    valueFrom: 14,
     step: 11,
     thumbPercent: 140,
   }
@@ -20,7 +20,7 @@ describe('The modelFacede tests', () => {
     ...initialState,
     min: 10,
     max: 21,
-    value: 14,
+    valueFrom: 14,
     step: 11,
   }
 

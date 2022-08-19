@@ -13,7 +13,7 @@ class ScaleMarks extends SliderComponents {
   }
 
   private createMarks() {
-    for (let [value, percent] of this.marks) {
+    for (let [percent, value] of this.marks) {
       this.createMark(value, percent);
     }
   }

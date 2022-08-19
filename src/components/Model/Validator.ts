@@ -6,11 +6,13 @@ class Validator {
 
   private min!: number;
   private max!: number;
-  private value!: number;
+  private valueFrom!: number;
   private step!: number;
   thumbPercent!: number;
   private resultObject: ModelInterface;
   stepPercent: number;
+  isRange!: boolean;
+  valueTo?: number;
 
   constructor(data: ModelInterface) {
     this.setData(data);
@@ -19,18 +21,20 @@ class Validator {
   }
 
   public setData(data: ModelInterface): void {
-    const { min, max, value, step, thumbPercent } = data;
+    const { min, max, valueFrom, step, thumbPercent, isRange, valueTo } = data;
     this.min = min;
     this.max = max;
-    this.value = value;
+    this.valueFrom = valueFrom;
     this.step = step;
     this.thumbPercent = thumbPercent;
+    this.isRange = isRange;
+    if (this.isRange && valueTo) this.valueTo = valueTo;
   }
 
   public validateData(): ModelInterface {
     this.checkRange();
     this.checkStep();
-    this.checkValue();
+    this.checkValues();
     this.checkPercent();
 
     return this.resultObject;
@@ -51,14 +55,14 @@ class Validator {
     let prevPercent = 0;
     let nextPercent = percentEdge;
 
-    for (let [value, percent] of mapSteps) {
+    for (let [percent, value] of mapSteps) {
 
       if (percent === 0 || percent === 100) {
-        resultMap.set(value, percent);
+        resultMap.set(percent, value);
       }
 
       if (Math.round(nextPercent) - Math.round(prevPercent) >= percentEdge && percent >= nextPercent) {
-        resultMap.set(value, percent);
+        resultMap.set(percent, value);
         prevPercent = percent;
         nextPercent = percent + percentEdge;
       }
@@ -101,24 +105,42 @@ class Validator {
     return result;
   }
 
-  private checkValue(): void {
-    if (this.value > this.max) {
-      this.value = this.max;
+  private checkValues(): void {
+    this.valueFrom = this.checkValue(this.valueFrom);
+
+    if (this.isRange) {
+      this.valueTo = this.checkValue(this.valueTo);
     }
 
-    if (this.value < this.min) {
-      this.value = this.min;
+    if (this.valueTo && this.valueFrom > this.valueTo) {
+      this.valueFrom = this.valueTo;
+      this.resultObject.valueTo = this.valueTo;
     }
 
-    if (this.value % this.step !== 0) {
-      this.value = this.min;
+    this.resultObject.valueFrom = this.valueFrom;
+  }
+
+  private checkValue(value: number = 0): number {
+
+    if (value > this.max) {
+      value = this.max;
     }
 
-    this.resultObject.value = this.value;
+    if (this.valueFrom < this.min) {
+      value = this.min;
+    }
+
+    if (value % this.step !== 0) {
+      const stepVal = this.step * Math.floor((value / this.step))
+      value = stepVal;
+    }
+
+    return value;
   }
 
   private checkPercent(): void {
-    const currentPercent = (this.value / (this.findRange() / 100))
+    const valOfRange = this.valueFrom - this.min;
+    const currentPercent = (valOfRange / (this.findRange() / 100))
     this.resultObject.thumbPercent = currentPercent;
   }
 }

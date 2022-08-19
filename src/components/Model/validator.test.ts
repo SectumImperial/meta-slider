@@ -12,39 +12,54 @@ describe('The validation of data tests', () => {
     ...initialState,
     min: 0,
     max: 10,
-    value: 0,
+    valueFrom: 0,
     step: 11,
+    isRange: false,
   }
   const dataValWrong = {
     ...initialState,
     min: 0,
     max: 10,
-    value: 11,
+    valueFrom: 11,
     step: 1,
+    isRange: false,
   }
 
   const dataValSmallWrong = {
     ...initialState,
     min: 0,
     max: 10,
-    value: -1,
+    valueFrom: -1,
     step: 1,
+    isRange: false,
   }
 
   const dataRangeWrong = {
     ...initialState,
     min: 0,
     max: 0,
-    value: 0,
+    valueFrom: 0,
     step: 1,
+    isRange: false,
   }
 
   const dataMinMaxWrong = {
     ...initialState,
     min: 10,
     max: 0,
-    value: 0,
+    valueFrom: 0,
     step: 1,
+    isRange: false,
+  }
+
+  const dataFromToWrong = {
+    ...initialState,
+    min: 0,
+    max: 10,
+    valueFrom: 10,
+    valueTo: 8,
+    step: 1,
+    isRange: true,
   }
 
 
@@ -53,40 +68,55 @@ describe('The validation of data tests', () => {
     ...initialState,
     min: 0,
     max: 10,
-    value: 0,
+    valueFrom: 0,
     step: 10,
+    isRange: false,
   }
 
   const dataValCorrect = {
     ...initialState,
     min: 0,
     max: 10,
-    value: 10,
+    valueFrom: 10,
     step: 1,
+    isRange: false,
   }
 
   const dataValSmallCorrect = {
     ...initialState,
     min: 0,
     max: 10,
-    value: 0,
+    valueFrom: 0,
     step: 1,
+    isRange: false,
   }
 
   const dataRangeCorrect = {
     ...initialState,
     min: 0,
     max: 1,
-    value: 0,
+    valueFrom: 0,
     step: 1,
+    isRange: false,
   }
 
   const dataMinMaxCorrect = {
     ...initialState,
     min: 0,
     max: 10,
-    value: 0,
+    valueFrom: 0,
     step: 1,
+    isRange: false,
+  }
+
+  const dataFromToCorrect = {
+    ...initialState,
+    min: 0,
+    max: 10,
+    valueFrom: 10,
+    valueTo: 10,
+    step: 1,
+    isRange: true,
   }
 
   test('Step can not be bigger than all range', () => {
@@ -117,6 +147,11 @@ describe('The validation of data tests', () => {
   test('Min can not be bigger than max', () => {
     validator = new Validator(dataMinMaxWrong);
     expect(validator.validateData()).toEqual(dataMinMaxCorrect)
+  })
+
+  test('Value from cannot be bigger than value to', () => {
+    validator = new Validator(dataFromToWrong);
+    expect(validator.validateData()).toEqual(dataFromToCorrect)
   })
 
 })

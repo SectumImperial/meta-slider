@@ -6,12 +6,19 @@ type StepsMap = Map<number, number>;
 
 class Model {
 
-  private state: ModelInterface = initialState;
-  mapSteps: StepsMap;
+  private state: ModelInterface;
+  mapSteps!: StepsMap;
+  stepPercent!: number;
 
-  constructor(state: ModelInterface) {
+  constructor(state: ModelInterface = initialState) {
     this.state = state;
+    this.init();
+
+  }
+
+  private init() {
     this.mapSteps = this.createSteps();
+    this.stepPercent = this.state.step / this.findPercent()
   }
 
   public setState(state: object) {
@@ -24,23 +31,22 @@ class Model {
   }
 
   public updateState(movedTo: number): void {
-    const { step, max } = this.state;
+    const { step } = this.state;
     const nearestCountStep: number = Math.floor(movedTo / (step / this.findPercent()))
-    const nearStep: number = nearestCountStep * step;
+    const nearStepPercent: number = nearestCountStep * this.stepPercent;
     const halfStep: number = step / 2;
     const halfMove: number = Number((movedTo % (step / this.findPercent())).toFixed(2));
 
-
     if (halfMove < halfStep) {
-      const val = nearStep;
-      const percent = this.mapSteps.get(val);
-      if (percent !== undefined) this.updateMoved(val, percent);
+      const val = this.mapSteps.get(nearStepPercent);
+      const percent = nearStepPercent;
+      if (val !== undefined) this.updateMoved(val, percent);
       return
     }
 
     if (halfMove >= halfStep) {
-      const val = nearStep + step <= max ? nearStep + step : max;
-      const percent = this.mapSteps.get(val);
+      const val = nearStepPercent + this.stepPercent <= 100 ? this.stepPercent + step : 100;
+      const percent = nearStepPercent;
       if (percent !== undefined) this.updateMoved(val, percent);
       return
     }
@@ -52,22 +58,27 @@ class Model {
     if (isNaN(val) || percent === undefined) throw new Error('Somethnig wrong in setting new values');
 
     this.setState({
-      value: val,
+      valueFrom: val,
       thumbPercent: percent,
     });
   }
 
   private createSteps(): StepsMap {
-    const { step, max } = this.state;
+    const { step, max, min } = this.state;
     const mapSteps: StepsMap = new Map();
     const range = this.findRange();
     const percent = this.findPercent();
-    for (let i = 0; i <= range; i += step) {
-      mapSteps.set(i, i / percent);
+
+    let countStep = 0;
+    for (let i = min; i <= max; i += step) {
+      mapSteps.set((countStep * step) / percent, i);
+      countStep++
     }
     if (range % step !== 0) {
       mapSteps.set(max, 100);
     }
+
+    countStep = 0;
     return mapSteps;
   }
 
@@ -83,22 +94,22 @@ class Model {
   }
 
 
-  public getValue(val: modelVal): number {
+  public getValue(val: modelVal): number | undefined {
     return this.state[`${val}`];
   }
 
   public increment(): void {
-    if (this.state.value !== this.state.max) this.state.value += this.state.step;
+    if (this.state.valueFrom !== this.state.max) this.state.valueFrom += this.state.step;
   }
 
   public decrement(): void {
-    if (this.state.value !== this.state.min) this.state.value -= this.state.step;
+    if (this.state.valueFrom !== this.state.min) this.state.valueFrom -= this.state.step;
   }
 
   public getPercentVal(): number {
-    const { value, min, max } = this.state;
+    const { valueFrom, min, max } = this.state;
     const range: number = max - min;
-    const percent: number = Number(((value / range) * 100).toFixed(3));
+    const percent: number = Number(((valueFrom / range) * 100).toFixed(3));
     return percent;
   }
 

@@ -14,8 +14,7 @@ class Tip extends SliderComponents {
   }
 
   private createTip(): HTMLDivElement {
-    const tip = document.createElement('div');
-    tip.className = 'slider__tip';
+    const tip = this.createElement('slider__tip')
     tip.innerText = `${this.valueTip}`;
     tip.style.left = `${this.percentPosition}%`;
     return tip;

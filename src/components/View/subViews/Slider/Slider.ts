@@ -30,10 +30,10 @@ class Slider extends Observer {
 
   constructor(root: Element, state: SliderInterface) {
     super()
-    const { isTip, value, thumbPercent, isProgress } = state;
+    const { isTip, valueFrom, thumbPercent, isProgress } = state;
     this.thumbPercent = thumbPercent;
     this.isTip = isTip;
-    this.tipValue = value;
+    this.tipValue = valueFrom;
     this.isProgress = isProgress;
     this.root = root;
     this.init();
@@ -75,12 +75,12 @@ class Slider extends Observer {
   public getNewState(data: SliderInterface) {
     const {
       thumbPercent,
-      value
+      valueFrom
     } = data;
     this.thumbPercent = thumbPercent;
     this.thumb.setPosition(this.thumbPercent);
     if (this.isTip && this.tip) {
-      this.tipValue = value;
+      this.tipValue = valueFrom;
       this.tip.setPosition(this.thumbPercent, this.tipValue);
     }
 

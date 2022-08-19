@@ -1,16 +1,18 @@
 interface ModelInterface {
   min: number,
   max: number,
-  value: number,
+  valueFrom: number,
+  valueTo?: number,
   step: number,
   thumbPercent: number,
   scaleMarks: boolean,
   scaleGap?: number,
   isTip: boolean,
   isProgress: boolean,
+  isRange: boolean,
 }
 
-type modelVal = 'min' | 'max' | 'value' | 'step';
+type modelVal = 'min' | 'max' | 'valueFrom' | 'step' | 'valueTo';
 
 interface SliderInterface extends ModelInterface {
   scaleMap?: Map<number, number>

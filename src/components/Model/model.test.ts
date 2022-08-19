@@ -24,7 +24,7 @@ describe('The model tests', () => {
   });
 
   test('The model must have defined value', () => {
-    expect(model.getValue('value')).toBeDefined();
+    expect(model.getValue('valueFrom')).toBeDefined();
   });
 
   test('The model must have defined step', () => {
@@ -41,9 +41,9 @@ describe('The model tests', () => {
   });
 
   test('The model should incremented the value after increment', () => {
-    const incrementVal = initialState.value + 1;
+    const incrementVal = initialState.valueFrom + 1;
     model.increment();
-    expect(model.getValue('value')).toEqual(incrementVal);
+    expect(model.getValue('valueFrom')).toEqual(incrementVal);
   });
 
 
@@ -52,15 +52,15 @@ describe('The model tests', () => {
   });
 
   test('The model should decremented the value after decrement', () => {
-    const decrementVal = initialState.value - 1;
+    const decrementVal = initialState.valueFrom - 1;
     model.decrement();
-    expect(model.getValue('value')).toEqual(decrementVal);
+    expect(model.getValue('valueFrom')).toEqual(decrementVal);
   });
 
   test('The model should return correct percent of curr. val', () => {
-    const { value, min, max } = initialState;
+    const { valueFrom, min, max } = initialState;
     const range = max - min;
-    const percent = Number(((value / range) * 100).toFixed(3));
+    const percent = Number(((valueFrom / range) * 100).toFixed(3));
 
     expect(model.getPercentVal()).toEqual(percent);
   });
