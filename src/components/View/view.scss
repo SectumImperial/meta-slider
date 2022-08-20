@@ -2,6 +2,7 @@
   display: flex;
   justify-content: center;
   position: relative;
+  width: 100%;
 
   &__scale {
     position: absolute;
@@ -70,6 +71,7 @@
     transform: translateX(-50%);
 
     z-index: 5;
+    white-space: nowrap;
 
     &::before {
       content: '';

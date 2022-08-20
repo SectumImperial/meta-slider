@@ -1,4 +1,4 @@
-import { ModelInterface, modelVal, ThumbID, ThumbValPercent } from "../Interfaces";
+import { ModelInterface, modelVal, ThumbID, ThumbValPercent, HandleMoveModel, HandleMoveModelFrom, HandleMoveModelTo } from "../Interfaces";
 import initialState from "../../state";
 // import Observer from "../../Observer/Observer";
 
@@ -74,18 +74,17 @@ class Model {
     return
   }
 
-  private handleMove(values: {
-    isRange: boolean,
-    val: number | undefined,
-    valueFrom: number,
-    valueTo: number | undefined,
-    thumb: ThumbID,
-    percent: number,
-    thumbPercentTo: number | undefined,
-    thumbPercentFrom: number,
-  }) {
-
-    const { isRange, val, valueFrom, valueTo, thumb, percent, thumbPercentTo, thumbPercentFrom } = values;
+  private handleMove(values: HandleMoveModel) {
+    const {
+      isRange,
+      val,
+      valueFrom,
+      valueTo,
+      thumb,
+      percent,
+      thumbPercentTo,
+      thumbPercentFrom
+    } = values;
 
     if (thumb === 'valueFrom') {
       this.handleMoveFrom({
@@ -110,15 +109,15 @@ class Model {
     }
   }
 
-  private handleMoveFrom(values: {
-    isRange: boolean,
-    val: number | undefined,
-    valueTo: number | undefined,
-    thumb: ThumbID,
-    percent: number,
-    thumbPercentTo: number | undefined,
-  }) {
-    const { isRange, val, valueTo, thumb, percent, thumbPercentTo } = values
+  private handleMoveFrom(values: HandleMoveModelFrom) {
+    const {
+      isRange,
+      val,
+      valueTo,
+      thumb,
+      percent,
+      thumbPercentTo
+    } = values
 
     if (isRange && val && valueTo && thumb === 'valueFrom' && val > valueTo && thumbPercentTo) {
       this.updateMoved(valueTo, thumbPercentTo, thumb)
@@ -127,17 +126,17 @@ class Model {
     }
   }
 
-  private handleMoveTo(values: {
-    isRange: boolean,
-    val: number | undefined,
-    valueFrom: number | undefined,
-    thumb: ThumbID,
-    percent: number,
-    thumbPercentFrom: number,
-  }) {
-    const { isRange, val, valueFrom, thumb, percent, thumbPercentFrom } = values
+  private handleMoveTo(values: HandleMoveModelTo) {
+    const {
+      isRange,
+      val,
+      valueFrom,
+      thumb,
+      percent,
+      thumbPercentFrom
+    } = values
 
-    if (isRange && val && valueFrom && thumb === 'valueTo' && val < valueFrom && thumbPercentFrom) {
+    if (isRange && val && valueFrom && thumbPercentFrom && thumb === 'valueTo' && val < valueFrom) {
       this.updateMoved(valueFrom, thumbPercentFrom, thumb)
     } else {
       if (val !== undefined) this.updateMoved(val, percent, thumb);

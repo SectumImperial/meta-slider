@@ -30,6 +30,7 @@ class Slider extends Observer {
 
   constructor(root: Element, protected readonly state: SliderInterface) {
     super()
+
     const {
       isTip,
       valueFrom,
@@ -39,6 +40,7 @@ class Slider extends Observer {
       isRange,
       scaleMap
     } = state;
+
     this.thumbPercentFrom = thumbPercentFrom;
     if (thumbPercentTo) this.thumbPercentTo = thumbPercentTo;
 
@@ -78,17 +80,36 @@ class Slider extends Observer {
       thumbPercentTo,
       valueTo,
     } = data;
+
+    // Thumb percents
     this.thumbPercentFrom = thumbPercentFrom;
     this.thumbFrom.setPosition(this.thumbPercentFrom);
+
 
     if (isRange && typeof thumbPercentTo === 'number' && this.thumbTo) {
       this.thumbPercentTo = thumbPercentTo;
       this.thumbTo.setPosition(this.thumbPercentTo);
     }
 
-    if (this.isTip && this.tipFrom) {
+    //  Tips
+    const isTip = this.isTip;
+
+    if (isTip && this.tipFrom) {
       this.tipValueFrom = valueFrom;
       this.tipFrom.setPosition(this.thumbPercentFrom, this.tipValueFrom);
+    }
+
+    if (
+      this.isNeedDoubleTip({
+        isTip,
+        isRange,
+        valueTo,
+        valueFrom,
+      })) {
+      this.tipFrom?.setValueTip(`${valueFrom} - ${valueTo}`);
+      this.tipTo?.hideTip();
+    } else {
+      this.tipTo?.showTip();
     }
 
     if (isRange && this.tipTo && valueTo && this.thumbPercentTo) {
@@ -96,16 +117,34 @@ class Slider extends Observer {
       this.tipTo.setPosition(this.thumbPercentTo, this.tipValueTo);
     }
 
-    if (this.isTip && isRange && valueTo && valueTo - valueFrom <= 2) {
-      this.tipFrom?.setValueTip(`${valueFrom} - ${valueTo}`);
-      this.tipTo?.hideTip();
-    } else {
-      this.tipTo?.showTip();
+    // Progress 
+    if (this.isProgress && !isRange) {
+      this.progress?.setProgressPosition(0, this.thumbPercentFrom)
     }
 
-    if (this.isProgress && this.progress) {
-      this.progress.setProgressPosition(0, this.thumbPercentFrom)
+    if (isRange && thumbPercentTo) {
+      this.progress?.setProgressPosition(this.thumbPercentFrom, thumbPercentTo - thumbPercentFrom);
     }
+
+    if (thumbPercentTo === thumbPercentFrom) {
+      this.progress?.setProgressPosition(0, 0);
+    }
+
+  }
+
+  private isNeedDoubleTip(values: {
+    isTip: boolean,
+    isRange: boolean,
+    valueTo: number | undefined,
+    valueFrom: number,
+  }) {
+    const {
+      isTip,
+      isRange,
+      valueTo,
+      valueFrom,
+    } = values
+    return isTip && isRange && valueTo && valueTo - valueFrom <= 2 || valueTo === 0 && valueFrom === 0
   }
 
   private addSlider(): void {
@@ -126,7 +165,12 @@ class Slider extends Observer {
     if (this.isRange) this.thumbTo = new Thumb(this.scaleElement, 95, 'valueTo');
     if (this.isTip, this.thumbPercentTo, this.isRange) this.tipTo = new Tip(this.scaleElement, this.thumbPercentTo!, this.tipValueTo!);
     if (this.isTip) this.tipFrom = new Tip(this.scaleElement, this.thumbPercentFrom, this.tipValueFrom);
-    if (this.isProgress) this.progress = new Progress(this.scaleElement, 0, this.thumbPercentFrom);
+    if (this.isProgress && !this.isRange) this.progress = new Progress(this.scaleElement, 0, this.thumbPercentFrom);
+    if (this.isProgress && this.isRange) {
+      const widthProgress = this.thumbPercentTo ? this.thumbPercentTo - this.thumbPercentFrom : 0;
+      console.log(this.thumbPercentFrom, widthProgress)
+      this.progress = new Progress(this.scaleElement, this.thumbPercentFrom, widthProgress);
+    }
   }
 }
 

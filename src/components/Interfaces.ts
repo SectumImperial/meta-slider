@@ -32,5 +32,44 @@ const ThumbValPercent = {
   valueTo: 'thumbPercentTo',
 }
 
+interface HandleMoveModel {
+  isRange: boolean,
+  val: number | undefined,
+  valueFrom: number,
+  valueTo: number | undefined,
+  thumb: ThumbID,
+  percent: number,
+  thumbPercentTo: number | undefined,
+  thumbPercentFrom: number,
+}
 
-export { ModelInterface, modelVal, SliderInterface, ValidateSliderData, ThumbID, ThumbValPercent };
+interface HandleMoveModelFrom {
+  isRange: boolean,
+  val: number | undefined,
+  valueTo: number | undefined,
+  thumb: ThumbID,
+  percent: number,
+  thumbPercentTo: number | undefined,
+}
+
+interface HandleMoveModelTo {
+  isRange: boolean,
+  val: number | undefined,
+  valueFrom: number | undefined,
+  thumb: ThumbID,
+  percent: number,
+  thumbPercentFrom: number,
+}
+
+
+export {
+  ModelInterface,
+  modelVal,
+  SliderInterface,
+  ValidateSliderData,
+  ThumbID,
+  ThumbValPercent,
+  HandleMoveModel,
+  HandleMoveModelFrom,
+  HandleMoveModelTo,
+};
