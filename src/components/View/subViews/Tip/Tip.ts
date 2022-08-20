@@ -3,14 +3,26 @@ import SliderComponents from "../SliderComponents/SliderComponents";
 class Tip extends SliderComponents {
   tip: HTMLDivElement;
   percentPosition: number;
-  valueTip: number
+  valueTip: number | string
 
-  constructor(root: HTMLDivElement, percentPosition: number, valueTip: number) {
+  constructor(root: HTMLDivElement, percentPosition: number, valueTip: number | string) {
     super(root);
     this.percentPosition = percentPosition;
     this.valueTip = valueTip;
     this.tip = this.createTip();
     this.addTip();
+  }
+
+  public setValueTip(valueTip: number | string): void {
+    this.tip.innerText = `${valueTip}`;
+  }
+
+  public hideTip() {
+    this.tip.style.display = 'none';
+  }
+
+  public showTip() {
+    this.tip.style.display = '';
   }
 
   private createTip(): HTMLDivElement {

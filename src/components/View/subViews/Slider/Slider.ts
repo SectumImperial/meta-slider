@@ -96,6 +96,13 @@ class Slider extends Observer {
       this.tipTo.setPosition(this.thumbPercentTo, this.tipValueTo);
     }
 
+    if (this.isTip && isRange && valueTo && valueTo - valueFrom <= 2) {
+      this.tipFrom?.setValueTip(`${valueFrom} - ${valueTo}`);
+      this.tipTo?.hideTip();
+    } else {
+      this.tipTo?.showTip();
+    }
+
     if (this.isProgress && this.progress) {
       this.progress.setProgressPosition(0, this.thumbPercentFrom)
     }
@@ -117,7 +124,7 @@ class Slider extends Observer {
     this.thumbFrom = new Thumb(this.scaleElement, this.thumbPercentFrom, 'valueFrom');
 
     if (this.isRange) this.thumbTo = new Thumb(this.scaleElement, 95, 'valueTo');
-    if (this.isTip, this.thumbPercentTo) this.tipTo = new Tip(this.scaleElement, this.thumbPercentTo, this.tipValueFrom);
+    if (this.isTip, this.thumbPercentTo, this.isRange) this.tipTo = new Tip(this.scaleElement, this.thumbPercentTo!, this.tipValueTo!);
     if (this.isTip) this.tipFrom = new Tip(this.scaleElement, this.thumbPercentFrom, this.tipValueFrom);
     if (this.isProgress) this.progress = new Progress(this.scaleElement, 0, this.thumbPercentFrom);
   }
