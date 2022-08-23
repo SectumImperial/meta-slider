@@ -61,7 +61,7 @@
     }
 
     &_vertical {
-      left: 20px;
+      left: -30px;
     }
 
     &_horizontal {
@@ -90,10 +90,8 @@
 
   &__tip {
     position: absolute;
-    top: -40px;
     min-width: 20px;
     min-height: 20px;
-
     padding: 2px;
 
     display: flex;
@@ -106,8 +104,6 @@
     border-radius: 3px;
     border: 1px solid black;
 
-    transform: translateX(-50%);
-
     z-index: 5;
     white-space: nowrap;
 
@@ -115,10 +111,32 @@
       content: '';
       position: absolute;
       background-color: transparent;
-      border: 10px solid transparent; 
-      border-top: 10px solid white;
-      top: 19px;
     }
+
+    &_horizontal {
+      transform: translateX(-50%);
+      top: -40px;
+
+      &::before {
+        border: 10px solid transparent; 
+        border-top: 10px solid white;
+        top: 19px;
+      }
+    }
+
+    &_vertical {
+      left: 20px;
+      padding-left: 5px;
+      transform: translateY(-50%);
+    }
+
+      &::before {
+        border: 10px solid transparent; 
+        border-right: 10px solid white;
+        top: 50%;
+        left: -15px;
+        transform: translateY(-50%);
+      }
   }
 
   &__progress {

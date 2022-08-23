@@ -50,6 +50,7 @@ class Slider extends Observer {
     const {
       isTip,
       valueFrom,
+      valueTo,
       thumbPercentFrom,
       thumbPercentTo,
       isProgress,
@@ -63,14 +64,12 @@ class Slider extends Observer {
 
     this.isTip = isTip || false;
     this.tipValueFrom = valueFrom || 0;
+    this.tipValueTo = valueTo || 0;
     this.isProgress = isProgress || false;
     this.isRange = isRange || false;
     this.isVertical = isVertical || false;
+    this.scaleMap = scaleMap;
     this.root = root;
-
-    if (scaleMap) {
-      this.scaleMarks = new ScaleMarks(this.scaleElement, scaleMap, isVertical)
-    }
   }
 
   private createlements() {
@@ -91,8 +90,20 @@ class Slider extends Observer {
       isVertical: this.isVertical,
     });
 
-    if (this.isTip && this.thumbPercentTo && this.isRange) this.tipTo = new Tip(this.scaleElement, this.thumbPercentTo!, this.tipValueTo!);
-    if (this.isTip) this.tipFrom = new Tip(this.scaleElement, this.thumbPercentFrom, this.tipValueFrom);
+    if (this.isTip) this.tipFrom = new Tip({
+      root: this.scaleElement,
+      percentPosition: this.thumbPercentFrom,
+      valueTip: this.tipValueFrom,
+      isVertical: this.isVertical,
+    });
+
+    if (this.isTip && this.thumbPercentTo && this.isRange && this.tipValueTo !== undefined) this.tipTo = new Tip({
+      root: this.scaleElement,
+      percentPosition: this.thumbPercentTo,
+      valueTip: this.tipValueTo,
+      isVertical: this.isVertical,
+    });
+
 
     if (this.isProgress && !this.isRange) this.progress = new Progress({
       root: this.scaleElement,
@@ -103,13 +114,16 @@ class Slider extends Observer {
 
     if (this.isProgress && this.isRange) {
       const widthProgress = this.thumbPercentTo ? this.thumbPercentTo - this.thumbPercentFrom : 0;
-      console.log(this.thumbPercentFrom, widthProgress)
       this.progress = new Progress({
         root: this.scaleElement,
         positionStart: this.thumbPercentFrom,
         positionEnd: widthProgress,
         isVertical: this.isVertical
       });
+    }
+
+    if (this.scaleMap) {
+      this.scaleMarks = new ScaleMarks(this.scaleElement, this.scaleMap, this.isVertical)
     }
   }
 
@@ -171,7 +185,7 @@ class Slider extends Observer {
       this.tipTo?.showTip();
     }
 
-    if (isRange && this.tipTo && valueTo && this.thumbPercentTo) {
+    if (isRange && this.tipTo && valueTo !== undefined && this.thumbPercentTo) {
       this.tipValueTo = valueTo;
       this.tipTo.setPosition(this.thumbPercentTo, this.tipValueTo);
     }

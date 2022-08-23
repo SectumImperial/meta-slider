@@ -1,14 +1,29 @@
+import { TipData } from "../../../Interfaces";
 import SliderComponents from "../SliderComponents/SliderComponents";
+
+type startPointType = 'top' | 'left';
 
 class Tip extends SliderComponents {
   tip: HTMLDivElement;
   percentPosition: number;
   valueTip: number | string
+  isVertical: boolean;
+  startPoint: startPointType;
 
-  constructor(root: HTMLDivElement, percentPosition: number, valueTip: number | string) {
+  constructor(data: TipData) {
+    const {
+      root,
+      percentPosition,
+      valueTip,
+      isVertical,
+    } = data;
+
     super(root);
     this.percentPosition = percentPosition;
     this.valueTip = valueTip;
+    this.isVertical = isVertical;
+    this.startPoint = isVertical ? 'top' : 'left';
+
     this.tip = this.createTip();
     this.addTip();
   }
@@ -26,9 +41,11 @@ class Tip extends SliderComponents {
   }
 
   private createTip(): HTMLDivElement {
-    const tip = this.createElement('slider__tip')
+    const mod = this.isVertical ? 'vertical' : 'horizontal';
+    const tip = this.createElement('slider__tip');
+    tip.classList.add(`slider__tip_${mod}`);
     tip.innerText = `${this.valueTip}`;
-    tip.style.left = `${this.percentPosition}%`;
+    tip.style[this.startPoint] = `${this.percentPosition}%`;
     return tip;
   }
 
@@ -37,7 +54,7 @@ class Tip extends SliderComponents {
   }
 
   public setPosition(percentPosition: number, value: number): void {
-    this.tip.style.left = `${percentPosition}%`;
+    this.tip.style[this.startPoint] = `${percentPosition}%`;
     this.tip.innerText = `${value}`;
   }
 }

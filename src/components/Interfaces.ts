@@ -75,6 +75,13 @@ interface ProgressData {
   isVertical: boolean;
 }
 
+interface TipData {
+  root: HTMLDivElement,
+  percentPosition: number,
+  valueTip: number | string,
+  isVertical: boolean,
+}
+
 
 export {
   ModelInterface,
@@ -87,5 +94,6 @@ export {
   HandleMoveModelFrom,
   HandleMoveModelTo,
   SliderEventValChangedData,
-  ProgressData
+  ProgressData,
+  TipData
 };
