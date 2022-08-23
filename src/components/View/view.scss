@@ -61,7 +61,7 @@
     }
 
     &_vertical {
-      left: -30px;
+      left: 25px;
     }
 
     &_horizontal {
@@ -125,17 +125,17 @@
     }
 
     &_vertical {
-      left: 20px;
-      padding-left: 5px;
+      right: 30px;
+      padding-right: 5px;
       transform: translateY(-50%);
     }
 
       &::before {
         border: 10px solid transparent; 
-        border-right: 10px solid white;
+        border-left: 10px solid white;
         top: 50%;
-        left: -15px;
         transform: translateY(-50%);
+        right: -18px;
       }
   }
 

@@ -1,6 +1,6 @@
 const initialState = {
   min: 0,
-  max: 100,
+  max: 10000,
   valueFrom: 1,
   valueTo: 0,
   step: 1,
