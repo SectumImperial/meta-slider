@@ -10,10 +10,6 @@ class SliderComponents extends Observer {
     this.root = root;
   }
 
-  public update(data: object) {
-    console.log(`SC Get data ${data}`)
-  }
-
   protected createElement(className: string): HTMLDivElement {
     const element = document.createElement('div');
     element.className = className;
@@ -21,13 +17,16 @@ class SliderComponents extends Observer {
   }
 
 
-  protected performMouseMove(thumbPos: number, id: string) {
+  protected performMouseMove(thumbPos: number, id: string, isVertical: boolean = false) {
+    const direction = isVertical ? 'clientY' : 'clientX';
+    const startPoint = isVertical ? 'top' : 'left';
     const mouseMove = (e: MouseEvent) => {
       e.preventDefault();
-      const newLeft = e.clientX - thumbPos - this.root.getBoundingClientRect().left;
+      const newPos = e[direction] - thumbPos - this.root.getBoundingClientRect()[startPoint];
       this.emit(SLIDER_EVENTS.VALUE_START_CHANGE, {
-        coordsMove: newLeft,
+        coordsMove: newPos,
         thumbId: id,
+        isVertical: isVertical,
       })
     }
 

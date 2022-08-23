@@ -15,20 +15,25 @@ class ModelFacade extends Observer {
     super();
     this.state = state;
     this.validator = new Validator(this.state);
+    console.log(this.state)
     this.validState = this.validator.validateData()
+    console.log(this.validState)
     this.model = new Model(this.validState);
     this.prevMove = 0;
   }
 
   public setState(state: ModelInterface) {
     this.validator.setData(state);
+    console.log(state);
     const validState = this.validator.validateData()
+    console.log(validState);
     this.model.setState(validState);
   }
 
   public getState(): SliderInterface {
     if (this.model.getState().scaleMarks) {
       const gap = this.model.getState().scalePercentGap || 20;
+
       const sliderMarks = this.validator.validateMarks(this.model.mapSteps, gap);
       return {
         ...this.model.getState(),
@@ -49,6 +54,7 @@ class ModelFacade extends Observer {
   }
 
   public update(data: ValidateSliderData, event: string) {
+
     if (event === MODEL_EVENTS.VALUE_CHANGED) {
       const { thumbId } = data;
       const movedTo = this.validator.performMoveToPercent(data);

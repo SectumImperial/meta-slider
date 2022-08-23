@@ -11,6 +11,7 @@ interface ModelInterface {
   isTip: boolean,
   isProgress: boolean,
   isRange: boolean,
+  isVertical: boolean,
 }
 
 interface SliderInterface extends ModelInterface {
@@ -19,7 +20,7 @@ interface SliderInterface extends ModelInterface {
 
 interface ValidateSliderData {
   coordsMove: number,
-  scaleWidth: number,
+  scaleSize: number,
   thumbId: string,
 }
 

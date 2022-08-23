@@ -46,8 +46,8 @@ class Validator {
   }
 
   public performMoveToPercent(data: ValidateSliderData): number {
-    const { coordsMove, scaleWidth } = data;
-    const percent = scaleWidth / 100;
+    const { coordsMove, scaleSize } = data;
+    const percent = scaleSize / 100;
     let percentMove = Number((coordsMove / percent).toFixed(2))
     if (percentMove < 0) percentMove = 0;
     if (percentMove > 100) percentMove = 100;
@@ -121,7 +121,7 @@ class Validator {
       this.valueTo = this.checkValue(this.valueTo);
     }
 
-    if (this.valueTo && this.valueFrom > this.valueTo) {
+    if (this.valueTo !== undefined && this.valueFrom > this.valueTo) {
       [this.valueFrom, this.valueTo] = [this.valueTo, this.valueFrom]
       this.resultObject.valueTo = this.valueTo;
     }

@@ -33,9 +33,9 @@ class Model {
   public updateState(movedTo: number, thumb: ThumbID): void {
     const { step, valueTo, valueFrom, isRange, thumbPercentTo, thumbPercentFrom } = this.state;
 
-    const nearestCountStep: number = Math.floor(movedTo / (step / this.findPercent()))
+    const nearestCountStep: number = Math.round(movedTo / this.stepPercent);
     const nearStepPercent: number = nearestCountStep * this.stepPercent;
-    const halfStep: number = step / 2;
+    const halfStep: number = this.stepPercent / 2;
     const halfMove: number = Number((movedTo % (step / this.findPercent())).toFixed(2));
 
     if (halfMove < halfStep) {
@@ -52,7 +52,6 @@ class Model {
         thumbPercentTo,
         thumbPercentFrom,
       })
-
     }
 
     if (halfMove >= halfStep) {
@@ -136,7 +135,7 @@ class Model {
       thumbPercentFrom
     } = values
 
-    if (isRange && val && valueFrom && thumbPercentFrom && thumb === 'valueTo' && val < valueFrom) {
+    if (isRange && val !== undefined && valueFrom && thumbPercentFrom && thumb === 'valueTo' && val < valueFrom) {
       this.updateMoved(valueFrom, thumbPercentFrom, thumb)
     } else {
       if (val !== undefined) this.updateMoved(val, percent, thumb);

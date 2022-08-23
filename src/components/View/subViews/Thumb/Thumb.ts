@@ -1,23 +1,41 @@
 import SliderComponents from "../SliderComponents/SliderComponents";
 import { ThumbID } from '../../../Interfaces'
 
+interface thumbArgs {
+  root: HTMLElement,
+  thumbPercent: number,
+  id: ThumbID,
+  isVertical: boolean,
+}
+
+
 class Thumb extends SliderComponents {
-  shiftX!: number;
+  moved!: number;
   thumbPercent: number;
   thumbElement!: HTMLDivElement;
   thumbId: ThumbID;
+  isVertical: boolean;
 
-  constructor(root: HTMLElement, thumbPercent: number = 0, id: ThumbID = 'valueFrom') {
+  constructor(values: thumbArgs) {
+    const {
+      root,
+      thumbPercent = 0,
+      id = 'valueFrom',
+      isVertical = false
+    } = values;
+
     super(root);
     this.thumbPercent = thumbPercent;
-    this.thumbId = id
+    this.thumbId = id;
+    this.isVertical = isVertical
     this.initThumb();
   }
 
   public setPosition(thumbPercent: number): void {
+    const startPont = this.isVertical ? 'top' : 'left';
     this.thumbPercent = thumbPercent;
     this.checkZInd();
-    this.thumbElement.style.left = this.thumbPercent + '%';
+    this.thumbElement.style[startPont] = this.thumbPercent + '%';
   }
 
   public getThumb(): HTMLDivElement {
@@ -62,9 +80,11 @@ class Thumb extends SliderComponents {
 
 
   private mouseDown(e: MouseEvent): void {
-    this.shiftX = e.clientX - this.thumbElement.getBoundingClientRect().left;
+    if (!this.isVertical) this.moved = e.clientX - this.thumbElement.getBoundingClientRect().left;
+    if (this.isVertical) this.moved = e.clientY - this.thumbElement.getBoundingClientRect().top;
+
     this.checkZInd();
-    super.performMouseMove(this.shiftX, this.thumbId);
+    super.performMouseMove(this.moved, this.thumbId, this.isVertical);
   }
 }
 

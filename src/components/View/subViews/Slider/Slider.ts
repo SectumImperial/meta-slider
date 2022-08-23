@@ -1,5 +1,5 @@
 import Observer from "../../../../Observer/Observer";
-import { SliderInterface } from "../../../Interfaces";
+import { SliderInterface, ThumbID } from "../../../Interfaces";
 import { SLIDER_EVENTS } from "../../../Presenter/events";
 import Progress from "../Progress/Progress";
 import Scale from "../Scale/Scale";
@@ -7,26 +7,39 @@ import ScaleMarks from "../ScaleMarks/ScaleMarks";
 import Thumb from "../Thumb/Thumb";
 import Tip from "../Tip/Tip";
 
+
+interface sliderEventValChangedData {
+  coordsMove: number,
+  thumbId: ThumbID,
+  isVertical: boolean
+}
+
 class Slider extends Observer {
+  tipValueFrom: number;
+  thumbPercentFrom: number;
+  thumbPercentTo?: number;
+  tipValueTo?: number;
+
   root: Element;
   slider!: HTMLDivElement;
+  scaleElement!: HTMLDivElement;
+
+  isProgress: boolean;
+  isRange: boolean;
+  isVertical: boolean;
+  protected readonly isTip: boolean;
+
+  scaleMap: Map<number, number> | undefined;
+
+
   thumbFrom!: Thumb;
   thumbTo?: Thumb;
   scale!: Scale;
-  scaleElement!: HTMLDivElement;
-  thumbPercentFrom: number;
-  scaleMap: Map<number, number> | undefined;
-  tipValueFrom: number;
-
   scaleMarks!: ScaleMarks;
-  protected readonly isTip: boolean;
   tipFrom?: Tip;
-  isProgress: boolean;
-  progress?: Progress;
-  isRange: boolean;
-  thumbPercentTo?: number;
   tipTo?: Tip;
-  tipValueTo?: number;
+  progress?: Progress;
+
 
   constructor(root: Element, protected readonly state: SliderInterface) {
     super()
@@ -38,7 +51,8 @@ class Slider extends Observer {
       thumbPercentTo,
       isProgress,
       isRange,
-      scaleMap
+      scaleMap,
+      isVertical,
     } = state;
 
     this.thumbPercentFrom = thumbPercentFrom;
@@ -48,11 +62,12 @@ class Slider extends Observer {
     this.tipValueFrom = valueFrom;
     this.isProgress = isProgress;
     this.isRange = isRange;
+    this.isVertical = isVertical;
     this.root = root;
     this.init();
     this.setState(state);
     if (scaleMap) {
-      this.scaleMarks = new ScaleMarks(this.scaleElement, scaleMap)
+      this.scaleMarks = new ScaleMarks(this.scaleElement, scaleMap, isVertical)
     }
   }
 
@@ -64,10 +79,53 @@ class Slider extends Observer {
     this.addSlider();
   }
 
-  public update(data: object, event: string): void {
+
+  private createlements() {
+    this.scale = new Scale(this.slider, this.isVertical);
+    this.scaleElement = this.scale.getScale()
+
+
+    this.thumbFrom = new Thumb({
+      root: this.scaleElement,
+      thumbPercent: this.thumbPercentFrom,
+      id: 'valueFrom',
+      isVertical: this.isVertical,
+    });
+
+    if (this.isRange && this.thumbPercentTo) this.thumbTo = new Thumb({
+      root: this.scaleElement,
+      thumbPercent: this.thumbPercentTo,
+      id: 'valueTo',
+      isVertical: this.isVertical,
+    });
+
+    if (this.isTip && this.thumbPercentTo && this.isRange) this.tipTo = new Tip(this.scaleElement, this.thumbPercentTo!, this.tipValueTo!);
+    if (this.isTip) this.tipFrom = new Tip(this.scaleElement, this.thumbPercentFrom, this.tipValueFrom);
+
+    if (this.isProgress && !this.isRange) this.progress = new Progress(this.scaleElement, 0, this.thumbPercentFrom);
+    if (this.isProgress && this.isRange) {
+      const widthProgress = this.thumbPercentTo ? this.thumbPercentTo - this.thumbPercentFrom : 0;
+      console.log(this.thumbPercentFrom, widthProgress)
+      this.progress = new Progress(this.scaleElement, this.thumbPercentFrom, widthProgress);
+    }
+  }
+
+  private addSlider(): void {
+    this.root.append(this.slider);
+  }
+
+  private createSlider(): HTMLDivElement {
+    const sliderWrapper = document.createElement('div');
+    sliderWrapper.className = 'slider';
+    return sliderWrapper;
+  }
+
+  public update(data: sliderEventValChangedData, event: string): void {
     if (event === SLIDER_EVENTS.VALUE_START_CHANGE) {
-      const scaleWidth = this.scaleElement.getBoundingClientRect().width;
-      const sliderData = { ...data, scaleWidth: scaleWidth };
+      const { isVertical } = data;
+      const size = isVertical ? 'height' : 'width';
+      const scaleSize = this.scaleElement.getBoundingClientRect()[size];
+      const sliderData = { ...data, scaleSize: scaleSize };
       this.emit(SLIDER_EVENTS.DATA_COLLECTED, sliderData);
     }
   }
@@ -145,32 +203,6 @@ class Slider extends Observer {
       valueFrom,
     } = values
     return isTip && isRange && valueTo && valueTo - valueFrom <= 2 || valueTo === 0 && valueFrom === 0
-  }
-
-  private addSlider(): void {
-    this.root.append(this.slider);
-  }
-
-  private createSlider(): HTMLDivElement {
-    const sliderWrapper = document.createElement('div');
-    sliderWrapper.className = 'slider';
-    return sliderWrapper;
-  }
-
-  private createlements() {
-    this.scale = new Scale(this.slider);
-    this.scaleElement = this.scale.getScale()
-    this.thumbFrom = new Thumb(this.scaleElement, this.thumbPercentFrom, 'valueFrom');
-
-    if (this.isRange) this.thumbTo = new Thumb(this.scaleElement, 95, 'valueTo');
-    if (this.isTip, this.thumbPercentTo, this.isRange) this.tipTo = new Tip(this.scaleElement, this.thumbPercentTo!, this.tipValueTo!);
-    if (this.isTip) this.tipFrom = new Tip(this.scaleElement, this.thumbPercentFrom, this.tipValueFrom);
-    if (this.isProgress && !this.isRange) this.progress = new Progress(this.scaleElement, 0, this.thumbPercentFrom);
-    if (this.isProgress && this.isRange) {
-      const widthProgress = this.thumbPercentTo ? this.thumbPercentTo - this.thumbPercentFrom : 0;
-      console.log(this.thumbPercentFrom, widthProgress)
-      this.progress = new Progress(this.scaleElement, this.thumbPercentFrom, widthProgress);
-    }
   }
 }
 
