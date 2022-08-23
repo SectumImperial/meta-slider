@@ -62,6 +62,19 @@ interface HandleMoveModelTo {
   thumbPercentFrom: number,
 }
 
+interface SliderEventValChangedData {
+  coordsMove: number,
+  thumbId: ThumbID,
+  isVertical: boolean
+}
+
+interface ProgressData {
+  root: Element,
+  positionStart: number,
+  positionEnd: number,
+  isVertical: boolean;
+}
+
 
 export {
   ModelInterface,
@@ -73,4 +86,6 @@ export {
   HandleMoveModel,
   HandleMoveModelFrom,
   HandleMoveModelTo,
+  SliderEventValChangedData,
+  ProgressData
 };
