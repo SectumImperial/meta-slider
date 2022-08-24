@@ -11,7 +11,7 @@ const initialState = {
   isTip: true,
   isProgress: true,
   isRange: true,
-  isVertical: true,
+  isVertical: false,
 };
 
 export default initialState;

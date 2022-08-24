@@ -8,12 +8,12 @@ const config: Config.InitialOptions = {
   testEnvironment: 'node',
   moduleFileExtensions: [...defaults.moduleFileExtensions, 'ts', 'tsx'],
   collectCoverageFrom: [
-    "**/*.{ts,tsx}",
-    "!**/node_modules/**",
+    '**/*.{ts,tsx}',
+    '!**/node_modules/**',
   ],
   moduleNameMapper: {
     '.scss$': '<rootDir>/src',
-  }
+  },
 };
 
 export default config;

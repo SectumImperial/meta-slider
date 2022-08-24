@@ -1,5 +1,5 @@
-import SliderComponents from "../SliderComponents/SliderComponents";
-import { ThumbID } from '../../../Interfaces'
+import SliderComponents from '../SliderComponents/SliderComponents';
+import { StartPointType, ThumbID } from '../../../Interfaces';
 
 interface thumbArgs {
   root: HTMLElement,
@@ -8,12 +8,15 @@ interface thumbArgs {
   isVertical: boolean,
 }
 
-
 class Thumb extends SliderComponents {
   moved!: number;
+
   thumbPercent: number;
+
   thumbElement!: HTMLDivElement;
+
   thumbId: ThumbID;
+
   isVertical: boolean;
 
   constructor(values: thumbArgs) {
@@ -21,21 +24,21 @@ class Thumb extends SliderComponents {
       root,
       thumbPercent = 0,
       id = 'valueFrom',
-      isVertical = false
+      isVertical = false,
     } = values;
 
     super(root);
     this.thumbPercent = thumbPercent;
     this.thumbId = id;
-    this.isVertical = isVertical
+    this.isVertical = isVertical;
     this.initThumb();
   }
 
   public setPosition(thumbPercent: number): void {
-    const startPont = this.isVertical ? 'top' : 'left';
+    const startPoint: StartPointType = this.isVertical ? 'top' : 'left';
     this.thumbPercent = thumbPercent;
     this.checkZInd();
-    this.thumbElement.style[startPont] = this.thumbPercent + '%';
+    this.thumbElement.style[startPoint] = `${this.thumbPercent}%`;
   }
 
   public getThumb(): HTMLDivElement {
@@ -55,7 +58,6 @@ class Thumb extends SliderComponents {
   }
 
   private checkZInd(): void {
-
     if (this.thumbId === 'valueFrom' && this.thumbPercent === 100) {
       this.thumbElement.style.zIndex = '10';
     }
@@ -76,8 +78,6 @@ class Thumb extends SliderComponents {
   private addListeners() {
     this.thumbElement.addEventListener('mousedown', this.mouseDown.bind(this));
   }
-
-
 
   private mouseDown(e: MouseEvent): void {
     if (!this.isVertical) this.moved = e.clientX - this.thumbElement.getBoundingClientRect().left;

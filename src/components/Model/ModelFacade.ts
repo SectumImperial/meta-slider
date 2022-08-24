@@ -1,28 +1,34 @@
-import Model from "./Model";
-import Validator from "./Validator";
-import { ModelInterface, SliderInterface, ThumbID, ValidateSliderData } from "../Interfaces";
-import Observer from "../../Observer/Observer";
-import { MODEL_EVENTS } from "../Presenter/events";
+import Model from './Model';
+import Validator from './Validator';
+import {
+  ModelInterface, SliderInterface, ThumbID, ValidateSliderData,
+} from '../Interfaces';
+import Observer from '../../Observer/Observer';
+import { MODEL_EVENTS } from '../Presenter/events';
 
 class ModelFacade extends Observer {
   private state: ModelInterface;
+
   private model: Model;
+
   private validator: Validator;
+
   private validState: ModelInterface;
+
   private prevMove: number;
 
   constructor(state: ModelInterface) {
     super();
     this.state = state;
     this.validator = new Validator(this.state);
-    this.validState = this.validator.validateData()
+    this.validState = this.validator.validateData();
     this.model = new Model(this.validState);
     this.prevMove = 0;
   }
 
   public setState(state: ModelInterface) {
     this.validator.setData(state);
-    const validState = this.validator.validateData()
+    const validState = this.validator.validateData();
     this.model.setState(validState);
   }
 
@@ -33,10 +39,9 @@ class ModelFacade extends Observer {
       return {
         ...this.model.getState(),
         scaleMap: sliderMarks,
-      }
-    } else {
-      return this.model.getState();
+      };
     }
+    return this.model.getState();
   }
 
   public getModel(): Model {
@@ -52,10 +57,10 @@ class ModelFacade extends Observer {
       const { thumbId } = data;
       const movedTo = this.validator.performMoveToPercent(data);
 
-      if (movedTo === this.prevMove) return
+      if (movedTo === this.prevMove) return;
       this.prevMove = movedTo;
       this.model.updateState(movedTo, thumbId as ThumbID);
-      const newState = this.model.getState()
+      const newState = this.model.getState();
 
       if (newState.scaleMarks) {
         this.emit(MODEL_EVENTS.VALUE_CHANGED, { ...newState, scaleMap: this.model.mapSteps });
@@ -67,4 +72,3 @@ class ModelFacade extends Observer {
 }
 
 export default ModelFacade;
-

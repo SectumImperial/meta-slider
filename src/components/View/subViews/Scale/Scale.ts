@@ -1,10 +1,11 @@
-import SliderComponents from "../SliderComponents/SliderComponents";
+import SliderComponents from '../SliderComponents/SliderComponents';
 
 class Scale extends SliderComponents {
   scale!: HTMLDivElement;
+
   isVertical: boolean;
 
-  constructor(root: HTMLDivElement, isVertical: boolean = false) {
+  constructor(root: HTMLDivElement, isVertical = false) {
     super(root);
     this.isVertical = isVertical;
     this.init();
@@ -12,9 +13,9 @@ class Scale extends SliderComponents {
 
   private init(): void {
     this.scale = this.createElement('slider__scale');
-    if (this.isVertical) this.scale.classList.add('slider__scale_vertical')
-    if (!this.isVertical) this.scale.classList.add('slider__scale_horizontal')
-    this.addScale()
+    if (this.isVertical) this.scale.classList.add('slider__scale_vertical');
+    if (!this.isVertical) this.scale.classList.add('slider__scale_horizontal');
+    this.addScale();
   }
 
   public getScale() {

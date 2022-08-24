@@ -1,37 +1,48 @@
-import SliderComponents from "../SliderComponents/SliderComponents";
-import { ProgressData } from '../../../Interfaces'
+import SliderComponents from '../SliderComponents/SliderComponents';
+import { ProgressData, SizeType, StartPointType } from '../../../Interfaces';
 
 class Progress extends SliderComponents {
-  positionStart: number;
-  positionEnd: number;
-  isVertical: boolean;
+  positionStart!: number;
+
+  positionEnd!: number;
+
+  isVertical!: boolean;
+
   progress: HTMLDivElement;
 
-  constructor(data: ProgressData) {
+  constructor(protected readonly data: ProgressData) {
     const {
       root,
-      positionStart,
-      positionEnd,
-      isVertical
     } = data;
 
     super(root);
-    this.positionStart = positionStart;
-    this.positionEnd = positionEnd;
+    this.createVriables(data);
+    this.progress = this.createElement('slider__progress');
+    this.setProgressPosition(this.positionStart, this.positionEnd);
+  }
+
+  private createVriables(data: ProgressData) {
+    const {
+      positionStart,
+      positionEnd,
+      isVertical,
+    } = data;
+
+    this.positionStart = positionStart || 0;
+    this.positionEnd = positionEnd || 100;
     this.isVertical = isVertical;
     this.progress = this.createElement('slider__progress');
     this.setProgressPosition(this.positionStart, this.positionEnd);
   }
 
-  public setProgressPosition(positionStart: number = 0, positionEnd: number = 100): void {
-    const startPoint = this.isVertical ? 'top' : 'left';
-    const size = this.isVertical ? 'height' : 'width';
+  public setProgressPosition(positionStart = 0, positionEnd = 100): void {
+    const startPoint: StartPointType = this.isVertical ? 'top' : 'left';
+    const size: SizeType = this.isVertical ? 'height' : 'width';
 
-    this.progress.style[startPoint] = `${positionStart}%`
-    this.progress.style[size] = `${positionEnd}%`
+    this.progress.style[startPoint] = `${positionStart}%`;
+    this.progress.style[size] = `${positionEnd}%`;
     this.root.append(this.progress);
   }
-
 }
 
-export default Progress
+export default Progress;

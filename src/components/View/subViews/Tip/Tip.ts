@@ -1,14 +1,16 @@
-import { TipData } from "../../../Interfaces";
-import SliderComponents from "../SliderComponents/SliderComponents";
-
-type startPointType = 'top' | 'left';
+import { StartPointType, TipData } from '../../../Interfaces';
+import SliderComponents from '../SliderComponents/SliderComponents';
 
 class Tip extends SliderComponents {
   tip: HTMLDivElement;
+
   percentPosition: number;
-  valueTip: number | string
+
+  valueTip: number | string;
+
   isVertical: boolean;
-  startPoint: startPointType;
+
+  startPoint: StartPointType;
 
   constructor(data: TipData) {
     const {
@@ -59,4 +61,4 @@ class Tip extends SliderComponents {
   }
 }
 
-export default Tip
+export default Tip;

@@ -1,10 +1,7 @@
 import initialState from '../../state';
-import Validator from './Validator'
-
-
+import Validator from './Validator';
 
 describe('The validation of data tests', () => {
-
   let validator: Validator;
 
   //  Wrong cases
@@ -15,7 +12,7 @@ describe('The validation of data tests', () => {
     valueFrom: 0,
     step: 11,
     isRange: false,
-  }
+  };
   const dataValWrong = {
     ...initialState,
     min: 0,
@@ -23,7 +20,7 @@ describe('The validation of data tests', () => {
     valueFrom: 11,
     step: 1,
     isRange: false,
-  }
+  };
 
   const dataValSmallWrong = {
     ...initialState,
@@ -32,7 +29,7 @@ describe('The validation of data tests', () => {
     valueFrom: -1,
     step: 1,
     isRange: false,
-  }
+  };
 
   const dataRangeWrong = {
     ...initialState,
@@ -41,7 +38,7 @@ describe('The validation of data tests', () => {
     valueFrom: 0,
     step: 1,
     isRange: false,
-  }
+  };
 
   const dataMinMaxWrong = {
     ...initialState,
@@ -50,7 +47,7 @@ describe('The validation of data tests', () => {
     valueFrom: 0,
     step: 1,
     isRange: false,
-  }
+  };
 
   const dataFromToWrong = {
     ...initialState,
@@ -60,8 +57,7 @@ describe('The validation of data tests', () => {
     valueTo: 8,
     step: 1,
     isRange: true,
-  }
-
+  };
 
   // Correct cases
   const dataStepCorrect = {
@@ -71,7 +67,7 @@ describe('The validation of data tests', () => {
     valueFrom: 0,
     step: 10,
     isRange: false,
-  }
+  };
 
   const dataValCorrect = {
     ...initialState,
@@ -80,7 +76,7 @@ describe('The validation of data tests', () => {
     valueFrom: 10,
     step: 1,
     isRange: false,
-  }
+  };
 
   const dataValSmallCorrect = {
     ...initialState,
@@ -89,7 +85,7 @@ describe('The validation of data tests', () => {
     valueFrom: 0,
     step: 1,
     isRange: false,
-  }
+  };
 
   const dataRangeCorrect = {
     ...initialState,
@@ -98,7 +94,7 @@ describe('The validation of data tests', () => {
     valueFrom: 0,
     step: 1,
     isRange: false,
-  }
+  };
 
   const dataMinMaxCorrect = {
     ...initialState,
@@ -107,7 +103,7 @@ describe('The validation of data tests', () => {
     valueFrom: 0,
     step: 1,
     isRange: false,
-  }
+  };
 
   const dataFromToCorrect = {
     ...initialState,
@@ -117,41 +113,35 @@ describe('The validation of data tests', () => {
     valueTo: 10,
     step: 1,
     isRange: true,
-  }
+  };
 
   test('Step can not be bigger than all range', () => {
     validator = new Validator(dataStepWrong);
-    expect(validator.validateData()).toEqual(dataStepCorrect)
-  })
+    expect(validator.validateData()).toEqual(dataStepCorrect);
+  });
 
   test('Value can not be bigger than max', () => {
     validator = new Validator(dataValWrong);
-    expect(validator.validateData()).toEqual(dataValCorrect)
-  })
-
-  test('Value can not be smaller than min', () => {
-    validator = new Validator(dataValWrong);
-    expect(validator.validateData()).toEqual(dataValCorrect)
-  })
+    expect(validator.validateData()).toEqual(dataValCorrect);
+  });
 
   test('Value can not be smaller than min', () => {
     validator = new Validator(dataValSmallWrong);
-    expect(validator.validateData()).toEqual(dataValSmallCorrect)
-  })
+    expect(validator.validateData()).toEqual(dataValSmallCorrect);
+  });
 
   test('Min and max canot be the same', () => {
     validator = new Validator(dataRangeWrong);
-    expect(validator.validateData()).toEqual(dataRangeCorrect)
-  })
+    expect(validator.validateData()).toEqual(dataRangeCorrect);
+  });
 
   test('Min can not be bigger than max', () => {
     validator = new Validator(dataMinMaxWrong);
-    expect(validator.validateData()).toEqual(dataMinMaxCorrect)
-  })
+    expect(validator.validateData()).toEqual(dataMinMaxCorrect);
+  });
 
   test('Value from cannot be bigger than value to', () => {
     validator = new Validator(dataFromToWrong);
-    expect(validator.validateData()).toEqual(dataFromToCorrect)
-  })
-
-})
+    expect(validator.validateData()).toEqual(dataFromToCorrect);
+  });
+});

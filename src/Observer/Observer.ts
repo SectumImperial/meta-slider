@@ -19,14 +19,14 @@ abstract class Observer {
   }
 
   public removeSubscriber(event: string, observer: ValueObserverEntry): void {
-    this.observers[event].filter(obs => obs !== observer)
+    this.observers[event].filter((obs) => obs !== observer);
   }
 
   public emit(event: string, data: object): void {
     const observers = this.observers[event] || [];
     observers.forEach((observer) => {
       observer.update(data, event);
-    })
+    });
   }
 }
 

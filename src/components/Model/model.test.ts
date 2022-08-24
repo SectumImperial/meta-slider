@@ -1,15 +1,13 @@
-import Model from "./Model";
-import ModelFacade from "./ModelFacade";
-import initialState from '../../state'
-
+import Model from './Model';
+import ModelFacade from './ModelFacade';
+import initialState from '../../state';
 
 describe('The model tests', () => {
-
   let model: Model;
 
   beforeEach(() => {
     model = new ModelFacade(initialState).getModel();
-  })
+  });
 
   test('The model must be an instance of Model', () => {
     expect(model).toBeInstanceOf(Model);
@@ -35,7 +33,6 @@ describe('The model tests', () => {
     expect(model.getState()).toEqual(initialState);
   });
 
-
   test('The model increment method should be defined', () => {
     expect(model.increment).toBeDefined();
   });
@@ -45,7 +42,6 @@ describe('The model tests', () => {
     model.increment();
     expect(model.getValue('valueFrom')).toEqual(incrementVal);
   });
-
 
   test('The model decrement method should be defined', () => {
     expect(model.increment).toBeDefined();
@@ -64,4 +60,4 @@ describe('The model tests', () => {
 
     expect(model.getPercentVal()).toEqual(percent);
   });
-})
+});

@@ -1,40 +1,53 @@
-import Observer from "../../../../Observer/Observer";
-import { SliderInterface, SliderEventValChangedData } from "../../../Interfaces";
-import { SLIDER_EVENTS } from "../../../Presenter/events";
-import Progress from "../Progress/Progress";
-import Scale from "../Scale/Scale";
-import ScaleMarks from "../ScaleMarks/ScaleMarks";
-import Thumb from "../Thumb/Thumb";
-import Tip from "../Tip/Tip";
+import Observer from '../../../../Observer/Observer';
+import { SliderInterface, SliderEventValChangedData, SizeType } from '../../../Interfaces';
+import { SLIDER_EVENTS } from '../../../Presenter/events';
+import Progress from '../Progress/Progress';
+import Scale from '../Scale/Scale';
+import ScaleMarks from '../ScaleMarks/ScaleMarks';
+import Thumb from '../Thumb/Thumb';
+import Tip from '../Tip/Tip';
 
 class Slider extends Observer {
   tipValueFrom!: number;
+
   thumbPercentFrom!: number;
+
   thumbPercentTo?: number;
+
   tipValueTo?: number;
 
   root!: Element;
+
   slider!: HTMLDivElement;
+
   scaleElement!: HTMLDivElement;
 
   isProgress!: boolean;
+
   isRange!: boolean;
+
   isVertical!: boolean;
+
   isTip!: boolean;
 
   scaleMap: Map<number, number> | undefined;
 
   thumbFrom!: Thumb;
+
   thumbTo?: Thumb;
+
   scale!: Scale;
+
   scaleMarks!: ScaleMarks;
+
   tipFrom?: Tip;
+
   tipTo?: Tip;
+
   progress?: Progress;
 
-
   constructor(root: Element, protected readonly state: SliderInterface) {
-    super()
+    super();
     this.createVariables(root, state);
     this.init();
     this.setState(state);
@@ -74,7 +87,7 @@ class Slider extends Observer {
 
   private createlements() {
     this.scale = new Scale(this.slider, this.isVertical);
-    this.scaleElement = this.scale.getScale()
+    this.scaleElement = this.scale.getScale();
 
     this.thumbFrom = new Thumb({
       root: this.scaleElement,
@@ -83,34 +96,41 @@ class Slider extends Observer {
       isVertical: this.isVertical,
     });
 
-    if (this.isRange && this.thumbPercentTo) this.thumbTo = new Thumb({
-      root: this.scaleElement,
-      thumbPercent: this.thumbPercentTo,
-      id: 'valueTo',
-      isVertical: this.isVertical,
-    });
+    if (this.isRange && this.thumbPercentTo) {
+      this.thumbTo = new Thumb({
+        root: this.scaleElement,
+        thumbPercent: this.thumbPercentTo,
+        id: 'valueTo',
+        isVertical: this.isVertical,
+      });
+    }
 
-    if (this.isTip) this.tipFrom = new Tip({
-      root: this.scaleElement,
-      percentPosition: this.thumbPercentFrom,
-      valueTip: this.tipValueFrom,
-      isVertical: this.isVertical,
-    });
+    if (this.isTip) {
+      this.tipFrom = new Tip({
+        root: this.scaleElement,
+        percentPosition: this.thumbPercentFrom,
+        valueTip: this.tipValueFrom,
+        isVertical: this.isVertical,
+      });
+    }
 
-    if (this.isTip && this.thumbPercentTo && this.isRange && this.tipValueTo !== undefined) this.tipTo = new Tip({
-      root: this.scaleElement,
-      percentPosition: this.thumbPercentTo,
-      valueTip: this.tipValueTo,
-      isVertical: this.isVertical,
-    });
+    if (this.isTip && this.thumbPercentTo && this.isRange && this.tipValueTo !== undefined) {
+      this.tipTo = new Tip({
+        root: this.scaleElement,
+        percentPosition: this.thumbPercentTo,
+        valueTip: this.tipValueTo,
+        isVertical: this.isVertical,
+      });
+    }
 
-
-    if (this.isProgress && !this.isRange) this.progress = new Progress({
-      root: this.scaleElement,
-      positionStart: this.thumbPercentFrom,
-      positionEnd: 0,
-      isVertical: this.isVertical
-    });
+    if (this.isProgress && !this.isRange) {
+      this.progress = new Progress({
+        root: this.scaleElement,
+        positionStart: this.thumbPercentFrom,
+        positionEnd: 0,
+        isVertical: this.isVertical,
+      });
+    }
 
     if (this.isProgress && this.isRange) {
       const widthProgress = this.thumbPercentTo ? this.thumbPercentTo - this.thumbPercentFrom : 0;
@@ -118,12 +138,12 @@ class Slider extends Observer {
         root: this.scaleElement,
         positionStart: this.thumbPercentFrom,
         positionEnd: widthProgress,
-        isVertical: this.isVertical
+        isVertical: this.isVertical,
       });
     }
 
     if (this.scaleMap) {
-      this.scaleMarks = new ScaleMarks(this.scaleElement, this.scaleMap, this.isVertical)
+      this.scaleMarks = new ScaleMarks(this.scaleElement, this.scaleMap, this.isVertical);
     }
   }
 
@@ -131,6 +151,7 @@ class Slider extends Observer {
     this.root.append(this.slider);
   }
 
+  // eslint-disable-next-line class-methods-use-this
   private createSlider(): HTMLDivElement {
     const sliderWrapper = document.createElement('div');
     sliderWrapper.className = 'slider';
@@ -140,9 +161,9 @@ class Slider extends Observer {
   public update(data: SliderEventValChangedData, event: string): void {
     if (event === SLIDER_EVENTS.VALUE_START_CHANGE) {
       const { isVertical } = data;
-      const size = isVertical ? 'height' : 'width';
+      const size: SizeType = isVertical ? 'height' : 'width';
       const scaleSize = this.scaleElement.getBoundingClientRect()[size];
-      const sliderData = { ...data, scaleSize: scaleSize };
+      const sliderData = { ...data, scaleSize };
       this.emit(SLIDER_EVENTS.DATA_COLLECTED, sliderData);
     }
   }
@@ -166,19 +187,13 @@ class Slider extends Observer {
     }
 
     //  Tips
-    const isTip = this.isTip;
+    const { isTip } = this;
     if (isTip && this.tipFrom) {
       this.tipValueFrom = valueFrom;
       this.tipFrom.setPosition(this.thumbPercentFrom, this.tipValueFrom);
     }
 
-    if (
-      this.isNeedDoubleTip({
-        isTip,
-        isRange,
-        valueTo,
-        valueFrom,
-      })) {
+    if (this.isNeedDoubleTip()) {
       this.tipFrom?.setValueTip(`${valueFrom} - ${valueTo}`);
       this.tipTo?.hideTip();
     } else {
@@ -190,9 +205,9 @@ class Slider extends Observer {
       this.tipTo.setPosition(this.thumbPercentTo, this.tipValueTo);
     }
 
-    // Progress 
+    // Progress
     if (this.isProgress && !isRange) {
-      this.progress?.setProgressPosition(0, this.thumbPercentFrom)
+      this.progress?.setProgressPosition(0, this.thumbPercentFrom);
     }
     if (isRange && thumbPercentTo) {
       this.progress?.setProgressPosition(this.thumbPercentFrom, thumbPercentTo - thumbPercentFrom);
@@ -202,19 +217,12 @@ class Slider extends Observer {
     }
   }
 
-  private isNeedDoubleTip(values: {
-    isTip: boolean,
-    isRange: boolean,
-    valueTo: number | undefined,
-    valueFrom: number,
-  }) {
-    const {
-      isTip,
-      isRange,
-      valueTo,
-      valueFrom,
-    } = values
-    return isTip && isRange && valueTo && valueTo - valueFrom <= 2 || valueTo === 0 && valueFrom === 0
+  private isNeedDoubleTip() {
+    return this.isTip
+      && this.isRange
+      && this.thumbPercentTo !== undefined
+      && ((this.thumbPercentTo - this.thumbPercentFrom <= 2)
+        || (this.thumbPercentTo === 0 && this.thumbPercentFrom === 0));
   }
 }
 

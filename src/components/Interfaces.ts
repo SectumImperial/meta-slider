@@ -25,41 +25,31 @@ interface ValidateSliderData {
 }
 
 type modelVal = 'min' | 'max' | 'valueFrom' | 'step' | 'valueTo';
-
 type ThumbID = 'valueFrom' | 'valueTo'
+type StartPointType = 'top' | 'left';
+type SizeType = 'height' | 'width';
 
 const ThumbValPercent = {
   valueFrom: 'thumbPercentFrom',
   valueTo: 'thumbPercentTo',
-}
+};
 
 interface HandleMoveModel {
-  isRange: boolean,
   val: number | undefined,
-  valueFrom: number,
-  valueTo: number | undefined,
   thumb: ThumbID,
   percent: number,
-  thumbPercentTo: number | undefined,
-  thumbPercentFrom: number,
 }
 
 interface HandleMoveModelFrom {
-  isRange: boolean,
   val: number | undefined,
-  valueTo: number | undefined,
   thumb: ThumbID,
   percent: number,
-  thumbPercentTo: number | undefined,
 }
 
 interface HandleMoveModelTo {
-  isRange: boolean,
   val: number | undefined,
-  valueFrom: number | undefined,
   thumb: ThumbID,
   percent: number,
-  thumbPercentFrom: number,
 }
 
 interface SliderEventValChangedData {
@@ -82,6 +72,15 @@ interface TipData {
   isVertical: boolean,
 }
 
+interface isValCorrectInRangeArgs {
+  val: number | undefined,
+  value: number | undefined,
+  thumbPercent: number | undefined,
+  thumb: string,
+  idVal: ThumbID;
+}
+
+type StepsMap = Map<number, number>;
 
 export {
   ModelInterface,
@@ -95,5 +94,9 @@ export {
   HandleMoveModelTo,
   SliderEventValChangedData,
   ProgressData,
-  TipData
+  TipData,
+  isValCorrectInRangeArgs,
+  StepsMap,
+  StartPointType,
+  SizeType,
 };

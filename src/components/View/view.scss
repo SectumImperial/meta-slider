@@ -128,7 +128,6 @@
       right: 30px;
       padding-right: 5px;
       transform: translateY(-50%);
-    }
 
       &::before {
         border: 10px solid transparent; 
@@ -137,6 +136,7 @@
         transform: translateY(-50%);
         right: -18px;
       }
+    } 
   }
 
   &__progress {
