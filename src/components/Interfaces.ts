@@ -82,6 +82,13 @@ interface isValCorrectInRangeArgs {
 
 type StepsMap = Map<number, number>;
 
+interface ThumbArgs {
+  root: HTMLElement,
+  thumbPercent: number,
+  id: ThumbID,
+  isVertical: boolean,
+}
+
 export {
   ModelInterface,
   modelVal,
@@ -99,4 +106,5 @@ export {
   StepsMap,
   StartPointType,
   SizeType,
+  ThumbArgs,
 };

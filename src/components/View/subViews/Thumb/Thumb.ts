@@ -1,12 +1,5 @@
 import SliderComponents from '../SliderComponents/SliderComponents';
-import { StartPointType, ThumbID } from '../../../Interfaces';
-
-interface thumbArgs {
-  root: HTMLElement,
-  thumbPercent: number,
-  id: ThumbID,
-  isVertical: boolean,
-}
+import { ThumbArgs, ThumbID } from '../../../Interfaces';
 
 class Thumb extends SliderComponents {
   moved!: number;
@@ -17,36 +10,18 @@ class Thumb extends SliderComponents {
 
   thumbId: ThumbID;
 
-  isVertical: boolean;
-
-  constructor(values: thumbArgs) {
+  constructor(values: ThumbArgs) {
     const {
       root,
       thumbPercent = 0,
       id = 'valueFrom',
-      isVertical = false,
+      isVertical,
     } = values;
 
-    super(root);
+    super(root, isVertical);
     this.thumbPercent = thumbPercent;
     this.thumbId = id;
-    this.isVertical = isVertical;
     this.initThumb();
-  }
-
-  public setPosition(thumbPercent: number): void {
-    const startPoint: StartPointType = this.isVertical ? 'top' : 'left';
-    this.thumbPercent = thumbPercent;
-    this.checkZInd();
-    this.thumbElement.style[startPoint] = `${this.thumbPercent}%`;
-  }
-
-  public getThumb(): HTMLDivElement {
-    return this.thumbElement;
-  }
-
-  public getThumbId(): ThumbID {
-    return this.thumbId;
   }
 
   private initThumb(): void {
@@ -55,6 +30,20 @@ class Thumb extends SliderComponents {
     this.root.append(this.thumbElement);
     this.setPosition(this.thumbPercent);
     this.addListeners();
+  }
+
+  public setPosition(thumbPercent: number): void {
+    this.thumbPercent = thumbPercent;
+    this.checkZInd();
+    this.thumbElement.style[this.startPoint] = `${this.thumbPercent}%`;
+  }
+
+  public getThumb(): HTMLDivElement {
+    return this.thumbElement;
+  }
+
+  public getThumbId(): ThumbID {
+    return this.thumbId;
   }
 
   private checkZInd(): void {
@@ -77,14 +66,24 @@ class Thumb extends SliderComponents {
 
   private addListeners() {
     this.thumbElement.addEventListener('mousedown', this.mouseDown.bind(this));
+    // this.thumbElement.addEventListener(
+    //   'touchstart',
+    //   this.touchDown.bind(this),
+    //   { passive: true },
+    // );
   }
 
+  // private touchDown(e: TouchEvent) {
+  //   const sizeElement = this.thumbElement.getBoundingClientRect()[this.startPoint];
+  //   this.moved = e.touches[0][this.client] - sizeElement;
+  //   super.performToucMove(this.moved, this.thumbId, this.isVertical);
+  // }
+
   private mouseDown(e: MouseEvent): void {
-    if (!this.isVertical) this.moved = e.clientX - this.thumbElement.getBoundingClientRect().left;
-    if (this.isVertical) this.moved = e.clientY - this.thumbElement.getBoundingClientRect().top;
+    this.moved = e[this.direction] - this.thumbElement.getBoundingClientRect()[this.startPoint];
 
     this.checkZInd();
-    super.performMouseMove(this.moved, this.thumbId, this.isVertical);
+    super.performMouseMove(this.moved, this.thumbId);
   }
 }
 

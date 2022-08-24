@@ -1,47 +1,37 @@
 import SliderComponents from '../SliderComponents/SliderComponents';
-import { ProgressData, SizeType, StartPointType } from '../../../Interfaces';
+import { ProgressData } from '../../../Interfaces';
 
 class Progress extends SliderComponents {
-  positionStart!: number;
+  positionStart: number;
 
-  positionEnd!: number;
-
-  isVertical!: boolean;
+  positionEnd: number;
 
   progress: HTMLDivElement;
 
-  constructor(protected readonly data: ProgressData) {
+  constructor(data: ProgressData) {
     const {
       root,
-    } = data;
-
-    super(root);
-    this.createVriables(data);
-    this.progress = this.createElement('slider__progress');
-    this.setProgressPosition(this.positionStart, this.positionEnd);
-  }
-
-  private createVriables(data: ProgressData) {
-    const {
       positionStart,
       positionEnd,
       isVertical,
     } = data;
 
-    this.positionStart = positionStart || 0;
-    this.positionEnd = positionEnd || 100;
-    this.isVertical = isVertical;
+    super(root, isVertical);
+    this.positionStart = positionStart;
+    this.positionEnd = positionEnd;
     this.progress = this.createElement('slider__progress');
-    this.setProgressPosition(this.positionStart, this.positionEnd);
+    this.setProgress();
+  }
+
+  public setProgress(): void {
+    this.progress.style[this.startPoint] = `${this.positionStart}%`;
+    this.progress.style[this.size] = `${this.positionEnd}%`;
+    this.root.append(this.progress);
   }
 
   public setProgressPosition(positionStart = 0, positionEnd = 100): void {
-    const startPoint: StartPointType = this.isVertical ? 'top' : 'left';
-    const size: SizeType = this.isVertical ? 'height' : 'width';
-
-    this.progress.style[startPoint] = `${positionStart}%`;
-    this.progress.style[size] = `${positionEnd}%`;
-    this.root.append(this.progress);
+    this.progress.style[this.startPoint] = `${positionStart}%`;
+    this.progress.style[this.size] = `${positionEnd}%`;
   }
 }
 

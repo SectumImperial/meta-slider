@@ -1,8 +1,8 @@
 const initialState = {
   min: 0,
-  max: 10000,
+  max: 100,
   valueFrom: 1,
-  valueTo: 0,
+  valueTo: 50,
   step: 1,
   thumbPercentFrom: 0,
   thumbPercentTo: 0,
@@ -11,7 +11,7 @@ const initialState = {
   isTip: true,
   isProgress: true,
   isRange: true,
-  isVertical: false,
+  isVertical: true,
 };
 
 export default initialState;

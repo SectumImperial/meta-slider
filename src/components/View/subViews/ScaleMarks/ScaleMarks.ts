@@ -1,15 +1,11 @@
-import { StartPointType } from '../../../Interfaces';
 import SliderComponents from '../SliderComponents/SliderComponents';
 
 class ScaleMarks extends SliderComponents {
   marks: Map<number, number>;
 
-  isVertical: boolean;
-
   constructor(root: HTMLDivElement, marks: Map<number, number>, isVertical: boolean) {
-    super(root);
+    super(root, isVertical);
     this.marks = marks;
-    this.isVertical = isVertical;
     this.init();
   }
 
@@ -22,15 +18,13 @@ class ScaleMarks extends SliderComponents {
   }
 
   private createMark(value: number, percent: number) {
-    const startPoint: StartPointType = this.isVertical ? 'top' : 'left';
-    const mod = this.isVertical ? 'vertical' : 'horizontal';
     const mark = this.createElement('slider__mark');
-    mark.classList.add(`slider__mark_${mod}`);
-    mark.style[startPoint] = `${percent}%`;
+    mark.classList.add(`slider__mark_${this.mod}`);
+    mark.style[this.startPoint] = `${percent}%`;
 
     const markValue = document.createElement('span');
     markValue.className = 'slider__mark-value';
-    markValue.classList.add(`slider__mark-value_${mod}`);
+    markValue.classList.add(`slider__mark-value_${this.mod}`);
     markValue.innerText = `${value}`;
     mark.append(markValue);
 

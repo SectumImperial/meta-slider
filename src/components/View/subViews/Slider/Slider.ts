@@ -4,6 +4,7 @@ import { SLIDER_EVENTS } from '../../../Presenter/events';
 import Progress from '../Progress/Progress';
 import Scale from '../Scale/Scale';
 import ScaleMarks from '../ScaleMarks/ScaleMarks';
+import SliderComponents from '../SliderComponents/SliderComponents';
 import Thumb from '../Thumb/Thumb';
 import Tip from '../Tip/Tip';
 
@@ -46,6 +47,8 @@ class Slider extends Observer {
 
   progress?: Progress;
 
+  sliderCompnents!: SliderComponents;
+
   constructor(root: Element, protected readonly state: SliderInterface) {
     super();
     this.createVariables(root, state);
@@ -86,6 +89,7 @@ class Slider extends Observer {
   }
 
   private createlements() {
+    this.sliderCompnents = new SliderComponents(this.slider, this.isVertical);
     this.scale = new Scale(this.slider, this.isVertical);
     this.scaleElement = this.scale.getScale();
 
@@ -181,7 +185,7 @@ class Slider extends Observer {
     this.thumbPercentFrom = thumbPercentFrom;
     this.thumbFrom.setPosition(this.thumbPercentFrom);
 
-    if (isRange && typeof thumbPercentTo === 'number' && this.thumbTo) {
+    if (isRange && thumbPercentTo !== undefined && this.thumbTo) {
       this.thumbPercentTo = thumbPercentTo;
       this.thumbTo.setPosition(this.thumbPercentTo);
     }
@@ -209,10 +213,10 @@ class Slider extends Observer {
     if (this.isProgress && !isRange) {
       this.progress?.setProgressPosition(0, this.thumbPercentFrom);
     }
-    if (isRange && thumbPercentTo) {
+    if (this.isProgress && isRange && thumbPercentTo) {
       this.progress?.setProgressPosition(this.thumbPercentFrom, thumbPercentTo - thumbPercentFrom);
     }
-    if (thumbPercentTo === thumbPercentFrom) {
+    if (this.isProgress && thumbPercentTo === thumbPercentFrom) {
       this.progress?.setProgressPosition(0, 0);
     }
   }
