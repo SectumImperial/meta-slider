@@ -1,5 +1,5 @@
 import Observer from '../../../../Observer/Observer';
-import { SliderInterface, SliderEventValChangedData, SizeType } from '../../../Interfaces';
+import { SliderInterface, SliderEventValChangedData, ScaleClickData } from '../../../Interfaces';
 import { SLIDER_EVENTS } from '../../../Presenter/events';
 import Progress from '../Progress/Progress';
 import Scale from '../Scale/Scale';
@@ -52,14 +52,27 @@ class Slider extends Observer {
   constructor(root: Element, protected readonly state: SliderInterface) {
     super();
     this.createVariables(root, state);
-    this.init();
+    this.initSlider();
     this.setState(state);
   }
 
-  private init(): void {
+  private initSlider(): void {
     this.slider = this.createSlider();
     this.createlements();
     this.addSlider();
+  }
+
+  public update(data: SliderEventValChangedData | ScaleClickData, event: string): void {
+    if (event === SLIDER_EVENTS.VALUE_START_CHANGE) {
+      const { size } = this.sliderCompnents;
+      const scaleSize = this.scaleElement.getBoundingClientRect()[size];
+      const sliderData = { ...data, scaleSize };
+      this.emit(SLIDER_EVENTS.DATA_COLLECTED, sliderData);
+    }
+
+    if (event === SLIDER_EVENTS.SCALE_CLICKED) {
+      this.emit(SLIDER_EVENTS.SCALE_CLICKED, data);
+    }
   }
 
   private createVariables(root: Element, state: SliderInterface): void {
@@ -88,7 +101,7 @@ class Slider extends Observer {
     this.root = root;
   }
 
-  private createlements() {
+  private createlements(): void {
     this.sliderCompnents = new SliderComponents(this.slider, this.isVertical);
     this.scale = new Scale(this.slider, this.isVertical);
     this.scaleElement = this.scale.getScale();
@@ -162,17 +175,7 @@ class Slider extends Observer {
     return sliderWrapper;
   }
 
-  public update(data: SliderEventValChangedData, event: string): void {
-    if (event === SLIDER_EVENTS.VALUE_START_CHANGE) {
-      const { isVertical } = data;
-      const size: SizeType = isVertical ? 'height' : 'width';
-      const scaleSize = this.scaleElement.getBoundingClientRect()[size];
-      const sliderData = { ...data, scaleSize };
-      this.emit(SLIDER_EVENTS.DATA_COLLECTED, sliderData);
-    }
-  }
-
-  public setState(data: SliderInterface) {
+  public setState(data: SliderInterface): void {
     const {
       thumbPercentFrom,
       valueFrom,
@@ -221,7 +224,7 @@ class Slider extends Observer {
     }
   }
 
-  private isNeedDoubleTip() {
+  private isNeedDoubleTip(): boolean {
     return this.isTip
       && this.isRange
       && this.thumbPercentTo !== undefined

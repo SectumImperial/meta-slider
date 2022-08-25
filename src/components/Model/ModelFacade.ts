@@ -1,7 +1,11 @@
 import Model from './Model';
 import Validator from './Validator';
 import {
-  ModelInterface, SliderInterface, ThumbID, ValidateSliderData,
+  ModelInterface,
+  SliderInterface,
+  ThumbID,
+  ValidateSliderData,
+  ValidateSliderDataClicked,
 } from '../Interfaces';
 import Observer from '../../Observer/Observer';
 import { MODEL_EVENTS } from '../Presenter/events';
@@ -52,22 +56,37 @@ class ModelFacade extends Observer {
     return this.validator;
   }
 
-  public update(data: ValidateSliderData, event: string) {
+  public update(data: ValidateSliderData | ValidateSliderDataClicked, event: string) {
     if (event === MODEL_EVENTS.VALUE_CHANGED) {
-      const { thumbId } = data;
-      const movedTo = this.validator.performMoveToPercent(data);
-
-      if (movedTo === this.prevMove) return;
-      this.prevMove = movedTo;
-      this.model.updateState(movedTo, thumbId as ThumbID);
-      const newState = this.model.getState();
-
-      if (newState.scaleMarks) {
-        this.emit(MODEL_EVENTS.VALUE_CHANGED, { ...newState, scaleMap: this.model.mapSteps });
-      } else {
-        this.emit(MODEL_EVENTS.VALUE_CHANGED, newState);
-      }
+      this.hadleMoveEvent(data as ValidateSliderData);
     }
+
+    if (event === MODEL_EVENTS.VALUE_CHANGED_BY_CLICK) {
+      this.handleClickEvent(data as ValidateSliderDataClicked);
+    }
+  }
+
+  private hadleMoveEvent(data: ValidateSliderData) {
+    const { thumbId } = data;
+    const movedTo = this.validator.performMoveToPercent(data);
+
+    if (movedTo === this.prevMove) return;
+    this.prevMove = movedTo;
+    this.model.updateStateMove(movedTo, thumbId as ThumbID);
+    const newState = this.model.getState();
+
+    if (newState.scaleMarks) {
+      this.emit(MODEL_EVENTS.VALUE_CHANGED, { ...newState, scaleMap: this.model.mapSteps });
+    } else {
+      this.emit(MODEL_EVENTS.VALUE_CHANGED, newState);
+    }
+  }
+
+  private handleClickEvent(data: ValidateSliderDataClicked) {
+    const clickedPercent = this.validator.validateClickedPos(data);
+    this.model.updateStateClick(clickedPercent);
+    const newState = this.model.getState();
+    this.emit(MODEL_EVENTS.VALUE_CHANGED, newState);
   }
 }
 

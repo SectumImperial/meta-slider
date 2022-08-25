@@ -23,10 +23,12 @@ class Presenter extends Observer {
 
   private subscribeSlider() {
     this.view.addSubscriber(SLIDER_EVENTS.VALUE_CHANGED, this.modelFacade);
+    this.view.addSubscriber(SLIDER_EVENTS.VALUE_CHANGED_BY_CLICK, this.modelFacade);
   }
 
   private subscribeModel() {
     this.modelFacade.addSubscriber(MODEL_EVENTS.VALUE_CHANGED, this.view);
+    this.modelFacade.addSubscriber(MODEL_EVENTS.VALUE_CHANGED_BY_CLICK, this.view);
   }
 }
 

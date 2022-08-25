@@ -1,4 +1,10 @@
-import { ModelInterface, ThumbID, ValidateSliderData } from '../Interfaces';
+import {
+  ModelInterface,
+  ThumbID,
+  ValidateSliderData,
+  ValidateSliderDataClicked,
+  // ValidateSliderDataClicked,
+} from '../Interfaces';
 import initialState from '../../state';
 
 class Validator {
@@ -184,6 +190,14 @@ class Validator {
     const valOfRange = this[value] - this.min;
     const currentPercent = (valOfRange / (this.findRange() / 100));
     return currentPercent;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  public validateClickedPos(data: ValidateSliderDataClicked): number {
+    const { clickPos, scaleSize } = data;
+    const percent = scaleSize / 100;
+    const result = Number((clickPos / percent).toFixed(3));
+    return result;
   }
 }
 

@@ -11,7 +11,7 @@ class SliderComponents extends Observer {
 
   protected readonly startPoint: StartPointType;
 
-  protected readonly size: SizeType;
+  readonly size: SizeType;
 
   protected readonly mod: 'vertical' | 'horizontal';
 
@@ -42,7 +42,6 @@ class SliderComponents extends Observer {
       this.emit(SLIDER_EVENTS.VALUE_START_CHANGE, {
         coordsMove: newPos,
         thumbId: id,
-        isVertical: this.isVertical,
       });
     };
 
@@ -55,16 +54,25 @@ class SliderComponents extends Observer {
     document.addEventListener('mouseup', mouseUp);
   }
 
-  // protected performToucMove(thumbPos: number, id: string, isVertical = false) {
-  //   const touchMove = (e: TouchEvent) => {
-  //     e.preventDefault();
-  //     const direction = isVertical ? 'clientY' : 'clientX';
-  //     const newPos = e.touches[0][direction]
-  // - thumbPos - this.root.getBoundingClientRect()[startPoint];;
-  //   }
+  protected performToucMove(thumbPos: number, id: string) {
+    const touchMove = (e: TouchEvent) => {
+      e.stopImmediatePropagation();
+      const elemSize = this.root.getBoundingClientRect()[this.startPoint];
+      const newPos = e.touches[0][this.direction] - thumbPos - elemSize;
+      this.emit(SLIDER_EVENTS.VALUE_START_CHANGE, {
+        coordsMove: newPos,
+        thumbId: id,
+      });
+    };
 
-  //   document.addEventListener('touchmove', touchMove);
-  // }
+    const touchEnd = () => {
+      document.removeEventListener('touchmove', touchMove);
+      document.removeEventListener('touchend', touchEnd);
+    };
+
+    document.addEventListener('touchmove', touchMove);
+    document.addEventListener('touchend', touchEnd);
+  }
 }
 
 export default SliderComponents;

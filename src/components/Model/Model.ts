@@ -8,6 +8,7 @@ import {
   HandleMoveModelTo,
   isValCorrectInRangeArgs,
   StepsMap,
+  ModelSetVal,
 } from '../Interfaces';
 
 class Model {
@@ -36,15 +37,63 @@ class Model {
     return this.state;
   }
 
-  public updateState(movedTo: number, thumb: ThumbID): void {
+  public updateStateMove(movedTo: number, thumb: ThumbID): void {
+    const {
+      nearStepPercent,
+      halfStep,
+      halfMove,
+    } = this.findSuitablePercent(movedTo);
+
+    this.setNewValue({
+      nearStepPercent,
+      halfStep,
+      halfMove,
+      thumb,
+    });
+  }
+
+  private findSuitablePercent(percentMove: number) {
     const {
       step,
     } = this.state;
 
-    const nearestCountStep: number = Math.round(movedTo / this.stepPercent);
+    const nearestCountStep: number = Math.round(percentMove / this.stepPercent);
     const nearStepPercent: number = nearestCountStep * this.stepPercent;
     const halfStep: number = this.stepPercent / 2;
-    const halfMove = Number((movedTo % (step / this.findPercent())).toFixed(2));
+    const halfMove = Number((percentMove % (step / this.findPercent())).toFixed(2));
+
+    return {
+      nearStepPercent,
+      halfStep,
+      halfMove,
+    };
+  }
+
+  public updateStateClick(clickedPercent: number): void {
+    const {
+      nearStepPercent,
+      halfStep,
+      halfMove,
+    } = this.findSuitablePercent(clickedPercent);
+
+    const { isRange } = this.state;
+    if (!isRange) {
+      this.setNewValue({
+        nearStepPercent,
+        halfStep,
+        halfMove,
+        thumb: 'valueFrom',
+      });
+    }
+  }
+
+  private setNewValue(data: ModelSetVal) {
+    const {
+      halfMove,
+      halfStep,
+      nearStepPercent,
+      thumb,
+    } = data;
 
     if (halfMove < halfStep) {
       const val = this.mapSteps.get(nearStepPercent);
@@ -68,25 +117,6 @@ class Model {
         percent,
       });
     }
-  }
-
-  public getValue(val: modelVal): number | undefined {
-    return this.state[`${val}`];
-  }
-
-  public increment(): void {
-    if (this.state.valueFrom !== this.state.max) this.state.valueFrom += this.state.step;
-  }
-
-  public decrement(): void {
-    if (this.state.valueFrom !== this.state.min) this.state.valueFrom -= this.state.step;
-  }
-
-  public getPercentVal(): number {
-    const { valueFrom, min, max } = this.state;
-    const range: number = max - min;
-    const percent = Number(((valueFrom / range) * 100).toFixed(3));
-    return percent;
   }
 
   private handleMove(values: HandleMoveModel) {
@@ -189,6 +219,25 @@ class Model {
       [thumb]: val,
       [thumbPecent]: percent,
     });
+  }
+
+  public getValue(val: modelVal): number | undefined {
+    return this.state[`${val}`];
+  }
+
+  public increment(): void {
+    if (this.state.valueFrom !== this.state.max) this.state.valueFrom += this.state.step;
+  }
+
+  public decrement(): void {
+    if (this.state.valueFrom !== this.state.min) this.state.valueFrom -= this.state.step;
+  }
+
+  public getPercentVal(): number {
+    const { valueFrom, min, max } = this.state;
+    const range: number = max - min;
+    const percent = Number(((valueFrom / range) * 100).toFixed(3));
+    return percent;
   }
 
   private createSteps(): StepsMap {

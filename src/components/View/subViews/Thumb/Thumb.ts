@@ -50,15 +50,12 @@ class Thumb extends SliderComponents {
     if (this.thumbId === 'valueFrom' && this.thumbPercent === 100) {
       this.thumbElement.style.zIndex = '10';
     }
-
     if (this.thumbId === 'valueFrom' && this.thumbPercent < 100) {
       this.thumbElement.style.zIndex = '5';
     }
-
     if (this.thumbId === 'valueTo' && this.thumbPercent === 0) {
       this.thumbElement.style.zIndex = '10';
     }
-
     if (this.thumbId === 'valueTo' && this.thumbPercent > 0) {
       this.thumbElement.style.zIndex = '5';
     }
@@ -66,22 +63,21 @@ class Thumb extends SliderComponents {
 
   private addListeners() {
     this.thumbElement.addEventListener('mousedown', this.mouseDown.bind(this));
-    // this.thumbElement.addEventListener(
-    //   'touchstart',
-    //   this.touchDown.bind(this),
-    //   { passive: true },
-    // );
+    this.thumbElement.addEventListener(
+      'touchstart',
+      this.touchDown.bind(this),
+      { passive: true },
+    );
   }
 
-  // private touchDown(e: TouchEvent) {
-  //   const sizeElement = this.thumbElement.getBoundingClientRect()[this.startPoint];
-  //   this.moved = e.touches[0][this.client] - sizeElement;
-  //   super.performToucMove(this.moved, this.thumbId, this.isVertical);
-  // }
+  private touchDown(e: TouchEvent) {
+    const sizeElement = this.thumbElement.getBoundingClientRect()[this.startPoint];
+    this.moved = e.touches[0][this.direction] - sizeElement;
+    super.performToucMove(this.moved, this.thumbId);
+  }
 
   private mouseDown(e: MouseEvent): void {
     this.moved = e[this.direction] - this.thumbElement.getBoundingClientRect()[this.startPoint];
-
     this.checkZInd();
     super.performMouseMove(this.moved, this.thumbId);
   }

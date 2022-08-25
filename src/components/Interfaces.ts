@@ -24,6 +24,11 @@ interface ValidateSliderData {
   thumbId: string,
 }
 
+interface ValidateSliderDataClicked {
+  clickPos: number,
+  scaleSize: number,
+}
+
 type modelVal = 'min' | 'max' | 'valueFrom' | 'step' | 'valueTo';
 type ThumbID = 'valueFrom' | 'valueTo'
 type StartPointType = 'top' | 'left';
@@ -58,6 +63,11 @@ interface SliderEventValChangedData {
   isVertical: boolean
 }
 
+interface ScaleClickData {
+  clickPos: number,
+  scaleSize: number,
+}
+
 interface ProgressData {
   root: Element,
   positionStart: number,
@@ -89,6 +99,13 @@ interface ThumbArgs {
   isVertical: boolean,
 }
 
+interface ModelSetVal {
+  halfMove: number,
+  halfStep: number,
+  nearStepPercent: number,
+  thumb: ThumbID
+}
+
 export {
   ModelInterface,
   modelVal,
@@ -107,4 +124,7 @@ export {
   StartPointType,
   SizeType,
   ThumbArgs,
+  ScaleClickData,
+  ValidateSliderDataClicked,
+  ModelSetVal,
 };

@@ -36,6 +36,9 @@ class View extends Observer {
     if (event === SLIDER_EVENTS.VALUE_CHANGED) {
       this.updateSlider(data);
     }
+    if (event === SLIDER_EVENTS.SCALE_CLICKED) {
+      this.emit(SLIDER_EVENTS.VALUE_CHANGED_BY_CLICK, data);
+    }
   }
 
   private addSubscribeSlider() {
@@ -43,6 +46,8 @@ class View extends Observer {
     if (this.isRange && this.slider.thumbTo) {
       this.slider.thumbTo.addSubscriber(SLIDER_EVENTS.VALUE_START_CHANGE, this.slider);
     }
+    this.slider.scale.addSubscriber(SLIDER_EVENTS.SCALE_CLICKED, this.slider);
+    this.slider.addSubscriber(SLIDER_EVENTS.SCALE_CLICKED, this);
     this.slider.addSubscriber(SLIDER_EVENTS.DATA_COLLECTED, this);
   }
 }
