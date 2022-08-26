@@ -1,6 +1,5 @@
 import Observer from '../../Observer/Observer';
 import Slider from './subViews/Slider/Slider';
-import './view.scss';
 import { SLIDER_EVENTS } from '../Presenter/events';
 import { SliderInterface } from '../Interfaces';
 

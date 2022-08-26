@@ -1,5 +1,6 @@
 import { TipData } from '../../../Interfaces';
 import SliderComponents from '../SliderComponents/SliderComponents';
+import './tip.scss';
 
 class Tip extends SliderComponents {
   tip: HTMLDivElement;

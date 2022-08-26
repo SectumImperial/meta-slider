@@ -1,5 +1,6 @@
 import SliderComponents from '../SliderComponents/SliderComponents';
 import { ProgressData } from '../../../Interfaces';
+import './progress.scss';
 
 class Progress extends SliderComponents {
   positionStart: number;

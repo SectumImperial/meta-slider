@@ -1,5 +1,6 @@
 import SliderComponents from '../SliderComponents/SliderComponents';
 import { ThumbArgs, ThumbID } from '../../../Interfaces';
+import './thumb.scss';
 
 class Thumb extends SliderComponents {
   moved!: number;
@@ -51,7 +52,7 @@ class Thumb extends SliderComponents {
       this.thumbElement.style.zIndex = '10';
     }
     if (this.thumbId === 'valueFrom' && this.thumbPercent < 100) {
-      this.thumbElement.style.zIndex = '5';
+      this.thumbElement.style.zIndex = '6';
     }
     if (this.thumbId === 'valueTo' && this.thumbPercent === 0) {
       this.thumbElement.style.zIndex = '10';

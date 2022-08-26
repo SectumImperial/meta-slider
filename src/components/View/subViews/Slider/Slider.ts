@@ -7,6 +7,7 @@ import ScaleMarks from '../ScaleMarks/ScaleMarks';
 import SliderComponents from '../SliderComponents/SliderComponents';
 import Thumb from '../Thumb/Thumb';
 import Tip from '../Tip/Tip';
+import './slider.scss';
 
 class Slider extends Observer {
   tipValueFrom!: number;

@@ -1,4 +1,5 @@
 import SliderComponents from '../SliderComponents/SliderComponents';
+import './scaleMarks.scss';
 
 class ScaleMarks extends SliderComponents {
   marks: Map<number, number>;
