@@ -69,24 +69,6 @@ class Model {
     };
   }
 
-  public updateStateClick(clickedPercent: number): void {
-    const {
-      nearStepPercent,
-      halfStep,
-      halfMove,
-    } = this.findSuitablePercent(clickedPercent);
-
-    const { isRange } = this.state;
-    if (!isRange) {
-      this.setNewValue({
-        nearStepPercent,
-        halfStep,
-        halfMove,
-        thumb: 'valueFrom',
-      });
-    }
-  }
-
   private setNewValue(data: ModelSetVal) {
     const {
       halfMove,

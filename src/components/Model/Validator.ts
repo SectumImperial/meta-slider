@@ -2,7 +2,6 @@ import {
   ModelInterface,
   ThumbID,
   ValidateSliderData,
-  ValidateSliderDataClicked,
   // ValidateSliderDataClicked,
 } from '../Interfaces';
 import initialState from '../../state';
@@ -177,13 +176,16 @@ class Validator {
       const stepVal = this.step * Math.floor((value / this.step));
       result = stepVal;
     }
-
     return result;
   }
 
   private checkPercents(): void {
-    this.resultObject.thumbPercentFrom = this.checkPercent('valueFrom');
-    if (this.isRange) this.resultObject.thumbPercentTo = this.checkPercent('valueTo');
+    this.thumbPercentFrom = this.checkPercent('valueFrom');
+    this.resultObject.thumbPercentFrom = this.thumbPercentFrom;
+    if (this.isRange) {
+      this.thumbPercentTo = this.checkPercent('valueTo');
+      this.resultObject.thumbPercentTo = this.thumbPercentTo;
+    }
   }
 
   private checkPercent(value: ThumbID = 'valueFrom'): number {
@@ -192,12 +194,21 @@ class Validator {
     return currentPercent;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  public validateClickedPos(data: ValidateSliderDataClicked): number {
-    const { clickPos, scaleSize } = data;
-    const percent = scaleSize / 100;
-    const result = Number((clickPos / percent).toFixed(3));
-    return result;
+  public validateThumbId(movedTo: number): ThumbID {
+    if (!this.isRange) return 'valueFrom';
+    if (movedTo < this.thumbPercentFrom) return 'valueFrom';
+    if (this.thumbPercentTo !== undefined && movedTo > this.thumbPercentTo) return 'valueTo';
+
+    if (movedTo > this.thumbPercentFrom
+      && this.thumbPercentTo !== undefined
+      && movedTo < this.thumbPercentTo) {
+      const diffFrom = movedTo - this.thumbPercentFrom;
+      const diffTo = this.thumbPercentTo - movedTo;
+
+      if (diffFrom === diffTo || diffFrom < diffTo) return 'valueFrom';
+      if (diffFrom > diffTo) return 'valueTo';
+    }
+    return 'valueTo';
   }
 }
 

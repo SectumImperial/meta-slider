@@ -36,11 +36,11 @@ class Scale extends SliderComponents {
 
     const scaleSize = this.scale.getBoundingClientRect()[this.size];
     const scaleStart = this.scale.getBoundingClientRect()[this.startPoint];
-    const clickPos = e[this.direction] - scaleStart;
+    const coordsMove = e[this.direction] - scaleStart;
 
-    if (clickPos > scaleSize || clickPos < 0) return;
+    if (coordsMove > scaleSize || coordsMove < 0) return;
     const data = {
-      clickPos,
+      coordsMove,
       scaleSize,
     };
 

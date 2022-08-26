@@ -21,12 +21,7 @@ interface SliderInterface extends ModelInterface {
 interface ValidateSliderData {
   coordsMove: number,
   scaleSize: number,
-  thumbId: string,
-}
-
-interface ValidateSliderDataClicked {
-  clickPos: number,
-  scaleSize: number,
+  thumbId?: string,
 }
 
 type modelVal = 'min' | 'max' | 'valueFrom' | 'step' | 'valueTo';
@@ -125,6 +120,5 @@ export {
   SizeType,
   ThumbArgs,
   ScaleClickData,
-  ValidateSliderDataClicked,
   ModelSetVal,
 };

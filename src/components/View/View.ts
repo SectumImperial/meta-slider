@@ -36,9 +36,6 @@ class View extends Observer {
     if (event === SLIDER_EVENTS.VALUE_CHANGED) {
       this.updateSlider(data);
     }
-    if (event === SLIDER_EVENTS.SCALE_CLICKED) {
-      this.emit(SLIDER_EVENTS.VALUE_CHANGED_BY_CLICK, data);
-    }
   }
 
   private addSubscribeSlider() {

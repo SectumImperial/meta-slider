@@ -1,5 +1,5 @@
 const initialState = {
-  min: 0,
+  min: -100,
   max: 100,
   valueFrom: 50,
   valueTo: 50,
@@ -10,7 +10,7 @@ const initialState = {
   scaleMarks: true,
   isTip: true,
   isProgress: true,
-  isRange: false,
+  isRange: true,
   isVertical: false,
 };
 

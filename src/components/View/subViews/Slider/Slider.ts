@@ -71,7 +71,7 @@ class Slider extends Observer {
     }
 
     if (event === SLIDER_EVENTS.SCALE_CLICKED) {
-      this.emit(SLIDER_EVENTS.SCALE_CLICKED, data);
+      this.emit(SLIDER_EVENTS.DATA_COLLECTED, data);
     }
   }
 
