@@ -1,7 +1,7 @@
-import { ModelInterface } from '../Interfaces';
+import { ModelInputState } from '../Interfaces';
 import View from '../View/View';
 import Observer from '../../Observer/Observer';
-import { MODEL_EVENTS, SLIDER_EVENTS } from './events';
+import { MODEL_EVENTS, SLIDER_EVENTS } from '../../Observer/events';
 import ModelFacade from '../Model/ModelFacade';
 
 class Presenter extends Observer {
@@ -11,7 +11,7 @@ class Presenter extends Observer {
 
   root: HTMLElement;
 
-  constructor(root: HTMLElement, state: ModelInterface) {
+  constructor(root: HTMLElement, state: ModelInputState) {
     super();
     this.root = root;
 
@@ -21,11 +21,11 @@ class Presenter extends Observer {
     this.subscribeSlider();
   }
 
-  private subscribeSlider() {
+  private subscribeSlider(): void {
     this.view.addSubscriber(SLIDER_EVENTS.VALUE_CHANGED, this.modelFacade);
   }
 
-  private subscribeModel() {
+  private subscribeModel(): void {
     this.modelFacade.addSubscriber(MODEL_EVENTS.VALUE_CHANGED, this.view);
   }
 }

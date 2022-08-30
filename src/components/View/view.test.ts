@@ -3,7 +3,27 @@
  */
 
 import View from './View';
-import state from '../../state';
+
+const initialState = {
+  isProgress: true,
+  isRange: false,
+  isTip: true,
+  isVertical: false,
+  max: 10,
+  min: 0,
+  scaleMarks: false,
+  scalePercentGap: 5,
+  step: 1,
+  thumbPercentFrom: 10,
+  thumbPercentTo: 100,
+  valueFrom: 1,
+  valueTo: 10,
+};
+
+const initialStateRange = {
+  ...initialState,
+  isRange: true,
+};
 
 describe('The View component tests', () => {
   let root: HTMLElement;
@@ -12,7 +32,7 @@ describe('The View component tests', () => {
   beforeEach(() => {
     root = document.createElement('div');
     root.className = 'slider__wrapper';
-    view = new View(root, state);
+    view = new View(root, initialState);
   });
 
   afterEach(() => {
@@ -36,5 +56,22 @@ describe('The View component tests', () => {
   test('Thumb should exist', () => {
     const thumb = root.querySelectorAll('.slider__thumb');
     expect(thumb).toHaveLength(1);
+  });
+
+  test('Second thumb should exist with true range', () => {
+    root.innerHTML = '';
+    view = new View(root, initialStateRange);
+    const thumb = root.querySelectorAll('.slider__thumb');
+    expect(thumb).toHaveLength(2);
+  });
+
+  test('Progress bar should exist with true progress', () => {
+    const progress = root.querySelectorAll('.slider__progress');
+    expect(progress).toHaveLength(1);
+  });
+
+  test('Tit should exist with true tip', () => {
+    const tip = root.querySelectorAll('.slider__tip');
+    expect(tip).toHaveLength(1);
   });
 });

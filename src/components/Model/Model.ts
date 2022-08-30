@@ -1,12 +1,12 @@
 import {
   ModelInterface,
-  modelVal,
+  ModelVal,
   ThumbID,
   ThumbValPercent,
   HandleMoveModel,
   HandleMoveModelFrom,
   HandleMoveModelTo,
-  isValCorrectInRangeArgs,
+  isValTheSamePos,
   StepsMap,
   ModelSetVal,
 } from '../Interfaces';
@@ -137,9 +137,9 @@ class Model {
       thumbPercentTo,
     } = this.state;
 
-    if (this.isValCorrectInRange({
+    if (this.isValTheSamePos({
       val,
-      value: valueTo,
+      valueAnotherThumb: valueTo,
       thumbPercent: thumbPercentTo,
       thumb,
       idVal: 'valueFrom',
@@ -160,9 +160,9 @@ class Model {
       thumbPercentFrom,
     } = this.state;
 
-    if (this.isValCorrectInRange({
+    if (this.isValTheSamePos({
       val,
-      value: valueFrom,
+      valueAnotherThumb: valueFrom,
       thumbPercent: thumbPercentFrom,
       thumb,
       idVal: 'valueTo',
@@ -173,10 +173,10 @@ class Model {
     }
   }
 
-  private isValCorrectInRange(values: isValCorrectInRangeArgs) {
+  private isValTheSamePos(values: isValTheSamePos) {
     const {
       val,
-      value,
+      valueAnotherThumb,
       thumbPercent,
       thumb,
       idVal,
@@ -184,10 +184,10 @@ class Model {
 
     const { isRange } = this.state;
 
-    const checkVal = isRange && thumbPercent && thumb === idVal;
+    const checkVal = isRange && thumbPercent !== undefined && thumb === idVal;
     let compareVal = false;
-    if (val !== undefined && value !== undefined) {
-      compareVal = idVal === 'valueFrom' ? val > value : val < value;
+    if (val !== undefined && valueAnotherThumb !== undefined) {
+      compareVal = idVal === 'valueFrom' ? val > valueAnotherThumb : val < valueAnotherThumb;
     }
 
     return checkVal && compareVal;
@@ -203,16 +203,8 @@ class Model {
     });
   }
 
-  public getValue(val: modelVal): number | undefined {
+  public getValue(val: ModelVal): number | undefined | boolean {
     return this.state[`${val}`];
-  }
-
-  public increment(): void {
-    if (this.state.valueFrom !== this.state.max) this.state.valueFrom += this.state.step;
-  }
-
-  public decrement(): void {
-    if (this.state.valueFrom !== this.state.min) this.state.valueFrom -= this.state.step;
   }
 
   public getPercentVal(): number {

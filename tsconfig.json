@@ -25,7 +25,6 @@
     "strictBindCallApply": true,
     "strictFunctionTypes": true,
     "strictPropertyInitialization": true,
-
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "**/*.spec.ts"]

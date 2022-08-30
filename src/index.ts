@@ -4,4 +4,4 @@ import './styles.scss';
 
 const element = document.querySelector('.page__slider') as HTMLAnchorElement;
 const slider = new Presenter(element, initialState);
-console.log(slider);
+export default slider;

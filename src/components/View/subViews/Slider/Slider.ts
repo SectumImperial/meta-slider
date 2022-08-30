@@ -1,6 +1,6 @@
 import Observer from '../../../../Observer/Observer';
 import { SliderInterface, SliderEventValChangedData, ScaleClickData } from '../../../Interfaces';
-import { SLIDER_EVENTS } from '../../../Presenter/events';
+import { SLIDER_EVENTS } from '../../../../Observer/events';
 import Progress from '../Progress/Progress';
 import Scale from '../Scale/Scale';
 import ScaleMarks from '../ScaleMarks/ScaleMarks';
@@ -71,7 +71,7 @@ class Slider extends Observer {
       this.emit(SLIDER_EVENTS.DATA_COLLECTED, sliderData);
     }
 
-    if (event === SLIDER_EVENTS.SCALE_CLICKED) {
+    if (event === SLIDER_EVENTS.SCALE_CLICKED || event === SLIDER_EVENTS.KEY_DOWN) {
       this.emit(SLIDER_EVENTS.DATA_COLLECTED, data);
     }
   }

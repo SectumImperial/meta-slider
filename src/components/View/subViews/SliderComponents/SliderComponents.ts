@@ -1,6 +1,11 @@
 import Observer from '../../../../Observer/Observer';
-import { SizeType, StartPointType } from '../../../Interfaces';
-import { SLIDER_EVENTS } from '../../../Presenter/events';
+import {
+  KeyEvent,
+  SizeType,
+  StartPointType,
+  ThumbID,
+} from '../../../Interfaces';
+import { SLIDER_EVENTS } from '../../../../Observer/events';
 
 class SliderComponents extends Observer {
   protected scaleElement!: HTMLDivElement;
@@ -54,7 +59,7 @@ class SliderComponents extends Observer {
     document.addEventListener('mouseup', mouseUp);
   }
 
-  protected performToucMove(thumbPos: number, id: string) {
+  protected performToucMove(thumbPos: number, id: ThumbID) {
     const touchMove = (e: TouchEvent) => {
       e.stopImmediatePropagation();
       const elemSize = this.root.getBoundingClientRect()[this.startPoint];
@@ -72,6 +77,13 @@ class SliderComponents extends Observer {
 
     document.addEventListener('touchmove', touchMove);
     document.addEventListener('touchend', touchEnd);
+  }
+
+  protected performKeyDown(keyEvent: KeyEvent, id: ThumbID) {
+    this.emit(SLIDER_EVENTS.KEY_DOWN, {
+      keyEvent,
+      thumbId: id,
+    });
   }
 }
 
