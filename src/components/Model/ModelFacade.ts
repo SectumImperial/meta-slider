@@ -27,7 +27,7 @@ class ModelFacade extends Observer {
     this.model = new Model(this.validState);
   }
 
-  public setState(state: ModelInterface) {
+  public setState(state: ModelInputState) {
     const validState = this.validator.validateData(state);
     this.model.setState(validState);
   }
