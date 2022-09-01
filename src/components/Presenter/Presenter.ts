@@ -33,6 +33,10 @@ class Presenter extends Observer {
     this.modelFacade.setValue(param, value);
   }
 
+  public getValue(param: ModelVal): number | boolean | undefined {
+    return this.modelFacade.getValue(param);
+  }
+
   private subscribeSlider(): void {
     this.view.addSubscriber(SLIDER_EVENTS.VALUE_CHANGED, this.modelFacade);
   }

@@ -38,12 +38,15 @@ const babelOptions = preset => {
   return opts
 }
 
-const filename = (ext) => (isDev ? `[name].${ext}` : `[name].[fullhash].${ext}`);
+const filename = (ext) => (isDev ? `[name].${ext}` : `[name]/[name].[fullhash].${ext}`);
 
 module.exports = {
   mode: 'development',
   devtool: 'inline-source-map',
-  entry: './src/index.ts',
+  entry: {
+    slider: './src/slider.ts',
+    demo: './demo-page/demo-page.ts'
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: filename('js'),
@@ -63,7 +66,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'src/index.pug',
+      template: 'demo-page/index.pug',
     }),
     new MiniCssExtractPlugin({
       filename: filename('css'),
@@ -122,7 +125,7 @@ module.exports = {
         loader: 'pug-loader',
         exclude: /(node_modules|bower_components)/,
         options: {
-          root: path.resolve(__dirname, 'src'),
+          root: path.resolve(__dirname, 'demo-page'),
         },
       },
     ],

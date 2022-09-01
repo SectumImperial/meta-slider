@@ -1,0 +1,22 @@
+include ./slider.pug
+
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Slider
+  body.page
+    main.page__main.main
+      .main__container 
+        .main__sliders
+          .main__slider
+            +slider({
+              min: 0,
+              max: 13,
+              step: 1,
+              from: 25,
+              marks: true,
+              gap: 5,
+            })

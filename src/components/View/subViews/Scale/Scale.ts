@@ -11,15 +11,15 @@ class Scale extends SliderComponents {
   }
 
   private initScale(): void {
-    this.scale = this.createElement('slider__scale');
-    if (this.isVertical) this.scale.classList.add('slider__scale_vertical');
-    if (!this.isVertical) this.scale.classList.add('slider__scale_horizontal');
+    this.scale = this.createElement('plugin-slider__scale');
+    if (this.isVertical) this.scale.classList.add('plugin-slider__scale_vertical');
+    if (!this.isVertical) this.scale.classList.add('plugin-slider__scale_horizontal');
     this.addScale();
     this.addListenners();
   }
 
   public getScale(): HTMLDivElement {
-    if (!this.scale) this.scale = this.createElement('slider__scale');
+    if (!this.scale) this.scale = this.createElement('plugin-slider__scale');
     return this.scale;
   }
 
@@ -33,7 +33,7 @@ class Scale extends SliderComponents {
 
   private handleClick(e: MouseEvent): void {
     const { target } = e;
-    if (!(target as Element).closest('.slider__scale')) return;
+    if (!(target as Element).closest('.plugin-slider__scale')) return;
 
     const scaleSize = this.scale.getBoundingClientRect()[this.size];
     const scaleStart = this.scale.getBoundingClientRect()[this.startPoint];

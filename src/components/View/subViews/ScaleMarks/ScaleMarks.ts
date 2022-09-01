@@ -19,13 +19,13 @@ class ScaleMarks extends SliderComponents {
   }
 
   private createMark(value: number, percent: number) {
-    const mark = this.createElement('slider__mark');
-    mark.classList.add(`slider__mark_${this.mod}`);
+    const mark = this.createElement('plugin-slider__mark');
+    mark.classList.add(`plugin-slider__mark_${this.mod}`);
     mark.style[this.startPoint] = `${percent}%`;
 
     const markValue = document.createElement('span');
-    markValue.className = 'slider__mark-value';
-    markValue.classList.add(`slider__mark-value_${this.mod}`);
+    markValue.className = 'plugin-slider__mark-value';
+    markValue.classList.add(`plugin-slider__mark-value_${this.mod}`);
     markValue.innerText = `${value}`;
     mark.append(markValue);
 

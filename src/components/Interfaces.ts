@@ -44,19 +44,19 @@ const ThumbValPercent = {
 };
 
 interface HandleMoveModel {
-  val: number | undefined,
+  value: number | undefined,
   thumb: ThumbID,
   percent: number,
 }
 
 interface HandleMoveModelFrom {
-  val: number | undefined,
+  value: number | undefined,
   thumb: ThumbID,
   percent: number,
 }
 
 interface HandleMoveModelTo {
-  val: number | undefined,
+  value: number | undefined,
   thumb: ThumbID,
   percent: number,
 }
@@ -97,7 +97,7 @@ interface TipData {
 }
 
 interface isValTheSamePos {
-  val: number | undefined,
+  value: number | undefined,
   valueAnotherThumb: number | undefined,
   thumbPercent: number | undefined,
   thumb: string,

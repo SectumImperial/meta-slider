@@ -172,7 +172,7 @@ class Slider extends Observer {
   // eslint-disable-next-line class-methods-use-this
   private createSlider(): HTMLDivElement {
     const sliderWrapper = document.createElement('div');
-    sliderWrapper.className = 'slider';
+    sliderWrapper.className = 'plugin-slider';
     return sliderWrapper;
   }
 

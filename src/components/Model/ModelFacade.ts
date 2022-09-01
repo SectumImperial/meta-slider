@@ -52,6 +52,10 @@ class ModelFacade extends Observer {
     return this.validator;
   }
 
+  public getValue(value: ModelVal) {
+    return this.model.getState()[`${value}`];
+  }
+
   public update(data: ValidateSliderData, event: string) {
     if (event === MODEL_EVENTS.VALUE_CHANGED) {
       const movedTo = this.validator.performMoveToPercent(data);

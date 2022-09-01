@@ -8,7 +8,6 @@ import {
   HandleMoveModelTo,
   isValTheSamePos,
   StepsMap,
-  ModelSetVal,
 } from '../Interfaces';
 
 class Model {
@@ -25,7 +24,7 @@ class Model {
 
   private init() {
     this.mapSteps = this.createSteps();
-    this.stepPercent = this.state.step / this.findPercent();
+    this.stepPercent = Number((this.state.step / this.findPercent()).toFixed(3));
   }
 
   public setState(state: object) {
@@ -38,79 +37,68 @@ class Model {
   }
 
   public updateStateMove(movedTo: number, thumb: ThumbID): void {
-    const {
-      nearStepPercent,
-      halfStep,
-      halfMove,
-    } = this.findSuitablePercent(movedTo);
+    this.findSuitablePercent(movedTo, thumb);
+  }
 
-    this.setNewValue({
-      nearStepPercent,
-      halfStep,
-      halfMove,
+  private findSuitablePercent(percentMove: number, thumb: ThumbID) {
+    const {
+      step,
+      max,
+      min,
+    } = this.state;
+
+    const nearestCountStep = Math.floor(percentMove / this.stepPercent);
+    const nearStep = nearestCountStep * step;
+    const halfStep = Number((this.stepPercent / 2).toFixed(3));
+
+    const halfMove = Number((percentMove % this.stepPercent).toFixed(3));
+
+    let prevStepPercent = this.findPercentMap(nearStep);
+    if (prevStepPercent === undefined) prevStepPercent = 0;
+    let nextStepPercent = this.findPercentMap(nearStep + this.state.step);
+    if (nextStepPercent === undefined) nextStepPercent = 100;
+
+    if (percentMove === 100) {
+      prevStepPercent = this.findPercentMap(max - step);
+    }
+
+    let value: number | undefined;
+    let percent: number;
+    if (halfMove < halfStep && prevStepPercent !== undefined) {
+      value = this.mapSteps.get(prevStepPercent);
+      percent = prevStepPercent;
+    } else {
+      value = this.mapSteps.get(nextStepPercent);
+      percent = nextStepPercent;
+    }
+
+    if (percentMove === 100) {
+      value = this.mapSteps.get(100);
+      percent = 100;
+    }
+    if (value === undefined) value = min;
+
+    this.handleMove({
+      value,
       thumb,
+      percent,
     });
   }
 
-  private findSuitablePercent(percentMove: number) {
-    const {
-      step,
-    } = this.state;
-
-    const nearestCountStep: number = Math.round(percentMove / this.stepPercent);
-    const nearStepPercent: number = nearestCountStep * this.stepPercent;
-    const halfStep: number = this.stepPercent / 2;
-    const halfMove = Number((percentMove % (step / this.findPercent())).toFixed(2));
-
-    return {
-      nearStepPercent,
-      halfStep,
-      halfMove,
-    };
-  }
-
-  private setNewValue(data: ModelSetVal) {
-    const {
-      halfMove,
-      halfStep,
-      nearStepPercent,
-      thumb,
-    } = data;
-
-    if (halfMove < halfStep) {
-      const val = this.mapSteps.get(nearStepPercent);
-      const percent = nearStepPercent;
-
-      this.handleMove({
-        val,
-        thumb,
-        percent,
-      });
-    }
-
-    if (halfMove >= halfStep) {
-      const val = nearStepPercent + this.stepPercent <= 100
-        ? this.mapSteps.get(nearStepPercent) : this.mapSteps.get(100);
-      const percent = nearStepPercent;
-
-      this.handleMove({
-        val,
-        thumb,
-        percent,
-      });
-    }
+  private findPercentMap(value: number): number | undefined {
+    return [...this.mapSteps.keys()].find((key) => this.mapSteps.get(key) === value);
   }
 
   private handleMove(values: HandleMoveModel) {
     const {
-      val,
+      value,
       thumb,
       percent,
     } = values;
 
     if (thumb === 'valueFrom') {
       this.handleMoveFrom({
-        val,
+        value,
         thumb,
         percent,
       });
@@ -118,7 +106,7 @@ class Model {
 
     if (thumb === 'valueTo') {
       this.handleMoveTo({
-        val,
+        value,
         thumb,
         percent,
       });
@@ -127,7 +115,7 @@ class Model {
 
   private handleMoveFrom(values: HandleMoveModelFrom) {
     const {
-      val,
+      value,
       thumb,
       percent,
     } = values;
@@ -138,19 +126,19 @@ class Model {
     } = this.state;
 
     if (this.isValTheSamePos({
-      val,
+      value,
       valueAnotherThumb: valueTo,
       thumbPercent: thumbPercentTo,
       thumb,
       idVal: 'valueFrom',
     }) && valueTo !== undefined && thumbPercentTo !== undefined) {
       this.updateMoved(valueTo, thumbPercentTo, thumb);
-    } else if (val !== undefined) this.updateMoved(val, percent, thumb);
+    } else if (value !== undefined) this.updateMoved(value, percent, thumb);
   }
 
   private handleMoveTo(values: HandleMoveModelTo) {
     const {
-      val,
+      value,
       thumb,
       percent,
     } = values;
@@ -161,21 +149,21 @@ class Model {
     } = this.state;
 
     if (this.isValTheSamePos({
-      val,
+      value,
       valueAnotherThumb: valueFrom,
       thumbPercent: thumbPercentFrom,
       thumb,
       idVal: 'valueTo',
     }) && valueFrom !== undefined) {
       this.updateMoved(valueFrom, thumbPercentFrom, thumb);
-    } else if (val !== undefined) {
-      this.updateMoved(val, percent, thumb);
+    } else if (value !== undefined) {
+      this.updateMoved(value, percent, thumb);
     }
   }
 
   private isValTheSamePos(values: isValTheSamePos) {
     const {
-      val,
+      value,
       valueAnotherThumb,
       thumbPercent,
       thumb,
@@ -186,8 +174,8 @@ class Model {
 
     const checkVal = isRange && thumbPercent !== undefined && thumb === idVal;
     let compareVal = false;
-    if (val !== undefined && valueAnotherThumb !== undefined) {
-      compareVal = idVal === 'valueFrom' ? val > valueAnotherThumb : val < valueAnotherThumb;
+    if (value !== undefined && valueAnotherThumb !== undefined) {
+      compareVal = idVal === 'valueFrom' ? value > valueAnotherThumb : value < valueAnotherThumb;
     }
 
     return checkVal && compareVal;
@@ -222,7 +210,7 @@ class Model {
 
     let countStep = 0;
     for (let i = min; i <= max; i += step) {
-      mapSteps.set((countStep * step) / percent, i);
+      mapSteps.set(Number(((countStep * step) / percent).toFixed(3)), i);
       countStep += 1;
     }
     if (range % step !== 0) {

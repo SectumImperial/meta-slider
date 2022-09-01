@@ -26,7 +26,7 @@ class Thumb extends SliderComponents {
   }
 
   private initThumb(): void {
-    this.thumbElement = this.createElement('slider__thumb');
+    this.thumbElement = this.createElement('plugin-slider__thumb');
     this.thumbElement.id = this.thumbId;
     this.thumbElement.tabIndex = 1;
     this.root.append(this.thumbElement);
