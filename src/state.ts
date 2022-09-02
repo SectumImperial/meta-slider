@@ -1,8 +1,8 @@
 const initialState = {
   min: 0,
-  max: 10,
+  max: 100,
   valueFrom: 0,
-  valueTo: 10,
+  valueTo: 0,
   step: 1,
   scalePercentGap: 5,
   scaleMarks: false,
