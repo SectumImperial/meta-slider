@@ -5,7 +5,7 @@ It's the four task of Metalamp. https://coda.io/@metalamp/education/front-end-2
 
 ## Description 
 The slider can work with one or two thumbs. It can display a progress bar, display step labels on the scale, as well as a value hint above the thumb. It can take horizontal and vertical position. 
-The slider can be configurated with the JS and can validdate input data. 
+The slider can be configurated with the JS and can validdate input data. Options is object.
 
 ## How to add? 
 
@@ -29,7 +29,8 @@ Set slider as a JQuery plugin: `$(root).sliderPlugin(options);`
 | **`isVertical`** | Boolean. Sets the vertical position if `true`. Default `false`|
 
 Example of options 
-` const options = {
+```
+const options = {
   min: 0,
   max: 100,
   valueFrom: 0,
@@ -41,7 +42,8 @@ Example of options
   isProgress: false,
   isRange: false,
   isVertical: false,
-};`
+};
+```
 
 ## Methods
 
