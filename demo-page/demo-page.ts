@@ -135,6 +135,10 @@ class DemoSlider {
       if (valueForm !== undefined) {
         this.slider.setValue(`${param}`, valueForm);
         this.slider.setNewState(this.slider.getState());
+        if (typeof this.slider.getValue(`${param}`) === 'boolean' || param === 'scalePercentGap') {
+          if (this.content) this.content.innerHTML = '';
+          this.addSlider(this.slider.getState());
+        }
         this.updateForm();
       }
     }
