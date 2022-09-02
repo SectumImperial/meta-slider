@@ -22,12 +22,12 @@ class Model {
     this.init();
   }
 
-  private init() {
+  private init(): void {
     this.mapSteps = this.createSteps();
     this.stepPercent = Number((this.state.step / this.findPercent()).toFixed(3));
   }
 
-  public setState(state: object) {
+  public setState(state: object): void {
     const oldState = this.state;
     this.state = { ...oldState, ...state };
   }
@@ -92,7 +92,7 @@ class Model {
     return [...this.mapSteps.keys()].find((key) => this.mapSteps.get(key) === value);
   }
 
-  private handleMove(values: HandleMoveModel) {
+  private handleMove(values: HandleMoveModel): void {
     const {
       value,
       thumb,
@@ -116,7 +116,7 @@ class Model {
     }
   }
 
-  private handleMoveFrom(values: HandleMoveModelFrom) {
+  private handleMoveFrom(values: HandleMoveModelFrom): void {
     const {
       value,
       thumb,
@@ -139,7 +139,7 @@ class Model {
     } else if (value !== undefined) this.updateMoved(value, percent, thumb);
   }
 
-  private handleMoveTo(values: HandleMoveModelTo) {
+  private handleMoveTo(values: HandleMoveModelTo): void {
     const {
       value,
       thumb,
@@ -184,7 +184,7 @@ class Model {
     return checkVal && compareVal;
   }
 
-  private updateMoved(val: number, percent: number, thumb: ThumbID) {
+  private updateMoved(val: number, percent: number, thumb: ThumbID): void {
     if (Number.isNaN(val) || percent === undefined) throw new Error('Something wrong with setting new values');
     const thumbPecent = ThumbValPercent[thumb];
 
@@ -224,13 +224,13 @@ class Model {
     return mapSteps;
   }
 
-  private findPercent() {
+  private findPercent(): number {
     const range = this.findRange();
     const percent = range / 100;
     return percent;
   }
 
-  private findRange() {
+  private findRange(): number {
     const range = this.state.max - this.state.min;
     return range;
   }

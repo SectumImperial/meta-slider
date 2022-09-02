@@ -1,4 +1,4 @@
-import { ModelInputState, ModelVal } from '../Interfaces';
+import { ModelInputState, ModelVal, SliderInterface } from '../Interfaces';
 import View from '../View/View';
 import Observer from '../../Observer/Observer';
 import { MODEL_EVENTS, SLIDER_EVENTS } from '../../Observer/events';
@@ -21,15 +21,15 @@ class Presenter extends Observer {
     this.subscribeSlider();
   }
 
-  public getState() {
+  public getState(): SliderInterface {
     return this.modelFacade.getState();
   }
 
-  public setNewState(state: ModelInputState) {
+  public setNewState(state: ModelInputState): void {
     this.modelFacade.setState(state);
   }
 
-  public setValue(param: ModelVal, value: number | boolean) {
+  public setValue(param: ModelVal, value: number | boolean): void {
     this.modelFacade.setValue(param, value);
   }
 

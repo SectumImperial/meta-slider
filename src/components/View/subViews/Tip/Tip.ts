@@ -29,11 +29,11 @@ class Tip extends SliderComponents {
     this.tip.innerText = `${valueTip}`;
   }
 
-  public hideTip() {
+  public hideTip(): void {
     this.tip.style.display = 'none';
   }
 
-  public showTip() {
+  public showTip(): void {
     this.tip.style.display = '';
   }
 

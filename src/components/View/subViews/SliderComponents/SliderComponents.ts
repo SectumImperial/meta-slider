@@ -59,7 +59,7 @@ class SliderComponents extends Observer {
     document.addEventListener('mouseup', mouseUp);
   }
 
-  protected performToucMove(thumbPos: number, id: ThumbID) {
+  protected performToucMove(thumbPos: number, id: ThumbID): void {
     const touchMove = (e: TouchEvent) => {
       e.stopImmediatePropagation();
       const elemSize = this.root.getBoundingClientRect()[this.startPoint];
@@ -79,7 +79,7 @@ class SliderComponents extends Observer {
     document.addEventListener('touchend', touchEnd);
   }
 
-  protected performKeyDown(keyEvent: KeyEvent, id: ThumbID) {
+  protected performKeyDown(keyEvent: KeyEvent, id: ThumbID): void {
     this.emit(SLIDER_EVENTS.KEY_DOWN, {
       keyEvent,
       thumbId: id,

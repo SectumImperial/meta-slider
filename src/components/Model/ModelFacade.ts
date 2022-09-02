@@ -27,7 +27,7 @@ class ModelFacade extends Observer {
     this.model = new Model(this.validState);
   }
 
-  public setState(state: ModelInputState) {
+  public setState(state: ModelInputState): void {
     const validState = this.validator.validateData(state);
     this.model.setState(validState);
   }
@@ -56,7 +56,7 @@ class ModelFacade extends Observer {
     return this.model.getState()[`${value}`];
   }
 
-  public update(data: ValidateSliderData, event: string) {
+  public update(data: ValidateSliderData, event: string): void {
     if (event === MODEL_EVENTS.VALUE_CHANGED) {
       const movedTo = this.validator.performMoveToPercent(data);
       let { thumbId } = data;
@@ -77,7 +77,7 @@ class ModelFacade extends Observer {
     }
   }
 
-  public setValue(param: ModelVal, value: number | boolean) {
+  public setValue(param: ModelVal, value: number | boolean): void {
     const oldState = this.model.getState();
     const newState = { ...oldState, [param]: value };
     const validState = this.validator.validateData(newState);
