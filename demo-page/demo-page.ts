@@ -134,8 +134,7 @@ class DemoSlider {
       }
       if (valueForm !== undefined) {
         this.slider.setValue(`${param}`, valueForm);
-        if (this.content) this.content.innerHTML = '';
-        this.addSlider(this.slider.getState());
+        this.slider.setNewState(this.slider.getState());
         this.updateForm();
       }
     }
