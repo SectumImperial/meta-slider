@@ -48,9 +48,8 @@ class Model {
     } = this.state;
 
     const nearestCountStep = Math.floor(percentMove / this.stepPercent);
-    const nearStep = nearestCountStep * step;
+    const nearStep = min + (nearestCountStep * step);
     const halfStep = Number((this.stepPercent / 2).toFixed(3));
-
     const halfMove = Number((percentMove % this.stepPercent).toFixed(3));
 
     let prevStepPercent = this.findPercentMap(nearStep);
@@ -72,10 +71,14 @@ class Model {
       percent = nextStepPercent;
     }
 
-    if (percentMove === 100) {
-      value = this.mapSteps.get(100);
+    const allSteps = Math.ceil((max - min) / step);
+    const beforeEndPercent = this.stepPercent * (allSteps - 1);
+
+    if (percentMove === 100 || 100 - ((100 - beforeEndPercent) / 2) < percentMove) {
+      value = max;
       percent = 100;
     }
+
     if (value === undefined) value = min;
 
     this.handleMove({
@@ -214,7 +217,7 @@ class Model {
       countStep += 1;
     }
     if (range % step !== 0) {
-      mapSteps.set(max, 100);
+      mapSteps.set(100, max);
     }
 
     countStep = 0;

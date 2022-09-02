@@ -236,7 +236,7 @@ class Validator {
       this.valueTo = this.checkValue(this.valueTo);
     }
 
-    if (this.valueTo !== undefined && this.valueFrom > this.valueTo) {
+    if (this.valueTo !== undefined && this.valueFrom > this.valueTo && this.isRange) {
       [this.valueFrom, this.valueTo] = [this.valueTo, this.valueFrom];
     }
 
@@ -244,20 +244,26 @@ class Validator {
     if (this.isRange) this.resultObject.valueTo = this.valueTo;
   }
 
-  private checkValue(value = 0): number {
+  private checkValue(value: number): number {
     let result = value;
     if (Number.isNaN(result)) result = 0;
+    if (result === this.max) {
+      result = this.max;
+      return result;
+    }
+
+    if (result % this.step !== 0 && result !== this.min) {
+      const countStep = Math.round((result - this.min) / this.step);
+      const countVal = this.min + (this.step * countStep);
+      result = countVal;
+    }
+
     if (result > this.max) {
       result = this.max;
     }
 
     if (result < this.min) {
       result = this.min;
-    }
-
-    if (result % this.step !== 0) {
-      const stepVal = this.step * Math.floor((result / this.step));
-      result = stepVal;
     }
 
     return result;

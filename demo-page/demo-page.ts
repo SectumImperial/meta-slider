@@ -7,6 +7,10 @@ interface ElementListener {
   addEventListener(type: 'change', listener: (event: InputEvent) => void): void;
 }
 
+interface ElementPress {
+  addEventListener(type: 'keydown' | 'touchmove', listener: (event: KeyboardEvent) => void, options?: { passive: boolean }): void;
+}
+
 class DemoSlider {
   root: Element;
 
@@ -40,6 +44,21 @@ class DemoSlider {
 
   slider!: import('c:/Code/Meta Slider/src/components/Presenter/Presenter').default;
 
+  thumb?: ElementPress | null;
+
+  stateObject!: {
+    min: number;
+    max: number;
+    valueFrom: number;
+    valueTo: number;
+    step: number;
+    scalePercentGap: number;
+    scaleMarks: boolean; isTip:
+    boolean; isProgress: boolean;
+    isRange: boolean;
+    isVertical: boolean;
+  };
+
   constructor(root: Element) {
     this.root = root;
     this.content = root.querySelector('.slider__content');
@@ -48,7 +67,8 @@ class DemoSlider {
 
   private init() {
     this.findElems();
-    const sateObject = {
+
+    this.stateObject = {
       min: this.min || 0,
       max: this.max || 10,
       valueFrom: this.from || 0,
@@ -62,8 +82,12 @@ class DemoSlider {
       isVertical: this.vertical,
     };
 
-    this.addSlider(sateObject);
+    this.addSlider(this.stateObject);
     this.updateForm();
+
+    if (this.content?.querySelector('.plugin-slider__thumb')) {
+      this.thumb = this.content?.querySelector('.plugin-slider__thumb');
+    }
 
     this.addListeners();
   }
@@ -78,6 +102,18 @@ class DemoSlider {
       });
 
       elems.forEach((e) => e.addEventListener('change', this.updateState.bind(this)));
+    }
+
+    this.content?.addEventListener('mousedown', this.handleClick.bind(this));
+    this.content?.addEventListener('click', this.updateForm.bind(this));
+
+    if (this.thumb) {
+      this.thumb?.addEventListener('keydown', this.handelKey.bind(this));
+      this.thumb?.addEventListener(
+        'touchmove',
+        this.touchDown.bind(this),
+        { passive: true },
+      );
     }
   }
 
@@ -190,8 +226,32 @@ class DemoSlider {
             element.checked = false;
           }
         }
+
+        this.findElems();
       }
     });
+  }
+
+  private handleClick() {
+    const update = () => this.updateForm();
+    const mouseUp = () => {
+      this.content?.removeEventListener('mousemove', update);
+      this.content?.removeEventListener('mouseup', mouseUp);
+    };
+
+    this.content?.addEventListener('mousemove', update);
+    this.content?.addEventListener('mouseup', mouseUp);
+  }
+
+  private handelKey(e: KeyboardEvent): void {
+    const { key } = e;
+    if (key === 'ArrowLeft' || key === 'ArrowUp' || key === 'ArrowRight' || key === 'ArrowDown') {
+      this.updateForm();
+    }
+  }
+
+  private touchDown() {
+    this.updateForm();
   }
 }
 

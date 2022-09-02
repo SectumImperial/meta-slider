@@ -50,6 +50,8 @@ class Slider extends Observer {
 
   sliderCompnents!: SliderComponents;
 
+  isScaleMarks!: boolean;
+
   constructor(root: Element, protected readonly state: SliderInterface) {
     super();
     this.createVariables(root, state);
@@ -87,6 +89,7 @@ class Slider extends Observer {
       isRange,
       scaleMap,
       isVertical,
+      scaleMarks,
     } = state;
 
     this.thumbPercentFrom = thumbPercentFrom;
@@ -99,6 +102,7 @@ class Slider extends Observer {
     this.isRange = isRange || false;
     this.isVertical = isVertical || false;
     this.scaleMap = scaleMap;
+    this.isScaleMarks = scaleMarks;
     this.root = root;
   }
 
@@ -160,7 +164,7 @@ class Slider extends Observer {
       });
     }
 
-    if (this.scaleMap) {
+    if (this.scaleMap && this.isScaleMarks) {
       this.scaleMarks = new ScaleMarks(this.scaleElement, this.scaleMap, this.isVertical);
     }
   }

@@ -23,11 +23,20 @@
   &__sliders {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    gap: 10px;
+
+    @media (max-width: 1200px) {
+      grid-template-columns: 1fr;
+    }
   }
 
   &__slider {
     display: flex;
     gap: 5px;
+    padding: 7px;
+
+    border: 1px solid rgba(195, 0, 255, 0.904);
+    border-radius: 4px;
   }
 }
 

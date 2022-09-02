@@ -28,7 +28,7 @@ class Scale extends SliderComponents {
   }
 
   private addListenners(): void {
-    document.addEventListener('click', this.handleClick.bind(this));
+    this.scale.addEventListener('click', this.handleClick.bind(this));
   }
 
   private handleClick(e: MouseEvent): void {
