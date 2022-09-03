@@ -18,7 +18,7 @@ class ScaleMarks extends SliderComponents {
     this.marks.forEach((value: number, percent: number) => this.createMark(value, percent));
   }
 
-  private createMark(value: number, percent: number): void {
+  private createMark(percent: number, value: number): void {
     const mark = this.createElement('plugin-slider__mark');
     mark.classList.add(`plugin-slider__mark_${this.mod}`);
     mark.style[this.startPoint] = `${percent}%`;

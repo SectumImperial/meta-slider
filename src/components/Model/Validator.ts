@@ -1,6 +1,7 @@
 import {
   ModelInputState,
   ModelInterface,
+  StepsMap,
   ThumbID,
   ValidateSliderData,
 } from '../Interfaces';
@@ -90,28 +91,67 @@ class Validator {
     return percentMove;
   }
 
-  public validateMarks(
-    mapSteps: Map<number, number>,
-    basisPercent: number = this.DEFAULT_GAP,
-  ): Map<number, number> {
-    const percentEdge = this.validateGap(basisPercent);
-    const resultMap = new Map<number, number>();
+  // public validateMarks(
+  //   mapSteps: Map<number, number>,
+  //   basisPercent: number = this.DEFAULT_GAP,
+  // ): Map<number, number> {
+  //   const percentEdge = this.validateGap(basisPercent);
+  //   const resultMap = new Map<number, number>();
+  //   let prevPercent = 0;
+  //   let nextPercent = percentEdge;
+
+  //   mapSteps.forEach((percent: number, value: number) => {
+  //     if (percent === 0 || percent === 100) {
+  //       resultMap.set(percent, value);
+  //     }
+
+  //     if (this.isGetGap(nextPercent, prevPercent, percent, percentEdge)) {
+  //       resultMap.set(percent, value);
+  //       prevPercent = percent;
+  //       nextPercent = percent + percentEdge;
+  //     }
+  //   });
+
+  //   return resultMap;
+  // }
+
+  public validateMarks(options: { min: number, max: number, step: number, gap: number }) {
+    const {
+      step,
+      max,
+      min,
+      gap,
+    } = options;
+
+    const percentEdge = this.validateGap(gap);
+    const mapSteps: StepsMap = new Map();
+    const range = this.findRange();
+    const percent = range / 100;
+
     let prevPercent = 0;
     let nextPercent = percentEdge;
 
-    mapSteps.forEach((percent: number, value: number) => {
-      if (percent === 0 || percent === 100) {
-        resultMap.set(percent, value);
+    let countStep = 0;
+    for (let i = min; i <= max; i += step) {
+      const percentStep = Number((countStep * step) / percent);
+      if (this.isGetGap(nextPercent, prevPercent, percentStep, percentEdge)) {
+        mapSteps.set(i, percentStep);
+        prevPercent = percentStep;
+        nextPercent = prevPercent + percentEdge;
       }
 
-      if (this.isGetGap(nextPercent, prevPercent, percent, percentEdge)) {
-        resultMap.set(percent, value);
-        prevPercent = percent;
-        nextPercent = percent + percentEdge;
+      if (percentStep === 0 || percentStep === 100) {
+        mapSteps.set(i, percentStep);
       }
-    });
+      countStep += 1;
+    }
 
-    return resultMap;
+    if (range % step !== 0) {
+      mapSteps.set(max, 100);
+    }
+
+    countStep = 0;
+    return mapSteps;
   }
 
   public validateThumbId(movedTo: number): ThumbID {
@@ -186,11 +226,11 @@ class Validator {
     nextPercent: number,
     prevPercent: number,
     percent: number,
-    percentEdge: number,
+    gap: number,
   ): boolean {
-    return Math.round(nextPercent) - Math.round(prevPercent) >= percentEdge
+    return Math.round(nextPercent) - Math.round(prevPercent) >= gap
       && percent >= nextPercent
-      && (100 - percentEdge) >= nextPercent;
+      && (100 - gap) >= nextPercent;
   }
 
   private validateGap(basisPercent: number): number {

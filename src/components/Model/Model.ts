@@ -7,13 +7,13 @@ import {
   HandleMoveModelFrom,
   HandleMoveModelTo,
   isValTheSamePos,
-  StepsMap,
+  // StepsMap,
 } from '../Interfaces';
 
 class Model {
   private state: ModelInterface;
 
-  mapSteps!: StepsMap;
+  // mapSteps!: StepsMap;
 
   stepPercent!: number;
 
@@ -23,7 +23,7 @@ class Model {
   }
 
   private init(): void {
-    this.mapSteps = this.createSteps();
+    // this.mapSteps = this.createSteps();
     this.stepPercent = Number((this.state.step / this.findValPercent()));
   }
 
@@ -53,8 +53,8 @@ class Model {
     const prevStep = min + (step * nearestPrevCountStep);
     const nextStep = min + (step * nearestNextCountStep);
 
-    const prevPercent = this.mapSteps.get(prevStep);
-    const nextPercent = this.mapSteps.get(nextStep);
+    const prevPercent = this.stepPercent * nearestPrevCountStep;
+    const nextPercent = this.stepPercent * nearestNextCountStep;
 
     const halfStep = Number((this.stepPercent / 2).toFixed(3));
     const halfMove = Number((percentMove % this.stepPercent).toFixed(3));
@@ -199,25 +199,25 @@ class Model {
     return percent;
   }
 
-  private createSteps(): StepsMap {
-    const { step, max, min } = this.state;
-    const mapSteps: StepsMap = new Map();
-    const range = this.findRange();
-    const percent = this.findValPercent();
+  // private createSteps(): StepsMap {
+  //   const { step, max, min } = this.state;
+  //   const mapSteps: StepsMap = new Map();
+  //   const range = this.findRange();
+  //   const percent = this.findValPercent();
 
-    let countStep = 0;
-    for (let i = min; i <= max; i += step) {
-      const percentStep = Number(((countStep * step) / percent).toFixed(3));
-      mapSteps.set(i, percentStep);
-      countStep += 1;
-    }
-    if (range % step !== 0) {
-      mapSteps.set(max, 100);
-    }
+  //   let countStep = 0;
+  //   for (let i = min; i <= max; i += step) {
+  //     const percentStep = Number(((countStep * step) / percent).toFixed(3));
+  //     mapSteps.set(i, percentStep);
+  //     countStep += 1;
+  //   }
+  //   if (range % step !== 0) {
+  //     mapSteps.set(max, 100);
+  //   }
 
-    countStep = 0;
-    return mapSteps;
-  }
+  //   countStep = 0;
+  //   return mapSteps;
+  // }
 
   private findValPercent(): number {
     const range = this.findRange();

@@ -4,7 +4,7 @@ const initialState = {
   valueFrom: 0,
   valueTo: 0,
   step: 1,
-  scalePercentGap: 5,
+  scalePercentGap: 10,
   scaleMarks: false,
   isTip: false,
   isProgress: false,

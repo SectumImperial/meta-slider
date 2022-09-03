@@ -61,7 +61,6 @@ class DemoSlider {
 
   constructor(root: Element) {
     this.root = root;
-    this.content = root.querySelector('.slider__content');
     this.init();
   }
 
@@ -84,10 +83,6 @@ class DemoSlider {
     this.addSlider(this.stateObject);
     this.updateForm();
 
-    if (this.content?.querySelector('.plugin-slider__thumb')) {
-      this.thumb = this.content?.querySelector('.plugin-slider__thumb');
-    }
-
     this.addListeners();
   }
 
@@ -105,7 +100,6 @@ class DemoSlider {
 
     this.content?.addEventListener('mousedown', this.handleClick.bind(this));
     this.content?.addEventListener('click', this.updateForm.bind(this));
-
     if (this.thumb) {
       this.thumb?.addEventListener('keydown', this.handelKey.bind(this));
       this.thumb?.addEventListener(
@@ -150,6 +144,7 @@ class DemoSlider {
   private findElems() {
     this.mapElems = new Map();
 
+    this.content = this.root.querySelector('.slider__content');
     this.form = this.root.querySelector('.slider__form');
     if (!this.form) return;
     const min = <HTMLInputElement>
@@ -212,6 +207,10 @@ class DemoSlider {
       this.form.querySelector('.slider__input[data-role = vertical]');
     this.vertical = vertical.checked;
     this.mapElems.set('vertical', 'isVertical');
+
+    if (this.content?.querySelector('.plugin-slider__thumb')) {
+      this.thumb = this.content?.querySelector('.plugin-slider__thumb');
+    }
   }
 
   private updateForm() {

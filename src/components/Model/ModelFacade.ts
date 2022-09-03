@@ -5,6 +5,7 @@ import {
   ModelInterface,
   ModelVal,
   SliderInterface,
+  StepsMap,
   ThumbID,
   ValidateSliderData,
 } from '../Interfaces';
@@ -34,14 +35,23 @@ class ModelFacade extends Observer {
 
   public getState(): SliderInterface {
     if (this.model.getState().scaleMarks) {
-      const gap = this.model.getState().scalePercentGap || 20;
-      const sliderMarks = this.validator.validateMarks(this.model.mapSteps, gap);
+      const sliderMarks = this.validGapMarks();
       return {
         ...this.model.getState(),
         scaleMap: sliderMarks,
       };
     }
     return this.model.getState();
+  }
+
+  private validGapMarks(): StepsMap {
+    const gap = this.model.getState().scalePercentGap || 20;
+    const { min, max, step } = this.model.getState();
+    const sliderMarks = this.validator.validateMarks({
+      min, max, step, gap,
+    });
+
+    return sliderMarks;
   }
 
   public getModel(): Model {
@@ -70,7 +80,7 @@ class ModelFacade extends Observer {
       this.model.setState(validState);
 
       if (newState.scaleMarks) {
-        this.emit(MODEL_EVENTS.VALUE_CHANGED, { ...validState, scaleMap: this.model.mapSteps });
+        this.emit(MODEL_EVENTS.VALUE_CHANGED, { ...validState, scaleMap: this.validGapMarks() });
       } else {
         this.emit(MODEL_EVENTS.VALUE_CHANGED, validState);
       }
