@@ -11,8 +11,9 @@ const config: Config.InitialOptions = {
     '**/*.{ts,tsx}',
     '!**/node_modules/**',
   ],
+
   moduleNameMapper: {
-    '.scss$': '<rootDir>/src',
+    '\\.(css|scss)$': '<rootDir>/styleMock.js',
   },
 };
 

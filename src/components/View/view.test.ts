@@ -25,6 +25,11 @@ const initialStateRange = {
   isRange: true,
 };
 
+const initialStateVertical = {
+  ...initialState,
+  isVertical: true,
+};
+
 describe('The View component tests', () => {
   let root: HTMLElement;
   let view: View;
@@ -44,34 +49,76 @@ describe('The View component tests', () => {
   });
 
   test('Slider should exist', () => {
-    const slider = root.querySelectorAll('.slider');
+    const slider = root.querySelectorAll('.plugin-slider');
     expect(slider).toHaveLength(1);
   });
 
   test('Scale should exist', () => {
-    const scale = root.querySelectorAll('.slider__scale');
+    const scale = root.querySelectorAll('.plugin-slider__scale');
     expect(scale).toHaveLength(1);
   });
 
   test('Thumb should exist', () => {
-    const thumb = root.querySelectorAll('.slider__thumb');
+    const thumb = root.querySelectorAll('.plugin-slider__thumb');
     expect(thumb).toHaveLength(1);
+  });
+
+  test('Thumb should have correct style left if pos. horiz.', () => {
+    const thumb = root.querySelector('.plugin-slider__thumb') as HTMLDivElement;
+    expect(thumb.style.left).toBe(`${initialState.thumbPercentFrom}%`);
+  });
+
+  test('Thumb should have correct style top if pos. vert.', () => {
+    root.innerHTML = '';
+    view = new View(root, initialStateVertical);
+    const thumb = root.querySelector('.plugin-slider__thumb') as HTMLDivElement;
+    expect(thumb.style.top).toBe(`${initialStateVertical.thumbPercentFrom}%`);
   });
 
   test('Second thumb should exist with true range', () => {
     root.innerHTML = '';
     view = new View(root, initialStateRange);
-    const thumb = root.querySelectorAll('.slider__thumb');
+    const thumb = root.querySelectorAll('.plugin-slider__thumb');
     expect(thumb).toHaveLength(2);
   });
 
   test('Progress bar should exist with true progress', () => {
-    const progress = root.querySelectorAll('.slider__progress');
+    const progress = root.querySelectorAll('.plugin-slider__progress');
     expect(progress).toHaveLength(1);
   });
 
   test('Tit should exist with true tip', () => {
-    const tip = root.querySelectorAll('.slider__tip');
+    const tip = root.querySelectorAll('.plugin-slider__tip');
     expect(tip).toHaveLength(1);
+  });
+
+  test('Tit value should be correct with true tip', () => {
+    const tip = root.querySelector('.plugin-slider__tip') as HTMLDivElement;
+    expect(Number(tip.innerText)).toBe(initialState.valueFrom);
+  });
+
+  test('Tit value should have correct position', () => {
+    const tip = root.querySelector('.plugin-slider__tip') as HTMLDivElement;
+    expect(tip.style.left).toBe(`${initialStateVertical.thumbPercentFrom}%`);
+  });
+
+  test('Progress should have correct width with one thumb', () => {
+    const progress = root.querySelector('.plugin-slider__progress') as HTMLDivElement;
+    expect(progress.style.width).toBe(`${initialState.thumbPercentFrom}%`);
+  });
+
+  test('Progress should have correct left with second thumb', () => {
+    root.innerHTML = '';
+    view = new View(root, initialStateRange);
+    const progress = root.querySelector('.plugin-slider__progress') as HTMLDivElement;
+    expect(progress.style.left).toBe(`${initialStateRange.thumbPercentFrom}%`);
+  });
+
+  test('Progress should have correct width with second thumb', () => {
+    root.innerHTML = '';
+    view = new View(root, initialStateRange);
+    const progress = root.querySelector('.plugin-slider__progress') as HTMLDivElement;
+    const prWidth = initialStateRange.thumbPercentTo - initialStateRange.thumbPercentFrom;
+    expect(progress.style.width).toBe(`${prWidth}%`);
   });
 });

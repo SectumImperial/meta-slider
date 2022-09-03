@@ -49,8 +49,8 @@ describe('The modelFacede tests', () => {
     max: 21,
     min: 10,
     step: 11,
-    thumbPercentFrom: 9.091,
-    valueFrom: 11,
+    thumbPercentFrom: 0,
+    valueFrom: 10,
   };
 
   const dataCorrectTwoThumbs = {

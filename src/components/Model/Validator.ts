@@ -91,30 +91,6 @@ class Validator {
     return percentMove;
   }
 
-  // public validateMarks(
-  //   mapSteps: Map<number, number>,
-  //   basisPercent: number = this.DEFAULT_GAP,
-  // ): Map<number, number> {
-  //   const percentEdge = this.validateGap(basisPercent);
-  //   const resultMap = new Map<number, number>();
-  //   let prevPercent = 0;
-  //   let nextPercent = percentEdge;
-
-  //   mapSteps.forEach((percent: number, value: number) => {
-  //     if (percent === 0 || percent === 100) {
-  //       resultMap.set(percent, value);
-  //     }
-
-  //     if (this.isGetGap(nextPercent, prevPercent, percent, percentEdge)) {
-  //       resultMap.set(percent, value);
-  //       prevPercent = percent;
-  //       nextPercent = percent + percentEdge;
-  //     }
-  //   });
-
-  //   return resultMap;
-  // }
-
   public validateMarks(options: { min: number, max: number, step: number, gap: number }) {
     const {
       step,

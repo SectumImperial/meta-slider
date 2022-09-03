@@ -7,13 +7,10 @@ import {
   HandleMoveModelFrom,
   HandleMoveModelTo,
   isValTheSamePos,
-  // StepsMap,
 } from '../Interfaces';
 
 class Model {
   private state: ModelInterface;
-
-  // mapSteps!: StepsMap;
 
   stepPercent!: number;
 
@@ -178,16 +175,6 @@ class Model {
     return checkVal && compareVal;
   }
 
-  private updateMoved(val: number, percent: number, thumb: ThumbID): void {
-    if (Number.isNaN(val) || percent === undefined) throw new Error('Something wrong with setting new values');
-    const thumbPecent = ThumbValPercent[thumb];
-
-    this.setState({
-      [thumb]: val,
-      [thumbPecent]: percent,
-    });
-  }
-
   public getValue(val: ModelVal): number | undefined | boolean {
     return this.state[`${val}`];
   }
@@ -199,26 +186,6 @@ class Model {
     return percent;
   }
 
-  // private createSteps(): StepsMap {
-  //   const { step, max, min } = this.state;
-  //   const mapSteps: StepsMap = new Map();
-  //   const range = this.findRange();
-  //   const percent = this.findValPercent();
-
-  //   let countStep = 0;
-  //   for (let i = min; i <= max; i += step) {
-  //     const percentStep = Number(((countStep * step) / percent).toFixed(3));
-  //     mapSteps.set(i, percentStep);
-  //     countStep += 1;
-  //   }
-  //   if (range % step !== 0) {
-  //     mapSteps.set(max, 100);
-  //   }
-
-  //   countStep = 0;
-  //   return mapSteps;
-  // }
-
   private findValPercent(): number {
     const range = this.findRange();
     const percent = range / 100;
@@ -228,6 +195,16 @@ class Model {
   private findRange(): number {
     const range = this.state.max - this.state.min;
     return range;
+  }
+
+  private updateMoved(val: number, percent: number, thumb: ThumbID): void {
+    if (Number.isNaN(val) || percent === undefined) throw new Error('Something wrong with setting new values');
+    const thumbPecent = ThumbValPercent[thumb];
+
+    this.setState({
+      [thumb]: val,
+      [thumbPecent]: percent,
+    });
   }
 }
 
