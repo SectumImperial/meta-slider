@@ -11,20 +11,6 @@ interface ElementPress {
   addEventListener(type: 'keydown' | 'touchmove', listener: (event: KeyboardEvent) => void, options?: { passive: boolean }): void;
 }
 
-const mapObj = {
-  min: 'min',
-  max: 'max',
-  step: 'step',
-  from: 'valueFrom',
-  to: 'valueTo',
-  range: 'isRange',
-  marks: 'scaleMarks',
-  gap: 'scalePercentGap',
-  tip: 'isTip',
-  progress: 'isProgress',
-  vertical: 'isVertical',
-};
-
 class DemoSlider {
   root: Element;
 
@@ -54,7 +40,7 @@ class DemoSlider {
 
   content!: Element | null;
 
-  mapElems!: Map<string, string>;
+  mapElems!: Map<string, ModelVal>;
 
   slider!: import('c:/Code/Meta Slider/src/components/Presenter/Presenter').default;
 
@@ -80,9 +66,7 @@ class DemoSlider {
   }
 
   private init() {
-    this.mapElems = new Map(new Map(Object.entries(mapObj)));
     this.findElems();
-
     this.stateObject = {
       min: this.min || 0,
       max: this.max || 10,
@@ -138,7 +122,7 @@ class DemoSlider {
       const { role } = target.dataset;
       const param = this.mapElems.get(`${role}`);
       if (param === undefined) return;
-      const valueParam = this.slider.getValue(param as ModelVal);
+      const valueParam = this.slider.getValue(param);
       let valueForm: number | boolean | undefined;
       if (typeof valueParam === 'boolean') {
         valueForm = target.checked;
@@ -148,7 +132,7 @@ class DemoSlider {
         valueForm = undefined;
       }
       if (valueForm !== undefined) {
-        this.slider.setValue(`${param}` as ModelVal, valueForm);
+        this.slider.setValue(`${param}`, valueForm);
         if (param !== 'valueFrom' && param !== 'valueTo') {
           if (this.content) this.content.innerHTML = '';
           this.addSlider(this.slider.getState());
@@ -164,69 +148,82 @@ class DemoSlider {
   }
 
   private findElems() {
+    this.mapElems = new Map();
+
     this.form = this.root.querySelector('.slider__form');
     if (!this.form) return;
     const min = <HTMLInputElement>
       this.form.querySelector('.slider__input[data-role = min]');
     this.min = Number(min.value);
+    this.mapElems.set('min', 'min');
 
     const max = <HTMLInputElement>
       this.form.querySelector('.slider__input[data-role = max]');
     this.max = Number(max.value);
+    this.mapElems.set('max', 'max');
 
     const step = <HTMLInputElement>
       this.form.querySelector('.slider__input[data-role = step]');
     this.step = Number(step.value);
+    this.mapElems.set('step', 'step');
 
     const from = <HTMLInputElement>
       this.form.querySelector('.slider__input[data-role = from]');
     this.from = Number(from.value);
     from.step = `${this.step}`;
+    this.mapElems.set('from', 'valueFrom');
 
     const to = <HTMLInputElement>
       this.form.querySelector('.slider__input[data-role = to]');
     this.to = Number(to.value);
     to.step = `${this.step}`;
+    this.mapElems.set('to', 'valueTo');
 
     const gap = <HTMLInputElement>
       this.form.querySelector('.slider__input[data-role = gap]');
     if (gap.value) this.gap = Number(gap.value);
+    this.mapElems.set('gap', 'scalePercentGap');
 
     const range = <HTMLInputElement>
       this.form.querySelector('.slider__input[data-role = range]');
     this.range = range.checked;
     if (this.range) to.disabled = false;
     if (!this.range) to.disabled = true;
+    this.mapElems.set('range', 'isRange');
 
     const marks = <HTMLInputElement>
       this.form.querySelector('.slider__input[data-role = marks]');
     this.marks = marks.checked;
     if (this.marks) gap.disabled = false;
     if (!this.marks) gap.disabled = true;
+    this.mapElems.set('marks', 'scaleMarks');
 
     const tip = <HTMLInputElement>
       this.form.querySelector('.slider__input[data-role = tip]');
     this.tip = tip.checked;
+    this.mapElems.set('tip', 'isTip');
 
     const progress = <HTMLInputElement>
       this.form.querySelector('.slider__input[data-role = progress]');
     this.progress = progress.checked;
+    this.mapElems.set('progress', 'isProgress');
 
     const vertical = <HTMLInputElement>
       this.form.querySelector('.slider__input[data-role = vertical]');
     this.vertical = vertical.checked;
+    this.mapElems.set('vertical', 'isVertical');
   }
 
   private updateForm() {
-    this.mapElems.forEach((key, value: string) => {
+    this.mapElems.forEach((key: ModelVal, value: string) => {
       const element = this.form?.querySelector(`.slider__input[data-role = ${value}]`);
       if (element instanceof HTMLInputElement) {
-        if (element && typeof this.slider.getValue(key as ModelVal) === 'number') {
-          element.value = `${this.slider.getValue(`${key}` as ModelVal)}`;
+        if (element && typeof this.slider.getValue(key) === 'number') {
+          element.value = `${this.slider.getValue(`${key}`)}`;
         }
 
-        if (element && typeof this.slider.getValue(key as ModelVal) === 'boolean') {
-          if (this.slider.getValue(`${key}` as ModelVal)) {
+        if (element && typeof this.slider.getValue(key) === 'boolean') {
+          if (this.slider.getValue(`${key}`)) {
             element.checked = true;
           } else {
             element.checked = false;

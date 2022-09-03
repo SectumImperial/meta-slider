@@ -24,7 +24,7 @@ class Model {
 
   private init(): void {
     this.mapSteps = this.createSteps();
-    this.stepPercent = Number((this.state.step / this.findPercent()).toFixed(3));
+    this.stepPercent = Number((this.state.step / this.findValPercent()));
   }
 
   public setState(state: object): void {
@@ -203,7 +203,7 @@ class Model {
     const { step, max, min } = this.state;
     const mapSteps: StepsMap = new Map();
     const range = this.findRange();
-    const percent = this.findPercent();
+    const percent = this.findValPercent();
 
     let countStep = 0;
     for (let i = min; i <= max; i += step) {
@@ -219,7 +219,7 @@ class Model {
     return mapSteps;
   }
 
-  private findPercent(): number {
+  private findValPercent(): number {
     const range = this.findRange();
     const percent = range / 100;
     return percent;
