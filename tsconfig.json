@@ -26,6 +26,6 @@
     "strictFunctionTypes": true,
     "strictPropertyInitialization": true,
   },
-  "include": ["src/**/*"],
+  "include": ["demo-page/**/*"],
   "exclude": ["node_modules", "**/*.spec.ts"]
 } 
