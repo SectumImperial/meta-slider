@@ -95,38 +95,27 @@ class Validator {
     const {
       step,
       max,
-      min,
+      // min,
       gap,
     } = options;
 
-    const percentEdge = this.validateGap(gap);
     const mapSteps: StepsMap = new Map();
+    const validGap = this.validateGap(gap);
     const range = this.findRange();
     const percent = range / 100;
+    const stepPercent = step / percent;
+    const stepCountGap = step * Math.ceil(validGap / stepPercent);
+    const percentCountsGap = Math.ceil(stepCountGap / percent);
 
-    let prevPercent = 0;
-    let nextPercent = percentEdge;
-
-    let countStep = 0;
-    for (let i = min; i <= max; i += step) {
-      const percentStep = Number((countStep * step) / percent);
-      if (this.isGetGap(nextPercent, prevPercent, percentStep, percentEdge)) {
-        mapSteps.set(i, percentStep);
-        prevPercent = percentStep;
-        nextPercent = prevPercent + percentEdge;
+    for (let i = 0; i <= 100; i += percentCountsGap) {
+      if (i <= (100 - percentCountsGap)) {
+        const stepCount = Math.ceil(i / stepPercent);
+        const value = step * stepCount;
+        mapSteps.set(value, i);
       }
-
-      if (percentStep === 0 || percentStep === 100) {
-        mapSteps.set(i, percentStep);
-      }
-      countStep += 1;
     }
 
-    if (range % step !== 0) {
-      mapSteps.set(max, 100);
-    }
-
-    countStep = 0;
+    mapSteps.set(max, 100);
     return mapSteps;
   }
 
@@ -195,18 +184,6 @@ class Validator {
       isProgress: this.isProgress,
       scaleMarks: this.scaleMarks,
     };
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  private isGetGap(
-    nextPercent: number,
-    prevPercent: number,
-    percent: number,
-    gap: number,
-  ): boolean {
-    return Math.round(nextPercent) - Math.round(prevPercent) >= gap
-      && percent >= nextPercent
-      && (100 - gap) >= nextPercent;
   }
 
   private validateGap(basisPercent: number): number {
