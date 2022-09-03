@@ -74,18 +74,21 @@ class Thumb extends SliderComponents {
   }
 
   private touchDown(e: TouchEvent): void {
+    e.preventDefault();
     const sizeElement = this.thumbElement.getBoundingClientRect()[this.startPoint];
     this.moved = e.touches[0][this.direction] - sizeElement;
     super.performToucMove(this.moved, this.thumbId);
   }
 
   private mouseDown(e: MouseEvent): void {
+    e.preventDefault();
     this.moved = e[this.direction] - this.thumbElement.getBoundingClientRect()[this.startPoint];
     this.checkZInd();
     super.performMouseMove(this.moved, this.thumbId);
   }
 
   private keyDown(e: KeyboardEvent): void {
+    e.preventDefault();
     const { key } = e;
     if (key === 'ArrowLeft' || key === 'ArrowUp' || key === 'ArrowRight' || key === 'ArrowDown') e.preventDefault();
     if ((key === 'ArrowLeft' && !this.isVertical) || (key === 'ArrowUp' && this.isVertical)) {

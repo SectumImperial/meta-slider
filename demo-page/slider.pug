@@ -47,6 +47,7 @@ mixin slider(options = {})
           span.slider__descr from:
           input(
             type = 'number',
+            step = step
             value = from,
             data-role = 'from',
             class = 'slider__input',
@@ -56,6 +57,7 @@ mixin slider(options = {})
           input(
             type = 'number',
             value = to,
+            step = step
             disabled = !range,
             data-role = 'to',
             class = 'slider__input',

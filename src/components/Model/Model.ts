@@ -47,28 +47,27 @@ class Model {
       min,
     } = this.state;
 
-    const nearestCountStep = Math.floor(percentMove / this.stepPercent);
-    const nearStep = min + (nearestCountStep * step);
+    const nearestPrevCountStep = Math.floor(percentMove / this.stepPercent);
+    const nearestNextCountStep = Math.ceil(percentMove / this.stepPercent);
+
+    const prevStep = min + (step * nearestPrevCountStep);
+    const nextStep = min + (step * nearestNextCountStep);
+
+    const prevPercent = this.mapSteps.get(prevStep);
+    const nextPercent = this.mapSteps.get(nextStep);
+
     const halfStep = Number((this.stepPercent / 2).toFixed(3));
     const halfMove = Number((percentMove % this.stepPercent).toFixed(3));
 
-    let prevStepPercent = this.findPercentMap(nearStep);
-    if (prevStepPercent === undefined) prevStepPercent = 0;
-    let nextStepPercent = this.findPercentMap(nearStep + this.state.step);
-    if (nextStepPercent === undefined) nextStepPercent = 100;
+    let value: number;
+    let percent: number | undefined;
 
-    if (percentMove === 100) {
-      prevStepPercent = this.findPercentMap(max - step);
-    }
-
-    let value: number | undefined;
-    let percent: number;
-    if (halfMove < halfStep && prevStepPercent !== undefined) {
-      value = this.mapSteps.get(prevStepPercent);
-      percent = prevStepPercent;
+    if (halfMove < halfStep) {
+      value = prevStep;
+      percent = prevPercent;
     } else {
-      value = this.mapSteps.get(nextStepPercent);
-      percent = nextStepPercent;
+      value = nextStep;
+      percent = nextPercent;
     }
 
     const allSteps = Math.ceil((max - min) / step);
@@ -78,18 +77,13 @@ class Model {
       value = max;
       percent = 100;
     }
-
-    if (value === undefined) value = min;
+    if (percent === undefined) percent = this.stepPercent * nearestPrevCountStep;
 
     this.handleMove({
       value,
       thumb,
       percent,
     });
-  }
-
-  private findPercentMap(value: number): number | undefined {
-    return [...this.mapSteps.keys()].find((key) => this.mapSteps.get(key) === value);
   }
 
   private handleMove(values: HandleMoveModel): void {
@@ -213,11 +207,12 @@ class Model {
 
     let countStep = 0;
     for (let i = min; i <= max; i += step) {
-      mapSteps.set(Number(((countStep * step) / percent).toFixed(3)), i);
+      const percentStep = Number(((countStep * step) / percent).toFixed(3));
+      mapSteps.set(i, percentStep);
       countStep += 1;
     }
     if (range % step !== 0) {
-      mapSteps.set(100, max);
+      mapSteps.set(max, 100);
     }
 
     countStep = 0;

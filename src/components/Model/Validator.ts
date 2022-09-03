@@ -99,7 +99,7 @@ class Validator {
     let prevPercent = 0;
     let nextPercent = percentEdge;
 
-    mapSteps.forEach((value: number, percent: number) => {
+    mapSteps.forEach((percent: number, value: number) => {
       if (percent === 0 || percent === 100) {
         resultMap.set(percent, value);
       }

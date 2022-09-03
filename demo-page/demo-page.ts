@@ -67,7 +67,6 @@ class DemoSlider {
 
   private init() {
     this.findElems();
-
     this.stateObject = {
       min: this.min || 0,
       max: this.max || 10,
@@ -134,8 +133,7 @@ class DemoSlider {
       }
       if (valueForm !== undefined) {
         this.slider.setValue(`${param}`, valueForm);
-        this.slider.setNewState(this.slider.getState());
-        if (typeof this.slider.getValue(`${param}`) === 'boolean' || param === 'scalePercentGap') {
+        if (param !== 'valueFrom' && param !== 'valueTo') {
           if (this.content) this.content.innerHTML = '';
           this.addSlider(this.slider.getState());
         }
@@ -172,11 +170,13 @@ class DemoSlider {
     const from = <HTMLInputElement>
       this.form.querySelector('.slider__input[data-role = from]');
     this.from = Number(from.value);
+    from.step = `${this.step}`;
     this.mapElems.set('from', 'valueFrom');
 
     const to = <HTMLInputElement>
       this.form.querySelector('.slider__input[data-role = to]');
     this.to = Number(to.value);
+    to.step = `${this.step}`;
     this.mapElems.set('to', 'valueTo');
 
     const gap = <HTMLInputElement>
