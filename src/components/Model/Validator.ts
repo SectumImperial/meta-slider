@@ -109,9 +109,11 @@ class Validator {
 
     for (let i = 0; i <= 100; i += percentCountsGap) {
       if (i <= (100 - percentCountsGap)) {
-        const stepCount = Math.ceil(i / stepPercent);
+        const stepCount = Math.round(i / stepPercent);
         const value = step * stepCount;
-        mapSteps.set(value, i);
+        const percentScale = value / percent;
+
+        mapSteps.set(value, percentScale);
       }
     }
 
