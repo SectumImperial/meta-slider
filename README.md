@@ -1,5 +1,5 @@
 # meta-slider
-**[DEMO-PAGE](https://sectumimperial.github.io/meta-slider/)**
+**[DEMO-PAGE](https://sectumimperial.github.io/meta-slider/index.html)**
 
 It's the four task of Metalamp. https://coda.io/@metalamp/education/front-end-2
 
@@ -61,4 +61,9 @@ Clone:
 - `npm run lint` - Command to check syntax
 - `npm run test` - Command to run tests
 - `npm run transpile` - Command to transpile TS inro JS. 
+
+## Diagram 
+
+![UML-diagram](https://github.com/SectumImperial/meta-slider/blob/master/slder.png "diagram")
+
 
