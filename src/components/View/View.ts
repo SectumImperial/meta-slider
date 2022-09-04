@@ -8,14 +8,14 @@ class View extends Observer {
 
   slider!: Slider;
 
-  isRange!: boolean;
+  protected isRange!: boolean;
 
   constructor(root: Element, protected readonly state: SliderInterface) {
     super();
     this.initView(root, state);
   }
 
-  public initView(root: Element, state: SliderInterface): void {
+  private initView(root: Element, state: SliderInterface): void {
     const { isRange } = state;
     this.root = root;
     this.isRange = isRange;

@@ -19,27 +19,25 @@ class Validator {
 
   private resultObject!: ModelInterface;
 
-  stepPercent!: number;
+  private stepPercent!: number;
 
-  valueTo!: number;
+  private valueTo!: number;
 
-  thumbPercentFrom!: number;
+  private thumbPercentFrom!: number;
 
-  thumbPercentTo?: number;
+  private thumbPercentTo?: number;
 
-  scalePercentGap: number | undefined;
+  private scalePercentGap: number | undefined;
 
-  isTip!: boolean;
+  private isTip!: boolean;
 
-  isVertical!: boolean;
+  private isVertical!: boolean;
 
-  isProgress!: boolean;
+  private isProgress!: boolean;
 
-  scaleMarks!: boolean;
+  private scaleMarks!: boolean;
 
-  isRange!: boolean;
-
-  arrBooleans!: boolean[];
+  private isRange!: boolean;
 
   constructor(readonly data: ModelInputState) {
     this.validateData(data);
@@ -95,7 +93,7 @@ class Validator {
     const {
       step,
       max,
-      // min,
+      min,
       gap,
     } = options;
 
@@ -110,8 +108,9 @@ class Validator {
     for (let i = 0; i <= 100; i += percentCountsGap) {
       if (i <= (100 - percentCountsGap)) {
         const stepCount = Math.round(i / stepPercent);
-        const value = step * stepCount;
-        const percentScale = value / percent;
+        const valueSteps = step * stepCount;
+        const percentScale = valueSteps / percent;
+        const value = min + valueSteps;
 
         mapSteps.set(value, percentScale);
       }

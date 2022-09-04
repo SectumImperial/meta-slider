@@ -12,7 +12,7 @@ import {
 class Model {
   private state: ModelInterface;
 
-  stepPercent!: number;
+  private stepPercent!: number;
 
   constructor(state: ModelInterface) {
     this.state = state;
@@ -35,6 +35,17 @@ class Model {
 
   public updateStateMove(movedTo: number, thumb: ThumbID): void {
     this.findSuitablePercent(movedTo, thumb);
+  }
+
+  public getValue(val: ModelVal): number | undefined | boolean {
+    return this.state[`${val}`];
+  }
+
+  public getPercentVal(): number {
+    const { valueFrom, min, max } = this.state;
+    const range: number = max - min;
+    const percent = Number(((valueFrom / range) * 100).toFixed(3));
+    return percent;
   }
 
   private findSuitablePercent(percentMove: number, thumb: ThumbID) {
@@ -173,17 +184,6 @@ class Model {
     }
 
     return checkVal && compareVal;
-  }
-
-  public getValue(val: ModelVal): number | undefined | boolean {
-    return this.state[`${val}`];
-  }
-
-  public getPercentVal(): number {
-    const { valueFrom, min, max } = this.state;
-    const range: number = max - min;
-    const percent = Number(((valueFrom / range) * 100).toFixed(3));
-    return percent;
   }
 
   private findValPercent(): number {

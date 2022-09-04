@@ -5,15 +5,12 @@ import { MODEL_EVENTS, SLIDER_EVENTS } from '../../Observer/events';
 import ModelFacade from '../Model/ModelFacade';
 
 class Presenter extends Observer {
-  modelFacade: ModelFacade;
+  private modelFacade: ModelFacade;
 
-  view: View;
-
-  root: HTMLElement;
+  private view: View;
 
   constructor(root: HTMLElement, state: ModelInputState) {
     super();
-    this.root = root;
 
     this.modelFacade = new ModelFacade(state);
     this.view = new View(root, this.modelFacade.getState());

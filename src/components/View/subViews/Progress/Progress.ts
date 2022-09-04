@@ -3,11 +3,11 @@ import { ProgressData } from '../../../Interfaces';
 import './progress.scss';
 
 class Progress extends SliderComponents {
-  positionStart: number;
+  private positionStart: number;
 
-  positionEnd: number;
+  private positionEnd: number;
 
-  progress: HTMLDivElement;
+  private progress: HTMLDivElement;
 
   constructor(data: ProgressData) {
     const {

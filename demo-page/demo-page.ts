@@ -16,9 +16,9 @@ class DemoSlider {
 
   form!: Element | null;
 
-  min!: number | null;
+  min!: number;
 
-  max!: number | null;
+  max!: number;
 
   step!: number | null;
 
@@ -67,8 +67,8 @@ class DemoSlider {
   private init() {
     this.findElems();
     this.stateObject = {
-      min: this.min || 0,
-      max: this.max || 10,
+      min: this.min,
+      max: this.max,
       valueFrom: this.from || 0,
       valueTo: this.to || 0,
       step: this.step || 1,
