@@ -1,5 +1,5 @@
 # meta-slider
-**[DEMO-PAGE](https://sectumimperial.github.io/meta-slider/)**
+**[DEMO-PAGE](https://sectumimperial.github.io/meta-slider/index.html)**
 
 It's the four task of Metalamp. https://coda.io/@metalamp/education/front-end-2
 
