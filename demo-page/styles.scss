@@ -45,7 +45,7 @@
 
   @media (max-width: 1000px) {
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr auto;
+    grid-template-rows: 375px auto;
     gap: 50px;
   }
 
@@ -56,7 +56,7 @@
     padding: 40px;
 
     @media (max-width: 1000px) {
-      min-height: 350px;
+      height: 100%;
     }
   }
 
