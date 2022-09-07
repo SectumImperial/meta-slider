@@ -37,17 +37,32 @@
 }
 
 .slider {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr auto;
   gap: 5px;
+  align-items: center;
   width: 100%;
 
+  @media (max-width: 1000px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+    gap: 50px;
+  }
+
   &__content {
-    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 40px;
+
+    @media (max-width: 1000px) {
+      min-height: 350px;
+    }
+  }
+
+  &__nav {
+    max-width: 350px;
+    justify-self: center
   }
 
   &__form {

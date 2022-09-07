@@ -69,7 +69,6 @@ class Thumb extends SliderComponents {
     this.thumbElement.addEventListener(
       'touchstart',
       this.touchDown.bind(this),
-      { passive: true },
     );
   }
 
