@@ -95,22 +95,22 @@ class DemoSlider {
         }
       });
 
-      elems.forEach((e) => e.addEventListener('change', this.updateState.bind(this)));
+      elems.forEach((e) => e.addEventListener('change', this.handleItemChange.bind(this)));
     }
 
-    this.content?.addEventListener('mousedown', this.handleClick.bind(this));
-    this.content?.addEventListener('click', this.updateForm.bind(this));
+    this.content?.addEventListener('mousedown', this.handleCotentClick.bind(this));
+    this.content?.addEventListener('click', this.handleCotentClick.bind(this));
     if (this.thumb) {
-      this.thumb?.addEventListener('keydown', this.handelKey.bind(this));
+      this.thumb?.addEventListener('keydown', this.handleThumbKeyPress.bind(this));
       this.thumb?.addEventListener(
         'touchmove',
-        this.touchDown.bind(this),
+        this.handleThumbTouchMove.bind(this),
         { passive: true },
       );
     }
   }
 
-  private updateState(e: InputEvent): void {
+  private handleItemChange(e: InputEvent): void {
     const { target } = e;
     if (target instanceof HTMLInputElement) {
       const { role } = target.dataset;
@@ -234,7 +234,7 @@ class DemoSlider {
     });
   }
 
-  private handleClick() {
+  private handleCotentClick() {
     const update = () => this.updateForm();
     const mouseUp = () => {
       this.content?.removeEventListener('mousemove', update);
@@ -245,14 +245,14 @@ class DemoSlider {
     this.content?.addEventListener('mouseup', mouseUp);
   }
 
-  private handelKey(e: KeyboardEvent): void {
+  private handleThumbKeyPress(e: KeyboardEvent): void {
     const { key } = e;
     if (key === 'ArrowLeft' || key === 'ArrowUp' || key === 'ArrowRight' || key === 'ArrowDown') {
       this.updateForm();
     }
   }
 
-  private touchDown() {
+  private handleThumbTouchMove() {
     this.updateForm();
   }
 }

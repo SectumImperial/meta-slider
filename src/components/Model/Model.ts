@@ -19,11 +19,6 @@ class Model {
     this.init();
   }
 
-  private init(): void {
-    // this.mapSteps = this.createSteps();
-    this.stepPercent = Number((this.state.step / this.findValPercent()));
-  }
-
   public setState(state: object): void {
     const oldState = this.state;
     this.state = { ...oldState, ...state };
@@ -46,6 +41,11 @@ class Model {
     const range: number = max - min;
     const percent = Number(((valueFrom / range) * 100).toFixed(3));
     return percent;
+  }
+
+  private init(): void {
+    // this.mapSteps = this.createSteps();
+    this.stepPercent = Number((this.state.step / this.findValPercent()));
   }
 
   private findSuitablePercent(percentMove: number, thumb: ThumbID) {

@@ -37,6 +37,11 @@ class Tip extends SliderComponents {
     this.tip.style.display = '';
   }
 
+  public setPosition(percentPosition: number, value: number): void {
+    this.tip.style[this.startPoint] = `${percentPosition}%`;
+    this.tip.innerText = `${value}`;
+  }
+
   private createTip(): HTMLDivElement {
     const tip = this.createElement('plugin-slider__tip');
     tip.classList.add(`plugin-slider__tip_${this.mod}`);
@@ -47,11 +52,6 @@ class Tip extends SliderComponents {
 
   private addTip() {
     this.root.append(this.tip);
-  }
-
-  public setPosition(percentPosition: number, value: number): void {
-    this.tip.style[this.startPoint] = `${percentPosition}%`;
-    this.tip.innerText = `${value}`;
   }
 }
 

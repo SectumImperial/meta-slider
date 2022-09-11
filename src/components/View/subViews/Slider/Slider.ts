@@ -59,12 +59,6 @@ class Slider extends Observer {
     this.setState(state);
   }
 
-  private initSlider(): void {
-    this.slider = this.createSlider();
-    this.createlements();
-    this.addSlider();
-  }
-
   public update(data: SliderEventValChangedData | ScaleClickData, event: string): void {
     if (event === SLIDER_EVENTS.VALUE_START_CHANGE) {
       const { size } = this.sliderCompnents;
@@ -76,6 +70,61 @@ class Slider extends Observer {
     if (event === SLIDER_EVENTS.SCALE_CLICKED || event === SLIDER_EVENTS.KEY_DOWN) {
       this.emit(SLIDER_EVENTS.DATA_COLLECTED, data);
     }
+  }
+
+  public setState(data: SliderInterface): void {
+    const {
+      thumbPercentFrom,
+      valueFrom,
+      isRange,
+      thumbPercentTo,
+      valueTo,
+    } = data;
+
+    // Thumb percents
+    this.thumbPercentFrom = thumbPercentFrom;
+    this.thumbFrom.setPosition(this.thumbPercentFrom);
+
+    if (isRange && thumbPercentTo !== undefined && this.thumbTo) {
+      this.thumbPercentTo = thumbPercentTo;
+      this.thumbTo.setPosition(this.thumbPercentTo);
+    }
+
+    //  Tips
+    const { isTip } = this;
+    if (isTip && this.tipFrom) {
+      this.tipValueFrom = valueFrom;
+      this.tipFrom.setPosition(this.thumbPercentFrom, this.tipValueFrom);
+    }
+
+    if (this.isNeedDoubleTip()) {
+      this.tipFrom?.setValueTip(`${valueFrom} - ${valueTo}`);
+      this.tipTo?.hideTip();
+    } else {
+      this.tipTo?.showTip();
+    }
+
+    if (isRange && this.tipTo && valueTo !== undefined && this.thumbPercentTo) {
+      this.tipValueTo = valueTo;
+      this.tipTo.setPosition(this.thumbPercentTo, this.tipValueTo);
+    }
+
+    // Progress
+    if (this.isProgress && !isRange) {
+      this.progress?.setProgressPosition(0, this.thumbPercentFrom);
+    }
+    if (this.isProgress && isRange && thumbPercentTo) {
+      this.progress?.setProgressPosition(this.thumbPercentFrom, thumbPercentTo - thumbPercentFrom);
+    }
+    if (this.isProgress && thumbPercentTo === thumbPercentFrom) {
+      this.progress?.setProgressPosition(0, 0);
+    }
+  }
+
+  private initSlider(): void {
+    this.slider = this.createSlider();
+    this.createlements();
+    this.addSlider();
   }
 
   private createVariables(root: Element, state: SliderInterface): void {
@@ -178,55 +227,6 @@ class Slider extends Observer {
     const sliderWrapper = document.createElement('div');
     sliderWrapper.className = 'plugin-slider';
     return sliderWrapper;
-  }
-
-  public setState(data: SliderInterface): void {
-    const {
-      thumbPercentFrom,
-      valueFrom,
-      isRange,
-      thumbPercentTo,
-      valueTo,
-    } = data;
-
-    // Thumb percents
-    this.thumbPercentFrom = thumbPercentFrom;
-    this.thumbFrom.setPosition(this.thumbPercentFrom);
-
-    if (isRange && thumbPercentTo !== undefined && this.thumbTo) {
-      this.thumbPercentTo = thumbPercentTo;
-      this.thumbTo.setPosition(this.thumbPercentTo);
-    }
-
-    //  Tips
-    const { isTip } = this;
-    if (isTip && this.tipFrom) {
-      this.tipValueFrom = valueFrom;
-      this.tipFrom.setPosition(this.thumbPercentFrom, this.tipValueFrom);
-    }
-
-    if (this.isNeedDoubleTip()) {
-      this.tipFrom?.setValueTip(`${valueFrom} - ${valueTo}`);
-      this.tipTo?.hideTip();
-    } else {
-      this.tipTo?.showTip();
-    }
-
-    if (isRange && this.tipTo && valueTo !== undefined && this.thumbPercentTo) {
-      this.tipValueTo = valueTo;
-      this.tipTo.setPosition(this.thumbPercentTo, this.tipValueTo);
-    }
-
-    // Progress
-    if (this.isProgress && !isRange) {
-      this.progress?.setProgressPosition(0, this.thumbPercentFrom);
-    }
-    if (this.isProgress && isRange && thumbPercentTo) {
-      this.progress?.setProgressPosition(this.thumbPercentFrom, thumbPercentTo - thumbPercentFrom);
-    }
-    if (this.isProgress && thumbPercentTo === thumbPercentFrom) {
-      this.progress?.setProgressPosition(0, 0);
-    }
   }
 
   private isNeedDoubleTip(): boolean {

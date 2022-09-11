@@ -64,29 +64,29 @@ class Thumb extends SliderComponents {
   }
 
   private addListeners(): void {
-    this.thumbElement.addEventListener('mousedown', this.mouseDown.bind(this));
-    this.thumbElement.addEventListener('keydown', this.keyDown.bind(this));
+    this.thumbElement.addEventListener('mousedown', this.handleThumbMouseDown.bind(this));
+    this.thumbElement.addEventListener('keydown', this.handleThumbKeyDown.bind(this));
     this.thumbElement.addEventListener(
       'touchstart',
-      this.touchDown.bind(this),
+      this.handleThumbTouch.bind(this),
     );
   }
 
-  private touchDown(e: TouchEvent): void {
+  private handleThumbTouch(e: TouchEvent): void {
     e.preventDefault();
     const sizeElement = this.thumbElement.getBoundingClientRect()[this.startPoint];
     this.moved = e.touches[0][this.direction] - sizeElement;
-    super.performToucMove(this.moved, this.thumbId);
+    super.performTouchMove(this.moved, this.thumbId);
   }
 
-  private mouseDown(e: MouseEvent): void {
+  private handleThumbMouseDown(e: MouseEvent): void {
     e.preventDefault();
     this.moved = e[this.direction] - this.thumbElement.getBoundingClientRect()[this.startPoint];
     this.checkZInd();
     super.performMouseMove(this.moved, this.thumbId);
   }
 
-  private keyDown(e: KeyboardEvent): void {
+  private handleThumbKeyDown(e: KeyboardEvent): void {
     e.preventDefault();
     const { key } = e;
     if (key === 'ArrowLeft' || key === 'ArrowUp' || key === 'ArrowRight' || key === 'ArrowDown') e.preventDefault();

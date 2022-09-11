@@ -40,7 +40,7 @@ class SliderComponents extends Observer {
   }
 
   protected performMouseMove(thumbPos: number, id: string): void {
-    const mouseMove = (e: MouseEvent) => {
+    const handleThumbMousMove = (e: MouseEvent) => {
       e.preventDefault();
       const elemSize = this.root.getBoundingClientRect()[this.startPoint];
       const newPos = e[this.direction] - thumbPos - elemSize;
@@ -50,17 +50,17 @@ class SliderComponents extends Observer {
       });
     };
 
-    const mouseUp = () => {
-      document.removeEventListener('mousemove', mouseMove);
-      document.removeEventListener('mouseup', mouseUp);
+    const handleThumbMousUp = () => {
+      document.removeEventListener('mousemove', handleThumbMousMove);
+      document.removeEventListener('mouseup', handleThumbMousUp);
     };
 
-    document.addEventListener('mousemove', mouseMove);
-    document.addEventListener('mouseup', mouseUp);
+    document.addEventListener('mousemove', handleThumbMousMove);
+    document.addEventListener('mouseup', handleThumbMousUp);
   }
 
-  protected performToucMove(thumbPos: number, id: ThumbID): void {
-    const touchMove = (e: TouchEvent) => {
+  protected performTouchMove(thumbPos: number, id: ThumbID): void {
+    const handleThumbTouchMove = (e: TouchEvent) => {
       e.stopImmediatePropagation();
       const elemSize = this.root.getBoundingClientRect()[this.startPoint];
       const newPos = e.touches[0][this.direction] - thumbPos - elemSize;
@@ -70,13 +70,13 @@ class SliderComponents extends Observer {
       });
     };
 
-    const touchEnd = () => {
-      document.removeEventListener('touchmove', touchMove);
-      document.removeEventListener('touchend', touchEnd);
+    const handleThumbTouchEnd = () => {
+      document.removeEventListener('touchmove', handleThumbTouchMove);
+      document.removeEventListener('touchend', handleThumbTouchEnd);
     };
 
-    document.addEventListener('touchmove', touchMove);
-    document.addEventListener('touchend', touchEnd);
+    document.addEventListener('touchmove', handleThumbTouchMove);
+    document.addEventListener('touchend', handleThumbTouchEnd);
   }
 
   protected performKeyDown(keyEvent: KeyEvent, id: ThumbID): void {

@@ -15,14 +15,6 @@ class View extends Observer {
     this.initView(root, state);
   }
 
-  private initView(root: Element, state: SliderInterface): void {
-    const { isRange } = state;
-    this.root = root;
-    this.isRange = isRange;
-    this.slider = new Slider(root, state);
-    this.addSubscribeSlider();
-  }
-
   public updateSlider(data: SliderInterface): void {
     this.slider.setState(data);
   }
@@ -34,6 +26,14 @@ class View extends Observer {
     if (event === SLIDER_EVENTS.VALUE_CHANGED) {
       this.updateSlider(data);
     }
+  }
+
+  private initView(root: Element, state: SliderInterface): void {
+    const { isRange } = state;
+    this.root = root;
+    this.isRange = isRange;
+    this.slider = new Slider(root, state);
+    this.addSubscribeSlider();
   }
 
   private addSubscribeSlider(): void {

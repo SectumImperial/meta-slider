@@ -44,16 +44,6 @@ class ModelFacade extends Observer {
     return this.model.getState();
   }
 
-  private validGapMarks(): StepsMap {
-    const gap = this.model.getState().scalePercentGap || 20;
-    const { min, max, step } = this.model.getState();
-    const sliderMarks = this.validator.validateMarks({
-      min, max, step, gap,
-    });
-
-    return sliderMarks;
-  }
-
   public getModel(): Model {
     return this.model;
   }
@@ -93,6 +83,16 @@ class ModelFacade extends Observer {
     const validState = this.validator.validateData(newState);
     this.model.setState(validState);
     this.emit(MODEL_EVENTS.VALUE_CHANGED, this.model.getState());
+  }
+
+  private validGapMarks(): StepsMap {
+    const gap = this.model.getState().scalePercentGap || 20;
+    const { min, max, step } = this.model.getState();
+    const sliderMarks = this.validator.validateMarks({
+      min, max, step, gap,
+    });
+
+    return sliderMarks;
   }
 }
 
