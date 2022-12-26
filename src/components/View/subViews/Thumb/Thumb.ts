@@ -75,13 +75,15 @@ class Thumb extends SliderComponents {
   private handleThumbTouch(e: TouchEvent): void {
     e.preventDefault();
     const sizeElement = this.thumbElement.getBoundingClientRect()[this.startPoint];
-    this.moved = e.touches[0][this.direction] - sizeElement;
+    this.moved = e.touches[0][this.direction] - (sizeElement
+      + (this.thumbElement.getBoundingClientRect()[this.size] / 2));
     super.performTouchMove(this.moved, this.thumbId);
   }
 
   private handleThumbMouseDown(e: MouseEvent): void {
     e.preventDefault();
-    this.moved = e[this.direction] - this.thumbElement.getBoundingClientRect()[this.startPoint];
+    this.moved = e[this.direction] - (this.thumbElement.getBoundingClientRect()[this.startPoint]
+      + (this.thumbElement.getBoundingClientRect()[this.size] / 2));
     this.checkZInd();
     super.performMouseMove(this.moved, this.thumbId);
   }
