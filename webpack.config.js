@@ -4,6 +4,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const ESLintPlugin = require('eslint-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 const isDev = process.env.NODE_ENV === 'development';
 const isProd = !isDev;
@@ -72,6 +73,9 @@ module.exports = {
       filename: filename('css'),
     }),
     new ESLintPlugin(),
+    new CopyPlugin({
+      patterns: [{ from: 'demo-page/favicon/', to: 'favicon' }],
+    }),
     ],
   module: {
     rules: [
@@ -108,7 +112,7 @@ module.exports = {
         },
       },
       {
-        test: /\.tsx?$/,
+        test: /\.ts$/,
         exclude: /(node_modules|bower_components)/,
         use: [
           {
@@ -116,7 +120,10 @@ module.exports = {
             options: babelOptions('@babel/preset-typescript'),
           },
           {
-            loader: 'ts-loader'
+            loader: 'ts-loader',
+            options: {
+              onlyCompileBundledFiles: true,
+            }
           },
         ]
         },

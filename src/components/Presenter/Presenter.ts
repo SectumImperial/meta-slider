@@ -11,7 +11,6 @@ class Presenter extends Observer {
 
   constructor(root: HTMLElement, state: ModelInputState) {
     super();
-
     this.modelFacade = new ModelFacade(state);
     this.view = new View(root, this.modelFacade.getState());
     this.subscribeModel();
