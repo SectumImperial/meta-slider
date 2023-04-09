@@ -76,7 +76,7 @@ module.exports = {
     new CopyPlugin({
       patterns: [{ from: 'demo-page/favicon/', to: 'favicon' }],
     }),
-    ],
+  ],
   module: {
     rules: [
       {
