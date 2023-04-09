@@ -214,6 +214,7 @@ class Validator {
     if (this.step > allRange) {
       this.step = allRange;
     }
+    if (this.step < 0.001) this.step = 0.001;
     if (!this.step) this.step = 1;
     this.resultObject.step = this.step;
   }
