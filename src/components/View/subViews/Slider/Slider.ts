@@ -1,5 +1,7 @@
 import Observer from '../../../../Observer/Observer';
-import { SliderInterface, SliderEventValChangedData, ScaleClickData } from '../../../Interfaces';
+import {
+  SliderInterface, SliderEventValChangedData, ScaleClickData, ThumbID,
+} from '../../../Interfaces';
 import { SLIDER_EVENTS } from '../../../../Observer/events';
 import Progress from '../Progress/Progress';
 import Scale from '../Scale/Scale';
@@ -48,7 +50,7 @@ class Slider extends Observer {
 
   progress?: Progress;
 
-  sliderCompnents!: SliderComponents;
+  sliderComponents!: SliderComponents;
 
   isScaleMarks!: boolean;
 
@@ -61,7 +63,7 @@ class Slider extends Observer {
 
   public update(data: SliderEventValChangedData | ScaleClickData, event: string): void {
     if (event === SLIDER_EVENTS.VALUE_START_CHANGE) {
-      const { size } = this.sliderCompnents;
+      const { size } = this.sliderComponents;
       const scaleSize = this.scaleElement.getBoundingClientRect()[size];
       const sliderData = { ...data, scaleSize };
       this.emit(SLIDER_EVENTS.DATA_COLLECTED, sliderData);
@@ -81,16 +83,43 @@ class Slider extends Observer {
       valueTo,
     } = data;
 
-    // Thumb percents
+    this.setThumbs(thumbPercentFrom, thumbPercentTo, isRange);
+    this.setTips(valueFrom, valueTo, isRange);
+    this.setProgress(thumbPercentFrom, thumbPercentTo, isRange);
+  }
+
+  private setThumbs(
+    thumbPercentFrom: number,
+    thumbPercentTo: number | undefined,
+    isRange: boolean,
+  ) {
     this.thumbPercentFrom = thumbPercentFrom;
     this.thumbFrom.setPosition(this.thumbPercentFrom);
+
+    if (isRange) {
+      const secondThumb = this.slider.querySelector('#valueTo');
+      if (secondThumb === null && thumbPercentTo !== undefined) {
+        this.setThumb('valueTo', thumbPercentTo);
+      }
+    }
 
     if (isRange && thumbPercentTo !== undefined && this.thumbTo) {
       this.thumbPercentTo = thumbPercentTo;
       this.thumbTo.setPosition(this.thumbPercentTo);
     }
+  }
 
-    //  Tips
+  private setThumb(id: ThumbID, thumbPercent: number) {
+    const thumb = id === 'valueTo' ? 'thumbTo' : 'thumbFrom';
+    this[thumb] = new Thumb({
+      root: this.scaleElement,
+      thumbPercent,
+      id,
+      isVertical: this.isVertical,
+    });
+  }
+
+  private setTips(valueFrom: number, valueTo: number | undefined, isRange: boolean) {
     const { isTip } = this;
     if (isTip && this.tipFrom) {
       this.tipValueFrom = valueFrom;
@@ -108,10 +137,37 @@ class Slider extends Observer {
       this.tipValueTo = valueTo;
       this.tipTo.setPosition(this.thumbPercentTo, this.tipValueTo);
     }
+  }
 
-    // Progress
-    if (this.isProgress && !isRange) {
-      this.progress?.setProgressPosition(0, this.thumbPercentFrom);
+  private setTip(valueDirection = 'valueFrom') {
+    const tipValue = valueDirection === 'valueFrom' ? 'tipValueFrom' : 'tipValueTo';
+    const tip = valueDirection === 'valueFrom' ? 'tipFrom' : 'tipTo';
+    const percentPosition = valueDirection === 'valueFrom' ? 'thumbPercentFrom' : 'thumbPercentTo';
+
+    if (valueDirection === 'valueTo' && this[percentPosition] === undefined) return;
+
+    this[tip] = new Tip({
+      root: this.scaleElement,
+      percentPosition: this[percentPosition] as number,
+      valueTip: tipValue,
+      isVertical: this.isVertical,
+    });
+  }
+
+  private setProgress(
+    thumbPercentFrom: number,
+    thumbPercentTo: number | undefined,
+    isRange: boolean,
+  ) {
+    const progress = this.slider.querySelector('.plugin-slider__progress');
+    if (progress === null) {
+      const positionEnd = typeof thumbPercentTo === 'number' ? thumbPercentTo : 0;
+      this.progress = new Progress({
+        root: this.scaleElement,
+        positionStart: this.thumbPercentFrom,
+        positionEnd,
+        isVertical: this.isVertical,
+      });
     }
     if (this.isProgress && isRange && thumbPercentTo) {
       this.progress?.setProgressPosition(this.thumbPercentFrom, thumbPercentTo - thumbPercentFrom);
@@ -119,11 +175,14 @@ class Slider extends Observer {
     if (this.isProgress && thumbPercentTo === thumbPercentFrom) {
       this.progress?.setProgressPosition(0, 0);
     }
+    if (this.isProgress && !isRange) {
+      this.progress?.setProgressPosition(0, this.thumbPercentFrom);
+    }
   }
 
   private initSlider(): void {
     this.slider = this.createSlider();
-    this.createlements();
+    this.createElements();
     this.addSlider();
   }
 
@@ -155,63 +214,25 @@ class Slider extends Observer {
     this.root = root;
   }
 
-  private createlements(): void {
-    this.sliderCompnents = new SliderComponents(this.slider, this.isVertical);
+  private createElements(): void {
+    this.sliderComponents = new SliderComponents(this.slider, this.isVertical);
     this.scale = new Scale(this.slider, this.isVertical);
     this.scaleElement = this.scale.getScale();
+    this.setThumb('valueFrom', this.thumbPercentFrom);
 
-    this.thumbFrom = new Thumb({
-      root: this.scaleElement,
-      thumbPercent: this.thumbPercentFrom,
-      id: 'valueFrom',
-      isVertical: this.isVertical,
-    });
-
-    if (this.isRange && this.thumbPercentTo) {
-      this.thumbTo = new Thumb({
-        root: this.scaleElement,
-        thumbPercent: this.thumbPercentTo,
-        id: 'valueTo',
-        isVertical: this.isVertical,
-      });
+    if (this.isRange && this.thumbPercentTo !== undefined) {
+      this.setThumb('valueTo', this.thumbPercentTo);
     }
 
     if (this.isTip) {
-      this.tipFrom = new Tip({
-        root: this.scaleElement,
-        percentPosition: this.thumbPercentFrom,
-        valueTip: this.tipValueFrom,
-        isVertical: this.isVertical,
-      });
+      this.setTip('valueFrom');
     }
 
     if (this.isTip && this.thumbPercentTo && this.isRange && this.tipValueTo !== undefined) {
-      this.tipTo = new Tip({
-        root: this.scaleElement,
-        percentPosition: this.thumbPercentTo,
-        valueTip: this.tipValueTo,
-        isVertical: this.isVertical,
-      });
+      this.setTip('valueTo');
     }
 
-    if (this.isProgress && !this.isRange) {
-      this.progress = new Progress({
-        root: this.scaleElement,
-        positionStart: this.thumbPercentFrom,
-        positionEnd: 0,
-        isVertical: this.isVertical,
-      });
-    }
-
-    if (this.isProgress && this.isRange) {
-      const widthProgress = this.thumbPercentTo ? this.thumbPercentTo - this.thumbPercentFrom : 0;
-      this.progress = new Progress({
-        root: this.scaleElement,
-        positionStart: this.thumbPercentFrom,
-        positionEnd: widthProgress,
-        isVertical: this.isVertical,
-      });
-    }
+    this.setProgress(this.thumbPercentFrom, 0, this.isRange);
 
     if (this.scaleMap && this.isScaleMarks) {
       this.scaleMarks = new ScaleMarks(this.scaleElement, this.scaleMap, this.isVertical);
