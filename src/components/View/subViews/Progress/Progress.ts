@@ -20,7 +20,7 @@ class Progress extends SliderComponents {
     super(root, isVertical);
     this.positionStart = positionStart;
     this.positionEnd = positionEnd;
-    this.progress = this.createElement('plugin-slider__progress');
+    this.progress = SliderComponents.createElement('plugin-slider__progress');
     this.setProgress();
   }
 

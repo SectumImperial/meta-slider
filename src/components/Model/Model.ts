@@ -44,7 +44,6 @@ class Model {
   }
 
   private init(): void {
-    // this.mapSteps = this.createSteps();
     this.stepPercent = Number((this.state.step / this.findValPercent()));
   }
 

@@ -32,15 +32,14 @@ class SliderComponents extends Observer {
     this.root = root;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  protected createElement(className: string): HTMLDivElement {
+  static createElement(className: string): HTMLDivElement {
     const element = document.createElement('div');
     element.className = className;
     return element;
   }
 
   protected performMouseMove(thumbPos: number, id: string): void {
-    const handleThumbMousMove = (e: MouseEvent) => {
+    const handleThumbMouseMove = (e: MouseEvent) => {
       e.preventDefault();
       const elemSize = this.root.getBoundingClientRect()[this.startPoint];
       const newPos = e[this.direction] - thumbPos - elemSize;
@@ -50,13 +49,13 @@ class SliderComponents extends Observer {
       });
     };
 
-    const handleThumbMousUp = () => {
-      document.removeEventListener('mousemove', handleThumbMousMove);
-      document.removeEventListener('mouseup', handleThumbMousUp);
+    const handleThumbMouseUp = () => {
+      document.removeEventListener('mousemove', handleThumbMouseMove);
+      document.removeEventListener('mouseup', handleThumbMouseUp);
     };
 
-    document.addEventListener('mousemove', handleThumbMousMove);
-    document.addEventListener('mouseup', handleThumbMousUp);
+    document.addEventListener('mousemove', handleThumbMouseMove);
+    document.addEventListener('mouseup', handleThumbMouseUp);
   }
 
   protected performTouchMove(thumbPos: number, id: ThumbID): void {
@@ -83,6 +82,13 @@ class SliderComponents extends Observer {
     this.emit(SLIDER_EVENTS.KEY_DOWN, {
       keyEvent,
       thumbId: id,
+    });
+  }
+
+  protected performClickMark(percent: number, value: number) {
+    this.emit(SLIDER_EVENTS.MARK_CLICKED, {
+      percent,
+      value,
     });
   }
 }

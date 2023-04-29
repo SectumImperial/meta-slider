@@ -75,6 +75,8 @@ interface ValidateSliderData {
   scaleSize: number,
   thumbId?: string,
   keyEvent?: KeyEvent,
+  percent?: number,
+  value?: number,
 }
 
 interface ScaleClickData {

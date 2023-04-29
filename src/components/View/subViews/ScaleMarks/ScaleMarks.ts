@@ -12,6 +12,22 @@ class ScaleMarks extends SliderComponents {
 
   private init(): void {
     this.createMarks();
+    this.addListeners();
+  }
+
+  private addListeners(): void {
+    this.root.addEventListener('click', this.handleRootClick.bind(this));
+  }
+
+  private handleRootClick(e: Event) {
+    const target = e.target as HTMLElement;
+    if (target === null) return;
+    const { value, percent } = target.dataset;
+    if (target.classList.contains('plugin-slider__mark-value')) {
+      if (percent !== undefined) {
+        this.performClickMark(Number(percent), Number(value));
+      }
+    }
   }
 
   private createMarks(): void {
@@ -19,13 +35,15 @@ class ScaleMarks extends SliderComponents {
   }
 
   private createMark(percent: number, value: number): void {
-    const mark = this.createElement('plugin-slider__mark');
+    const mark = SliderComponents.createElement('plugin-slider__mark');
     mark.classList.add(`plugin-slider__mark_${this.mod}`);
     mark.style[this.startPoint] = `${percent}%`;
 
     const markValue = document.createElement('span');
     markValue.className = 'plugin-slider__mark-value';
     markValue.classList.add(`plugin-slider__mark-value_${this.mod}`);
+    markValue.dataset.value = `${value}`;
+    markValue.dataset.percent = `${percent}`;
     markValue.innerText = `${value}`;
     mark.append(markValue);
 

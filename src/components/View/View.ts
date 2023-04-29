@@ -44,6 +44,9 @@ class View extends Observer {
       this.slider.thumbTo.addSubscriber(SLIDER_EVENTS.KEY_DOWN, this.slider);
     }
     this.slider.scale.addSubscriber(SLIDER_EVENTS.SCALE_CLICKED, this.slider);
+    if (this.slider.isScaleMarks) {
+      this.slider.scaleMarks.addSubscriber(SLIDER_EVENTS.MARK_CLICKED, this.slider);
+    }
     this.slider.addSubscriber(SLIDER_EVENTS.SCALE_CLICKED, this);
     this.slider.addSubscriber(SLIDER_EVENTS.DATA_COLLECTED, this);
   }

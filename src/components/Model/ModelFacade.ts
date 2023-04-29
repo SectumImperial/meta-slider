@@ -56,8 +56,10 @@ class ModelFacade extends Observer {
     return this.model.getState()[`${value}`];
   }
 
-  public update(data: ValidateSliderData, event: string): void {
-    if (event === MODEL_EVENTS.VALUE_CHANGED) {
+  public update(data: ValidateSliderData): void {
+    const typeData = data.percent === undefined ? 'scaleMove' : 'markMove';
+
+    if (typeData === 'scaleMove') {
       const movedTo = this.validator.performMoveToPercent(data);
       let { thumbId } = data;
       if (thumbId === undefined) thumbId = this.validator.validateThumbId(movedTo);
@@ -70,10 +72,21 @@ class ModelFacade extends Observer {
       this.model.setState(validState);
 
       if (newState.scaleMarks) {
-        this.emit(MODEL_EVENTS.VALUE_CHANGED, { ...validState, scaleMap: this.validGapMarks() });
+        this.emit(MODEL_EVENTS.VALUE_CHANGED, {
+          ...this.model.getState(),
+          scaleMap: this.validGapMarks(),
+        });
       } else {
-        this.emit(MODEL_EVENTS.VALUE_CHANGED, validState);
+        this.emit(MODEL_EVENTS.VALUE_CHANGED, this.model.getState());
       }
+    }
+
+    if (data.percent !== undefined && data.value !== undefined && typeData === 'markMove') {
+      const { percent, value } = data;
+      const oldState = this.model.getState();
+      const performedData = this.validator.validatePercent(percent, value, oldState);
+      this.model.setState(performedData);
+      this.emit(MODEL_EVENTS.VALUE_CHANGED, this.model.getState());
     }
   }
 

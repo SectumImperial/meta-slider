@@ -10,6 +10,10 @@
     color: white;
     font-size: 13px;
 
+    &:hover {
+      text-shadow: 1px 1px 2px rgb(129, 0, 0);
+    }
+
     &::before {
       content: '';
       position: absolute;

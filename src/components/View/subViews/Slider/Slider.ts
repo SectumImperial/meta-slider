@@ -1,6 +1,9 @@
 import Observer from '../../../../Observer/Observer';
 import {
-  SliderInterface, SliderEventValChangedData, ScaleClickData, ThumbID,
+  SliderInterface,
+  SliderEventValChangedData,
+  ScaleClickData,
+  ThumbID,
 } from '../../../Interfaces';
 import { SLIDER_EVENTS } from '../../../../Observer/events';
 import Progress from '../Progress/Progress';
@@ -61,15 +64,23 @@ class Slider extends Observer {
     this.setState(state);
   }
 
-  public update(data: SliderEventValChangedData | ScaleClickData, event: string): void {
+  static createSlider(): HTMLDivElement {
+    const sliderWrapper = document.createElement('div');
+    sliderWrapper.className = 'plugin-slider';
+    return sliderWrapper;
+  }
+
+  public update(
+    data: SliderEventValChangedData | ScaleClickData,
+    event: string,
+  ): void {
+    const { size } = this.sliderComponents;
+    const scaleSize = this.scaleElement.getBoundingClientRect()[size];
+
     if (event === SLIDER_EVENTS.VALUE_START_CHANGE) {
-      const { size } = this.sliderComponents;
-      const scaleSize = this.scaleElement.getBoundingClientRect()[size];
       const sliderData = { ...data, scaleSize };
       this.emit(SLIDER_EVENTS.DATA_COLLECTED, sliderData);
-    }
-
-    if (event === SLIDER_EVENTS.SCALE_CLICKED || event === SLIDER_EVENTS.KEY_DOWN) {
+    } else {
       this.emit(SLIDER_EVENTS.DATA_COLLECTED, data);
     }
   }
@@ -181,7 +192,7 @@ class Slider extends Observer {
   }
 
   private initSlider(): void {
-    this.slider = this.createSlider();
+    this.slider = Slider.createSlider();
     this.createElements();
     this.addSlider();
   }
@@ -241,13 +252,6 @@ class Slider extends Observer {
 
   private addSlider(): void {
     this.root.append(this.slider);
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  private createSlider(): HTMLDivElement {
-    const sliderWrapper = document.createElement('div');
-    sliderWrapper.className = 'plugin-slider';
-    return sliderWrapper;
   }
 
   private isNeedDoubleTip(): boolean {

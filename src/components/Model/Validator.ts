@@ -57,7 +57,6 @@ class Validator {
     return this.resultObject;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public performMoveToPercent(data: ValidateSliderData): number {
     const {
       coordsMove, scaleSize, keyEvent, thumbId,
@@ -135,6 +134,44 @@ class Validator {
       if (diffFrom > diffTo) return 'valueTo';
     }
     return 'valueTo';
+  }
+
+  public validatePercent(percent: number, value: number, oldState: ModelInterface) {
+    const { isRange } = oldState;
+
+    if (!isRange) {
+      const newDate = { ...oldState, valueFrom: value, thumbPercentFrom: percent };
+      const result = this.validateData(newDate);
+      return result;
+    }
+
+    if (isRange && oldState.thumbPercentTo !== undefined) {
+      const { thumbPercentFrom, thumbPercentTo } = oldState;
+      let thumbPercent = 'thumbPercentFrom';
+      let thumbValue = 'valueFrom';
+
+      if (Number(percent) > thumbPercentTo) {
+        thumbPercent = 'thumbPercentTo';
+        thumbValue = 'valueTo';
+      }
+
+      if (Number(percent) > thumbPercentFrom && Number(percent) < thumbPercentTo) {
+        const differentPercent = thumbPercentTo - thumbPercentFrom;
+        const percentValue = percent - thumbPercentFrom;
+        const middle = differentPercent / 2;
+
+        if (percentValue >= middle) {
+          thumbPercent = 'thumbPercentTo';
+          thumbValue = 'valueTo';
+        }
+      }
+
+      const newDate = { ...oldState, [thumbValue]: value, [thumbPercent]: percent };
+      const result = this.validateData(newDate);
+      return result;
+    }
+
+    return oldState;
   }
 
   private setData(data: ModelInputState): void {

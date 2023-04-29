@@ -26,7 +26,7 @@ class Thumb extends SliderComponents {
   }
 
   private initThumb(): void {
-    this.thumbElement = this.createElement('plugin-slider__thumb');
+    this.thumbElement = SliderComponents.createElement('plugin-slider__thumb');
     this.thumbElement.id = this.thumbId;
     this.thumbElement.tabIndex = 1;
     this.root.append(this.thumbElement);
@@ -53,7 +53,7 @@ class Thumb extends SliderComponents {
       this.thumbElement.style.zIndex = '10';
     }
     if (this.thumbId === 'valueFrom' && this.thumbPercent < 100) {
-      this.thumbElement.style.zIndex = '6';
+      this.thumbElement.style.zIndex = '5';
     }
     if (this.thumbId === 'valueTo' && this.thumbPercent === 0) {
       this.thumbElement.style.zIndex = '10';
