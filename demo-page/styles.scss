@@ -34,6 +34,19 @@
     border: 1px solid rgba(195, 0, 255, 0.904);
     border-radius: 4px;
   }
+
+  &__slider-indicator {
+    width: 45px;
+    height: 10px;
+    background: white;
+    border: 1px solid red;
+    border-radius: 20px;
+    
+    &_active {
+      background: red;
+      box-shadow: 0 0 12px white;
+    }
+  }
 }
 
 .slider {

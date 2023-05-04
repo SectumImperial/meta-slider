@@ -14,6 +14,8 @@ interface ElementPress {
 class DemoSlider {
   root: Element;
 
+  indicator!: Element | null;
+
   form!: Element | null;
 
   min!: number;
@@ -99,7 +101,7 @@ class DemoSlider {
       Elements.forEach((e) => e.addEventListener('change', this.handleItemChange.bind(this)));
     }
 
-    this.content?.addEventListener('mousedown', this.handleContentClick.bind(this));
+    this.content?.addEventListener('mousedown', this.handleContentMouseDown.bind(this));
     this.content?.addEventListener('click', this.handleContentClick.bind(this));
     if (this.thumb) {
       this.thumb?.addEventListener('keydown', this.handleThumbKeyPress.bind(this));
@@ -112,6 +114,8 @@ class DemoSlider {
   }
 
   private handleItemChange(e: InputEvent): void {
+    this.toggleIndicator();
+
     const { target } = e;
     if (target instanceof HTMLInputElement) {
       const { role } = target.dataset;
@@ -135,6 +139,14 @@ class DemoSlider {
         this.updateForm();
       }
     }
+
+    this.toggleIndicator();
+  }
+
+  private toggleIndicator() {
+    if (this.indicator !== null) {
+      this.indicator.classList.toggle('main__slider-indicator_active');
+    }
   }
 
   private addSlider(options: ModelInputState) {
@@ -143,6 +155,7 @@ class DemoSlider {
   }
 
   private findElements() {
+    this.indicator = this.root.querySelector('.main__slider-indicator');
     this.mapElements = new Map();
 
     this.content = this.root.querySelector('.slider__content');
@@ -236,10 +249,20 @@ class DemoSlider {
   }
 
   private handleContentClick() {
-    const update = () => this.updateForm();
+    this.toggleIndicator();
+    this.updateForm();
+    this.toggleIndicator();
+  }
+
+  private handleContentMouseDown() {
+    this.toggleIndicator();
+    const update = () => {
+      this.updateForm();
+    };
     const mouseUp = () => {
       this.content?.removeEventListener('mousemove', update);
       this.content?.removeEventListener('mouseup', mouseUp);
+      this.toggleIndicator();
     };
 
     this.content?.addEventListener('mousemove', update);
@@ -247,15 +270,32 @@ class DemoSlider {
   }
 
   private handleThumbKeyPress(e: KeyboardEvent): void {
+    this.toggleIndicator();
+
     const { key } = e;
     if (key === 'ArrowLeft' || key === 'ArrowUp' || key === 'ArrowRight' || key === 'ArrowDown') {
       this.updateForm();
     }
+
+    this.toggleIndicator();
   }
 
   private handleThumbTouchMove() {
-    this.updateForm();
+    this.toggleIndicator();
+    const handleThumbTouchMoveStart = (e: TouchEvent) => {
+      e.stopImmediatePropagation();
+      this.updateForm();
+    };
+
+    const handleThumbTouchMoveStartEnd = () => {
+      document.removeEventListener('touchmove', handleThumbTouchMoveStart);
+      document.removeEventListener('touchend', handleThumbTouchMoveStartEnd);
+      this.toggleIndicator();
+    };
+
+    document.addEventListener('touchmove', handleThumbTouchMoveStart);
+    document.addEventListener('touchend', handleThumbTouchMoveStartEnd);
   }
 }
 
-document.querySelectorAll('.slider').forEach((e) => new DemoSlider(e));
+document.querySelectorAll('.main__slider').forEach((e) => new DemoSlider(e));
