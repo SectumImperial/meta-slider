@@ -28,21 +28,26 @@ class Scale extends SliderComponents {
   }
 
   private addListeners(): void {
-    this.scale.addEventListener('click', this.handleScaleClick.bind(this));
+    this.scale.addEventListener('mousedown', this.handleScaleMouseDown.bind(this));
   }
 
-  private handleScaleClick(e: MouseEvent): void {
-    const { target } = e;
-    if (!(target as Element).closest('.plugin-slider__scale')) return;
-    if ((target as Element).classList.contains('plugin-slider__mark-value')) return;
+  private handleScaleMouseDown(): void {
+    const scaleMouseUp = (e: MouseEvent) => {
+      const { target } = e;
+      if (!(target as Element).closest('.plugin-slider__scale')) return;
+      if ((target as Element).classList.contains('plugin-slider__mark-value')) return;
 
-    const scaleSize = this.scale.getBoundingClientRect()[this.size];
+      const scaleSize = this.scale.getBoundingClientRect()[this.size];
 
-    const scaleStart = this.scale.getBoundingClientRect()[this.startPoint];
-    const coordsMove = e[this.direction] - scaleStart;
+      const scaleStart = this.scale.getBoundingClientRect()[this.startPoint];
+      const coordsMove = e[this.direction] - scaleStart;
 
-    if (coordsMove > scaleSize || coordsMove < 0) return;
-    this.emitData(coordsMove, scaleSize);
+      if (coordsMove > scaleSize || coordsMove < 0) return;
+      this.emitData(coordsMove, scaleSize);
+      this.scale.removeEventListener('mouseup', scaleMouseUp);
+    };
+
+    this.scale.addEventListener('mouseup', scaleMouseUp);
   }
 
   private emitData(coordsMove: number, scaleSize: number) {

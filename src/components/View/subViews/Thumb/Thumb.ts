@@ -81,6 +81,7 @@ class Thumb extends SliderComponents {
   }
 
   private handleThumbMouseDown(e: MouseEvent): void {
+    e.stopImmediatePropagation();
     e.preventDefault();
     this.moved = e[this.direction] - (this.thumbElement.getBoundingClientRect()[this.startPoint]
       + (this.thumbElement.getBoundingClientRect()[this.size] / 2));
