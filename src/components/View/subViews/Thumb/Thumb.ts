@@ -1,5 +1,5 @@
+import { ThumbArgs, ThumbID } from 'Src/components/Interfaces';
 import SliderComponents from '../SliderComponents/SliderComponents';
-import { ThumbArgs, ThumbID } from '../../../Interfaces';
 import './thumb.scss';
 
 class Thumb extends SliderComponents {
@@ -81,7 +81,6 @@ class Thumb extends SliderComponents {
   }
 
   private handleThumbMouseDown(e: MouseEvent): void {
-    e.stopImmediatePropagation();
     e.preventDefault();
     this.moved = e[this.direction] - (this.thumbElement.getBoundingClientRect()[this.startPoint]
       + (this.thumbElement.getBoundingClientRect()[this.size] / 2));

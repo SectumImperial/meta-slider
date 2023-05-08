@@ -53,6 +53,7 @@ module.exports = {
     filename: filename('js'),
     clean: true,
   },
+
   devServer: {
     open: '/index.html',
     static: {	
@@ -62,8 +63,10 @@ module.exports = {
   },
   optimization: optimization(),
   resolve: {
-    // Add `.ts` and `.tsx` as a resolvable extension.
     extensions: ['.ts', '.tsx', '.js'],
+    alias: {
+      'Src': path.resolve(__dirname, './src'),
+    },
   },
   plugins: [
     new HtmlWebpackPlugin({

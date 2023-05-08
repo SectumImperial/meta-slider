@@ -1,4 +1,4 @@
-import { TipData } from '../../../Interfaces';
+import { TipData } from 'Src/components/Interfaces';
 import SliderComponents from '../SliderComponents/SliderComponents';
 import './tip.scss';
 

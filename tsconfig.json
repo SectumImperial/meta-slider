@@ -3,8 +3,10 @@
     "outDir": "./dist/",
     "module": "es2022",
     "target": "es6",
-    "allowJs": true,
     "moduleResolution": "node",
+    "baseUrl": ".",
+    "strict": true,
+    "allowJs": true,
     "noImplicitAny": true,
     "removeComments": true,
     "preserveConstEnums": true,
@@ -12,19 +14,19 @@
     "esModuleInterop": true,
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
-    "alwaysStrict": true,
     "exactOptionalPropertyTypes": true,
-    "strictNullChecks": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "strictBindCallApply": true,
-    "strictFunctionTypes": true,
-    "strictPropertyInitialization": true,
   },
-  "include": ["demo-page/**/*"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
-} 
+  "include": [
+    "demo-page/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ]
+}

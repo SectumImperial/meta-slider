@@ -1,8 +1,9 @@
-import { ModelInputState, ModelVal, SliderInterface } from '../Interfaces';
+import { MODEL_EVENTS, SLIDER_EVENTS } from 'Src/Observer/events';
+import Observer from 'Src/Observer/Observer';
+import { ModelInputState, ModelVal, SliderInterface } from 'Src/components/Interfaces';
 import View from '../View/View';
-import Observer from '../../Observer/Observer';
-import { MODEL_EVENTS, SLIDER_EVENTS } from '../../Observer/events';
 import ModelFacade from '../Model/ModelFacade';
+
 
 class Presenter extends Observer {
   private modelFacade: ModelFacade;

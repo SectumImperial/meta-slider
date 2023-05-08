@@ -4,7 +4,7 @@ import {
   StepsMap,
   ThumbID,
   ValidateSliderData,
-} from '../Interfaces';
+} from 'Src/components/Interfaces';
 
 class Validator {
   private DEFAULT_GAP = 20;

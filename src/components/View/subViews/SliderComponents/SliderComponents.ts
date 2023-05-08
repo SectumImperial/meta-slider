@@ -1,11 +1,11 @@
-import Observer from '../../../../Observer/Observer';
+import Observer from 'Src/Observer/Observer';
+import { SLIDER_EVENTS } from 'Src/Observer/events';
 import {
   KeyEvent,
   SizeType,
   StartPointType,
   ThumbID,
-} from '../../../Interfaces';
-import { SLIDER_EVENTS } from '../../../../Observer/events';
+} from 'Src/components/Interfaces';
 
 class SliderComponents extends Observer {
   protected scaleElement!: HTMLDivElement;

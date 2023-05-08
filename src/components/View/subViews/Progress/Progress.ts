@@ -1,5 +1,5 @@
+import { ProgressData } from 'Src/components/Interfaces';
 import SliderComponents from '../SliderComponents/SliderComponents';
-import { ProgressData } from '../../../Interfaces';
 import './progress.scss';
 
 class Progress extends SliderComponents {

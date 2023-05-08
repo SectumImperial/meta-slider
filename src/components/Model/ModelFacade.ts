@@ -1,5 +1,5 @@
-import Model from './Model';
-import Validator from './Validator';
+import Observer from 'Src/Observer/Observer';
+import { MODEL_EVENTS } from 'Src/Observer/events';
 import {
   ModelInputState,
   ModelInterface,
@@ -8,9 +8,9 @@ import {
   StepsMap,
   ThumbID,
   ValidateSliderData,
-} from '../Interfaces';
-import Observer from '../../Observer/Observer';
-import { MODEL_EVENTS } from '../../Observer/events';
+} from 'Src/components/Interfaces';
+import Model from './Model';
+import Validator from './Validator';
 
 class ModelFacade extends Observer {
   private model: Model;

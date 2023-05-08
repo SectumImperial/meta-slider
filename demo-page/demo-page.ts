@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { ModelInputState, ModelVal } from '../src/components/Interfaces';
+import { ModelInputState, ModelVal } from 'Src/components/Interfaces';
 import '../src/slider';
 import './styles.scss';
 
