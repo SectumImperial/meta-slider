@@ -1,7 +1,7 @@
 import {
   ModelInterface,
   ModelVal,
-  ThumbID,
+  ThumbId,
   ThumbValPercent,
   HandleMoveModel,
   HandleMoveModelFrom,
@@ -28,7 +28,7 @@ class Model {
     return this.state;
   }
 
-  public updateStateMove(movedTo: number, thumb: ThumbID): void {
+  public updateStateMove(movedTo: number, thumb: ThumbId): void {
     this.findSuitablePercent(movedTo, thumb);
   }
 
@@ -47,7 +47,7 @@ class Model {
     this.stepPercent = Number((this.state.step / this.findValPercent()));
   }
 
-  private findSuitablePercent(percentMove: number, thumb: ThumbID) {
+  private findSuitablePercent(percentMove: number, thumb: ThumbId) {
     const {
       step,
       max,
@@ -196,7 +196,7 @@ class Model {
     return range;
   }
 
-  private updateMoved(val: number, percent: number, thumb: ThumbID): void {
+  private updateMoved(val: number, percent: number, thumb: ThumbId): void {
     if (Number.isNaN(val) || percent === undefined) throw new Error('Something wrong with setting new values');
     const thumbPecent = ThumbValPercent[thumb];
 

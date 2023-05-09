@@ -1,4 +1,4 @@
-import { ThumbArgs, ThumbID } from 'Src/components/Interfaces';
+import { ThumbArgs, ThumbId } from 'Src/components/Interfaces';
 import SliderComponents from '../SliderComponents/SliderComponents';
 import './thumb.scss';
 
@@ -9,7 +9,7 @@ class Thumb extends SliderComponents {
 
   thumbElement!: HTMLDivElement;
 
-  thumbId: ThumbID;
+  thumbId: ThumbId;
 
   constructor(values: ThumbArgs) {
     const {
@@ -22,11 +22,15 @@ class Thumb extends SliderComponents {
     super(root, isVertical);
     this.thumbPercent = thumbPercent;
     this.thumbId = id;
-    this.initThumb();
+
+    this.handleThumbMouseDown = this.handleThumbMouseDown.bind(this);
+    this.handleThumbKeyDown = this.handleThumbKeyDown.bind(this);
+    this.handleThumbTouch = this.handleThumbTouch.bind(this);
+    this.init();
   }
 
-  private initThumb(): void {
-    this.thumbElement = SliderComponents.createElement('plugin-slider__thumb');
+  private init(): void {
+    this.thumbElement = SliderComponents.createElement('plugin-slider__thumb js-plugin-slider__thumb');
     this.thumbElement.id = this.thumbId;
     this.thumbElement.tabIndex = 1;
     this.root.append(this.thumbElement);
@@ -44,7 +48,7 @@ class Thumb extends SliderComponents {
     return this.thumbElement;
   }
 
-  public getThumbId(): ThumbID {
+  public getThumbId(): ThumbId {
     return this.thumbId;
   }
 
@@ -64,11 +68,11 @@ class Thumb extends SliderComponents {
   }
 
   private addListeners(): void {
-    this.thumbElement.addEventListener('mousedown', this.handleThumbMouseDown.bind(this));
-    this.thumbElement.addEventListener('keydown', this.handleThumbKeyDown.bind(this));
+    this.thumbElement.addEventListener('mousedown', this.handleThumbMouseDown);
+    this.thumbElement.addEventListener('keydown', this.handleThumbKeyDown);
     this.thumbElement.addEventListener(
       'touchstart',
-      this.handleThumbTouch.bind(this),
+      this.handleThumbTouch,
     );
   }
 

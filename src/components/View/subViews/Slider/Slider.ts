@@ -4,7 +4,7 @@ import {
   SliderInterface,
   SliderEventValChangedData,
   ScaleClickData,
-  ThumbID,
+  ThumbId,
 } from 'Src/components/Interfaces';
 import Progress from '../Progress/Progress';
 import Scale from '../Scale/Scale';
@@ -66,7 +66,7 @@ class Slider extends Observer {
 
   static createSlider(): HTMLDivElement {
     const sliderWrapper = document.createElement('div');
-    sliderWrapper.className = 'plugin-slider';
+    sliderWrapper.className = 'plugin-slider js-plugin-slider';
     return sliderWrapper;
   }
 
@@ -120,7 +120,7 @@ class Slider extends Observer {
     }
   }
 
-  private setThumb(id: ThumbID, thumbPercent: number) {
+  private setThumb(id: ThumbId, thumbPercent: number) {
     const thumb = id === 'valueTo' ? 'thumbTo' : 'thumbFrom';
     this[thumb] = new Thumb({
       root: this.scaleElement,

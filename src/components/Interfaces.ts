@@ -34,7 +34,7 @@ interface SliderInterface extends ModelInterface {
 
 type ModelVal = 'min' | 'max' | 'valueFrom' | 'step' | 'valueTo' | 'scaleMarks' | 'scalePercentGap'
   | 'isTip' | 'isProgress' | 'isRange' | 'isVertical';
-type ThumbID = 'valueFrom' | 'valueTo'
+type ThumbId = 'valueFrom' | 'valueTo'
 type StartPointType = 'top' | 'left';
 type SizeType = 'height' | 'width';
 
@@ -45,19 +45,19 @@ const ThumbValPercent = {
 
 interface HandleMoveModel {
   value: number | undefined,
-  thumb: ThumbID,
+  thumb: ThumbId,
   percent: number,
 }
 
 interface HandleMoveModelFrom {
   value: number | undefined,
-  thumb: ThumbID,
+  thumb: ThumbId,
   percent: number,
 }
 
 interface HandleMoveModelTo {
   value: number | undefined,
-  thumb: ThumbID,
+  thumb: ThumbId,
   percent: number,
 }
 
@@ -65,7 +65,7 @@ type KeyEvent = 'decrement' | 'increment';
 
 interface SliderEventValChangedData {
   coordsMove: number,
-  thumbId: ThumbID,
+  thumbId: ThumbId,
   isVertical: boolean,
   keyEvent?: KeyEvent,
 }
@@ -103,7 +103,7 @@ interface isValTheSamePos {
   valueAnotherThumb: number | undefined,
   thumbPercent: number | undefined,
   thumb: string,
-  idVal: ThumbID;
+  idVal: ThumbId;
 }
 
 type StepsMap = Map<number, number>;
@@ -111,7 +111,7 @@ type StepsMap = Map<number, number>;
 interface ThumbArgs {
   root: HTMLElement,
   thumbPercent: number,
-  id: ThumbID,
+  id: ThumbId,
   isVertical: boolean,
 }
 
@@ -119,7 +119,7 @@ interface ModelSetVal {
   halfMove: number,
   halfStep: number,
   nearStepPercent: number,
-  thumb: ThumbID
+  thumb: ThumbId
 }
 
 export {
@@ -127,7 +127,7 @@ export {
   ModelVal,
   SliderInterface,
   ValidateSliderData,
-  ThumbID,
+  ThumbId,
   ThumbValPercent,
   HandleMoveModel,
   HandleMoveModelFrom,

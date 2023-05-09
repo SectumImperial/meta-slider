@@ -7,7 +7,9 @@ class Scale extends SliderComponents {
 
   constructor(root: HTMLDivElement, isVertical: boolean) {
     super(root, isVertical);
-    this.initScale();
+
+    this.handleScaleMouseDown = this.handleScaleMouseDown.bind(this);
+    this.init();
   }
 
   public getScale(): HTMLDivElement {
@@ -15,8 +17,8 @@ class Scale extends SliderComponents {
     return this.scale;
   }
 
-  private initScale(): void {
-    this.scale = SliderComponents.createElement('plugin-slider__scale');
+  private init(): void {
+    this.scale = SliderComponents.createElement('plugin-slider__scale js-plugin-slider__scale');
     if (this.isVertical) this.scale.classList.add('plugin-slider__scale_vertical');
     if (!this.isVertical) this.scale.classList.add('plugin-slider__scale_horizontal');
     this.addScale();
@@ -28,7 +30,7 @@ class Scale extends SliderComponents {
   }
 
   private addListeners(): void {
-    this.scale.addEventListener('pointerdown', this.handleScaleMouseDown.bind(this));
+    this.scale.addEventListener('pointerdown', this.handleScaleMouseDown);
   }
 
   private handleScaleMouseDown(e: PointerEvent): void {

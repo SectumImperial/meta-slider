@@ -2,7 +2,7 @@ import {
   ModelInputState,
   ModelInterface,
   StepsMap,
-  ThumbID,
+  ThumbId,
   ValidateSliderData,
 } from 'Src/components/Interfaces';
 
@@ -119,7 +119,7 @@ class Validator {
     return mapSteps;
   }
 
-  public validateThumbId(movedTo: number): ThumbID {
+  public validateThumbId(movedTo: number): ThumbId {
     if (!this.isRange) return 'valueFrom';
     if (movedTo < this.thumbPercentFrom) return 'valueFrom';
     if (this.thumbPercentTo !== undefined && movedTo > this.thumbPercentTo) return 'valueTo';
@@ -310,7 +310,7 @@ class Validator {
     }
   }
 
-  private checkPercent(value: ThumbID = 'valueFrom'): number {
+  private checkPercent(value: ThumbId = 'valueFrom'): number {
     const valOfRange = this[value] - this.min;
     const currentPercent = Number((valOfRange / (this.findRange() / 100)).toFixed(3));
     return currentPercent;

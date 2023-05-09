@@ -64,6 +64,12 @@ class DemoSlider {
 
   constructor(root: Element) {
     this.root = root;
+
+    this.handleItemChange = this.handleItemChange.bind(this);
+    this.handleContentMouseDown = this.handleContentMouseDown.bind(this);
+    this.handleContentClick = this.handleContentClick.bind(this);
+    this.handleThumbKeyPress = this.handleThumbKeyPress.bind(this);
+    this.handleThumbTouchMove = this.handleThumbTouchMove.bind(this);
     this.init();
   }
 
@@ -91,23 +97,23 @@ class DemoSlider {
 
   private addListeners() {
     if (this.form) {
-      const Elements: ElementListener[] = [];
+      const elements: ElementListener[] = [];
       this.form.querySelectorAll('.slider__input').forEach((e) => {
         if (e) {
-          Elements.push(e);
+          elements.push(e);
         }
       });
 
-      Elements.forEach((e) => e.addEventListener('change', this.handleItemChange.bind(this)));
+      elements.forEach((e) => e.addEventListener('change', this.handleItemChange));
     }
 
-    this.content?.addEventListener('mousedown', this.handleContentMouseDown.bind(this));
-    this.content?.addEventListener('click', this.handleContentClick.bind(this));
+    this.content?.addEventListener('mousedown', this.handleContentMouseDown);
+    this.content?.addEventListener('click', this.handleContentClick);
     if (this.thumb) {
-      this.thumb?.addEventListener('keydown', this.handleThumbKeyPress.bind(this));
+      this.thumb?.addEventListener('keydown', this.handleThumbKeyPress);
       this.thumb?.addEventListener(
         'touchmove',
-        this.handleThumbTouchMove.bind(this),
+        this.handleThumbTouchMove,
         { passive: true },
       );
     }

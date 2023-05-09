@@ -4,7 +4,7 @@ import {
   KeyEvent,
   SizeType,
   StartPointType,
-  ThumbID,
+  ThumbId,
 } from 'Src/components/Interfaces';
 
 class SliderComponents extends Observer {
@@ -58,7 +58,7 @@ class SliderComponents extends Observer {
     document.addEventListener('mouseup', handleThumbMouseUp);
   }
 
-  protected performTouchMove(thumbPos: number, id: ThumbID): void {
+  protected performTouchMove(thumbPos: number, id: ThumbId): void {
     const handleThumbTouchMove = (e: TouchEvent) => {
       e.stopImmediatePropagation();
       const elemSize = this.root.getBoundingClientRect()[this.startPoint];
@@ -78,7 +78,7 @@ class SliderComponents extends Observer {
     document.addEventListener('touchend', handleThumbTouchEnd);
   }
 
-  protected performKeyDown(keyEvent: KeyEvent, id: ThumbID): void {
+  protected performKeyDown(keyEvent: KeyEvent, id: ThumbId): void {
     this.emit(SLIDER_EVENTS.KEY_DOWN, {
       keyEvent,
       thumbId: id,

@@ -6,7 +6,7 @@ import {
   ModelVal,
   SliderInterface,
   StepsMap,
-  ThumbID,
+  ThumbId,
   ValidateSliderData,
 } from 'Src/components/Interfaces';
 import Model from './Model';
@@ -66,7 +66,7 @@ class ModelFacade extends Observer {
       if (movedTo === this.prevMove) return;
 
       this.prevMove = movedTo;
-      this.model.updateStateMove(movedTo, thumbId as ThumbID);
+      this.model.updateStateMove(movedTo, thumbId as ThumbId);
       const newState = this.model.getState();
       const validState = this.validator.validateData(newState);
       this.model.setState(validState);

@@ -7,6 +7,8 @@ class ScaleMarks extends SliderComponents {
   constructor(root: HTMLDivElement, marks: Map<number, number>, isVertical: boolean) {
     super(root, isVertical);
     this.marks = marks;
+
+    this.handleRootClick = this.handleRootClick.bind(this);
     this.init();
   }
 
@@ -16,7 +18,7 @@ class ScaleMarks extends SliderComponents {
   }
 
   private addListeners(): void {
-    this.root.addEventListener('click', this.handleRootClick.bind(this));
+    this.root.addEventListener('click', this.handleRootClick);
   }
 
   private handleRootClick(e: Event) {
@@ -35,7 +37,7 @@ class ScaleMarks extends SliderComponents {
   }
 
   private createMark(percent: number, value: number): void {
-    const mark = SliderComponents.createElement('plugin-slider__mark');
+    const mark = SliderComponents.createElement('plugin-slider__mark js-plugin-slider__mark');
     mark.classList.add(`plugin-slider__mark_${this.mod}`);
     mark.style[this.startPoint] = `${percent}%`;
 
