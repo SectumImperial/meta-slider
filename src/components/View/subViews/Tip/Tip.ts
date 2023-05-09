@@ -5,9 +5,9 @@ import './tip.scss';
 class Tip extends SliderComponents {
   tip: HTMLDivElement;
 
-  private percentPosition: number;
-
   valueTip: number | string;
+
+  private percentPosition: number;
 
   constructor(data: TipData) {
     const {

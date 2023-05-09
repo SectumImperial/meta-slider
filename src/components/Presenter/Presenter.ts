@@ -4,7 +4,6 @@ import { ModelInputState, ModelVal, SliderInterface } from 'Src/components/Inter
 import View from '../View/View';
 import ModelFacade from '../Model/ModelFacade';
 
-
 class Presenter extends Observer {
   private modelFacade: ModelFacade;
 

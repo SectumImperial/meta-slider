@@ -8,6 +8,8 @@ import {
 } from 'Src/components/Interfaces';
 
 class SliderComponents extends Observer {
+  readonly size: SizeType;
+
   protected scaleElement!: HTMLDivElement;
 
   protected readonly root: Element;
@@ -15,8 +17,6 @@ class SliderComponents extends Observer {
   protected readonly direction: 'clientY' | 'clientX';
 
   protected readonly startPoint: StartPointType;
-
-  readonly size: SizeType;
 
   protected readonly mod: 'vertical' | 'horizontal';
 
