@@ -23,7 +23,7 @@ class Thumb extends SliderComponents {
     this.thumbPercent = thumbPercent;
     this.thumbId = id;
 
-    this.handleThumbMouseDown = this.handleThumbMouseDown.bind(this);
+    this.handleThumbPointerDown = this.handleThumbPointerDown.bind(this);
     this.handleThumbKeyDown = this.handleThumbKeyDown.bind(this);
     this.handleThumbTouch = this.handleThumbTouch.bind(this);
     this.init();
@@ -68,7 +68,7 @@ class Thumb extends SliderComponents {
   }
 
   private addListeners(): void {
-    this.thumbElement.addEventListener('mousedown', this.handleThumbMouseDown);
+    this.thumbElement.addEventListener('pointerdown', this.handleThumbPointerDown);
     this.thumbElement.addEventListener('keydown', this.handleThumbKeyDown);
     this.thumbElement.addEventListener(
       'touchstart',
@@ -84,12 +84,12 @@ class Thumb extends SliderComponents {
     super.performTouchMove(this.moved, this.thumbId);
   }
 
-  private handleThumbMouseDown(e: MouseEvent): void {
+  private handleThumbPointerDown(e: PointerEvent): void {
     e.preventDefault();
     this.moved = e[this.direction] - (this.thumbElement.getBoundingClientRect()[this.startPoint]
       + (this.thumbElement.getBoundingClientRect()[this.size] / 2));
     this.checkZInd();
-    super.performMouseMove(this.moved, this.thumbId);
+    super.performPointerMove(this.moved, this.thumbId);
   }
 
   private handleThumbKeyDown(e: KeyboardEvent): void {

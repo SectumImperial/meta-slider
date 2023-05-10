@@ -66,7 +66,7 @@ class DemoSlider {
     this.root = root;
 
     this.handleItemChange = this.handleItemChange.bind(this);
-    this.handleContentMouseDown = this.handleContentMouseDown.bind(this);
+    this.handleContentPointerDown = this.handleContentPointerDown.bind(this);
     this.handleContentClick = this.handleContentClick.bind(this);
     this.handleThumbKeyPress = this.handleThumbKeyPress.bind(this);
     this.handleThumbTouchMove = this.handleThumbTouchMove.bind(this);
@@ -107,7 +107,7 @@ class DemoSlider {
       elements.forEach((e) => e.addEventListener('change', this.handleItemChange));
     }
 
-    this.content?.addEventListener('mousedown', this.handleContentMouseDown);
+    this.content?.addEventListener('pointerdown', this.handleContentPointerDown);
     this.content?.addEventListener('click', this.handleContentClick);
     if (this.thumb) {
       this.thumb?.addEventListener('keydown', this.handleThumbKeyPress);
@@ -260,19 +260,19 @@ class DemoSlider {
     this.toggleIndicator();
   }
 
-  private handleContentMouseDown() {
+  private handleContentPointerDown() {
     this.toggleIndicator();
-    const update = () => {
+    const handlePointerMove = () => {
       this.updateForm();
     };
-    const mouseUp = () => {
-      this.content?.removeEventListener('mousemove', update);
-      this.content?.removeEventListener('mouseup', mouseUp);
+    const handlePointerUp = () => {
+      this.content?.removeEventListener('pointermove', handlePointerMove);
+      this.content?.removeEventListener('pointerup', handlePointerUp);
       this.toggleIndicator();
     };
 
-    this.content?.addEventListener('mousemove', update);
-    this.content?.addEventListener('mouseup', mouseUp);
+    this.content?.addEventListener('pointermove', handlePointerMove);
+    this.content?.addEventListener('pointerup', handlePointerUp);
   }
 
   private handleThumbKeyPress(e: KeyboardEvent): void {

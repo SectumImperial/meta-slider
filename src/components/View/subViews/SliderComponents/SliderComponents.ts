@@ -38,8 +38,8 @@ class SliderComponents extends Observer {
     return element;
   }
 
-  protected performMouseMove(thumbPos: number, id: string): void {
-    const handleThumbMouseMove = (e: MouseEvent) => {
+  protected performPointerMove(thumbPos: number, id: string): void {
+    const handleThumbPointerMove = (e: PointerEvent) => {
       e.preventDefault();
       const elemSize = this.root.getBoundingClientRect()[this.startPoint];
       const newPos = e[this.direction] - thumbPos - elemSize;
@@ -49,13 +49,13 @@ class SliderComponents extends Observer {
       });
     };
 
-    const handleThumbMouseUp = () => {
-      document.removeEventListener('mousemove', handleThumbMouseMove);
-      document.removeEventListener('mouseup', handleThumbMouseUp);
+    const handleThumbPointerUp = () => {
+      document.removeEventListener('pointermove', handleThumbPointerMove);
+      document.removeEventListener('pointerup', handleThumbPointerUp);
     };
 
-    document.addEventListener('mousemove', handleThumbMouseMove);
-    document.addEventListener('mouseup', handleThumbMouseUp);
+    document.addEventListener('pointermove', handleThumbPointerMove);
+    document.addEventListener('pointerup', handleThumbPointerUp);
   }
 
   protected performTouchMove(thumbPos: number, id: ThumbId): void {

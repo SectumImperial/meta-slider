@@ -8,7 +8,7 @@ class Scale extends SliderComponents {
   constructor(root: HTMLDivElement, isVertical: boolean) {
     super(root, isVertical);
 
-    this.handleScaleMouseDown = this.handleScaleMouseDown.bind(this);
+    this.handleScalePointerDown = this.handleScalePointerDown.bind(this);
     this.init();
   }
 
@@ -30,10 +30,10 @@ class Scale extends SliderComponents {
   }
 
   private addListeners(): void {
-    this.scale.addEventListener('pointerdown', this.handleScaleMouseDown);
+    this.scale.addEventListener('pointerdown', this.handleScalePointerDown);
   }
 
-  private handleScaleMouseDown(e: PointerEvent): void {
+  private handleScalePointerDown(e: PointerEvent): void {
     const { target } = e;
     if (!(target as Element).closest('.plugin-slider__scale')) return;
     if ((target as Element).classList.contains('plugin-slider__mark-value')) return;
