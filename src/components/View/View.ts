@@ -12,7 +12,7 @@ class View extends Observer {
 
   constructor(root: Element, protected readonly state: SliderOptions) {
     super();
-    this.initView(root, state);
+    this.init(root, state);
   }
 
   public updateSlider(data: SliderOptions): void {
@@ -28,7 +28,7 @@ class View extends Observer {
     }
   }
 
-  private initView(root: Element, state: SliderOptions): void {
+  private init(root: Element, state: SliderOptions): void {
     const { isRange } = state;
     this.root = root;
     this.isRange = isRange;

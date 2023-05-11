@@ -60,7 +60,7 @@ class Slider extends Observer {
   constructor(root: Element, protected readonly state: SliderOptions) {
     super();
     this.createVariables(root, state);
-    this.initSlider();
+    this.init();
     this.setState(state);
   }
 
@@ -191,7 +191,7 @@ class Slider extends Observer {
     }
   }
 
-  private initSlider(): void {
+  private init(): void {
     this.slider = Slider.createSlider();
     this.createElements();
     this.addSlider();
