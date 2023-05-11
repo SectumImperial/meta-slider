@@ -2,9 +2,9 @@ import Observer from 'Src/Observer/Observer';
 import { MODEL_EVENTS } from 'Src/Observer/events';
 import {
   ModelInputState,
-  ModelInterface,
+  ModelOptions,
   ModelVal,
-  SliderInterface,
+  SliderOptions,
   StepsMap,
   ThumbId,
   ValidateSliderData,
@@ -17,7 +17,7 @@ class ModelFacade extends Observer {
 
   private validator: Validator;
 
-  private validState: ModelInterface;
+  private validState: ModelOptions;
 
   private prevMove!: number;
 
@@ -33,7 +33,7 @@ class ModelFacade extends Observer {
     this.model.setState(validState);
   }
 
-  public getState(): SliderInterface {
+  public getState(): SliderOptions {
     if (this.model.getState().scaleMarks) {
       const sliderMarks = this.validGapMarks();
       return {

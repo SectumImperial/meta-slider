@@ -1,5 +1,5 @@
 import {
-  ModelInterface,
+  ModelOptions,
   ModelVal,
   ThumbId,
   ThumbValPercent,
@@ -10,11 +10,11 @@ import {
 } from 'Src/components/Interfaces';
 
 class Model {
-  private state: ModelInterface;
+  private state: ModelOptions;
 
   private stepPercent!: number;
 
-  constructor(state: ModelInterface) {
+  constructor(state: ModelOptions) {
     this.state = state;
     this.init();
   }
@@ -24,7 +24,7 @@ class Model {
     this.state = { ...oldState, ...state };
   }
 
-  public getState(): ModelInterface {
+  public getState(): ModelOptions {
     return this.state;
   }
 

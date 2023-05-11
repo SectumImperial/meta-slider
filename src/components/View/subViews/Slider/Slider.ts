@@ -1,7 +1,7 @@
 import Observer from 'Src/Observer/Observer';
 import { SLIDER_EVENTS } from 'Src/Observer/events';
 import {
-  SliderInterface,
+  SliderOptions,
   SliderEventValChangedData,
   ScaleClickData,
   ThumbId,
@@ -57,7 +57,7 @@ class Slider extends Observer {
 
   isScaleMarks!: boolean;
 
-  constructor(root: Element, protected readonly state: SliderInterface) {
+  constructor(root: Element, protected readonly state: SliderOptions) {
     super();
     this.createVariables(root, state);
     this.initSlider();
@@ -85,7 +85,7 @@ class Slider extends Observer {
     }
   }
 
-  public setState(data: SliderInterface): void {
+  public setState(data: SliderOptions): void {
     const {
       thumbPercentFrom,
       valueFrom,
@@ -197,7 +197,7 @@ class Slider extends Observer {
     this.addSlider();
   }
 
-  private createVariables(root: Element, state: SliderInterface): void {
+  private createVariables(root: Element, state: SliderOptions): void {
     const {
       isTip,
       valueFrom,

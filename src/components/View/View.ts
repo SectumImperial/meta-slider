@@ -1,6 +1,6 @@
 import Observer from 'Src/Observer/Observer';
 import { SLIDER_EVENTS } from 'Src/Observer/events';
-import { SliderInterface } from 'Src/components/Interfaces';
+import { SliderOptions } from 'Src/components/Interfaces';
 import Slider from './subViews/Slider/Slider';
 
 class View extends Observer {
@@ -10,16 +10,16 @@ class View extends Observer {
 
   protected isRange!: boolean;
 
-  constructor(root: Element, protected readonly state: SliderInterface) {
+  constructor(root: Element, protected readonly state: SliderOptions) {
     super();
     this.initView(root, state);
   }
 
-  public updateSlider(data: SliderInterface): void {
+  public updateSlider(data: SliderOptions): void {
     this.slider.setState(data);
   }
 
-  public update(data: SliderInterface, event: string): void {
+  public update(data: SliderOptions, event: string): void {
     if (event === SLIDER_EVENTS.DATA_COLLECTED) {
       this.emit(SLIDER_EVENTS.VALUE_CHANGED, data);
     }
@@ -28,7 +28,7 @@ class View extends Observer {
     }
   }
 
-  private initView(root: Element, state: SliderInterface): void {
+  private initView(root: Element, state: SliderOptions): void {
     const { isRange } = state;
     this.root = root;
     this.isRange = isRange;

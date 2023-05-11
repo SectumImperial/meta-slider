@@ -1,6 +1,6 @@
 import { MODEL_EVENTS, SLIDER_EVENTS } from 'Src/Observer/events';
 import Observer from 'Src/Observer/Observer';
-import { ModelInputState, ModelVal, SliderInterface } from 'Src/components/Interfaces';
+import { ModelInputState, ModelVal, SliderOptions } from 'Src/components/Interfaces';
 import View from '../View/View';
 import ModelFacade from '../Model/ModelFacade';
 
@@ -17,7 +17,7 @@ class Presenter extends Observer {
     this.subscribeSlider();
   }
 
-  public getState(): SliderInterface {
+  public getState(): SliderOptions {
     return this.modelFacade.getState();
   }
 

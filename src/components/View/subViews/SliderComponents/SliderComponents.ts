@@ -2,13 +2,13 @@ import Observer from 'Src/Observer/Observer';
 import { SLIDER_EVENTS } from 'Src/Observer/events';
 import {
   KeyEvent,
-  SizeType,
-  StartPointType,
+  SizePoint,
+  StartPoint,
   ThumbId,
 } from 'Src/components/Interfaces';
 
 class SliderComponents extends Observer {
-  readonly size: SizeType;
+  readonly size: SizePoint;
 
   protected scaleElement!: HTMLDivElement;
 
@@ -16,7 +16,7 @@ class SliderComponents extends Observer {
 
   protected readonly direction: 'clientY' | 'clientX';
 
-  protected readonly startPoint: StartPointType;
+  protected readonly startPoint: StartPoint;
 
   protected readonly mod: 'vertical' | 'horizontal';
 

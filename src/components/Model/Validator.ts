@@ -1,6 +1,6 @@
 import {
   ModelInputState,
-  ModelInterface,
+  ModelOptions,
   StepsMap,
   ThumbId,
   ValidateSliderData,
@@ -17,7 +17,7 @@ class Validator {
 
   private step!: number;
 
-  private resultObject!: ModelInterface;
+  private resultObject!: ModelOptions;
 
   private stepPercent!: number;
 
@@ -43,7 +43,7 @@ class Validator {
     this.validateData(data);
   }
 
-  public validateData(data: ModelInputState): ModelInterface {
+  public validateData(data: ModelInputState): ModelOptions {
     const prevBool = this.setBooleans(data);
     this.setData(data);
     this.resultObject = {
@@ -136,7 +136,7 @@ class Validator {
     return 'valueTo';
   }
 
-  public validatePercent(percent: number, value: number, oldState: ModelInterface) {
+  public validatePercent(percent: number, value: number, oldState: ModelOptions) {
     const { isRange } = oldState;
 
     if (!isRange) {

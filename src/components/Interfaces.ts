@@ -1,4 +1,4 @@
-interface ModelInterface {
+interface ModelOptions {
   min: number,
   max: number,
   valueFrom: number,
@@ -28,15 +28,15 @@ interface ModelInputState {
   isVertical: boolean
 }
 
-interface SliderInterface extends ModelInterface {
+interface SliderOptions extends ModelOptions {
   scaleMap?: Map<number, number>
 }
 
 type ModelVal = 'min' | 'max' | 'valueFrom' | 'step' | 'valueTo' | 'scaleMarks' | 'scalePercentGap'
   | 'isTip' | 'isProgress' | 'isRange' | 'isVertical';
 type ThumbId = 'valueFrom' | 'valueTo'
-type StartPointType = 'top' | 'left';
-type SizeType = 'height' | 'width';
+type StartPoint = 'top' | 'left';
+type SizePoint = 'height' | 'width';
 
 const ThumbValPercent = {
   valueFrom: 'thumbPercentFrom',
@@ -123,9 +123,9 @@ interface ModelSetVal {
 }
 
 export {
-  ModelInterface,
+  ModelOptions,
   ModelVal,
-  SliderInterface,
+  SliderOptions,
   ValidateSliderData,
   ThumbId,
   ThumbValPercent,
@@ -137,8 +137,8 @@ export {
   TipData,
   isValTheSamePos,
   StepsMap,
-  StartPointType,
-  SizeType,
+  StartPoint,
+  SizePoint,
   ThumbArgs,
   ScaleClickData,
   ModelSetVal,
