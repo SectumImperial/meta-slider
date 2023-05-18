@@ -3,11 +3,11 @@ import SliderComponents from '../SliderComponents/SliderComponents';
 import './thumb.scss';
 
 class Thumb extends SliderComponents {
-  moved!: number;
+  moved?: number;
 
   thumbPercent: number;
 
-  thumbElement!: HTMLDivElement;
+  thumbElement?: HTMLDivElement;
 
   thumbId: ThumbId;
 
@@ -41,10 +41,12 @@ class Thumb extends SliderComponents {
   public setPosition(thumbPercent: number): void {
     this.thumbPercent = thumbPercent;
     this.checkZInd();
-    this.thumbElement.style[this.startPoint] = `${this.thumbPercent}%`;
+    if (this.thumbElement !== undefined) {
+      this.thumbElement.style[this.startPoint] = `${this.thumbPercent}%`;
+    }
   }
 
-  public getThumb(): HTMLDivElement {
+  public getThumb(): HTMLDivElement | undefined {
     return this.thumbElement;
   }
 
@@ -53,6 +55,7 @@ class Thumb extends SliderComponents {
   }
 
   private checkZInd(): void {
+    if (this.thumbElement === undefined) return;
     if (this.thumbId === 'valueFrom' && this.thumbPercent === 100) {
       this.thumbElement.style.zIndex = '10';
     }
@@ -68,6 +71,7 @@ class Thumb extends SliderComponents {
   }
 
   private addListeners(): void {
+    if (this.thumbElement === undefined) return;
     this.thumbElement.addEventListener('pointerdown', this.handleThumbPointerDown);
     this.thumbElement.addEventListener('keydown', this.handleThumbKeyDown);
     this.thumbElement.addEventListener(
@@ -78,6 +82,7 @@ class Thumb extends SliderComponents {
 
   private handleThumbTouch(e: TouchEvent): void {
     e.preventDefault();
+    if (this.thumbElement === undefined) return;
     const sizeElement = this.thumbElement.getBoundingClientRect()[this.startPoint];
     this.moved = e.touches[0][this.direction] - (sizeElement
       + (this.thumbElement.getBoundingClientRect()[this.size] / 2));
@@ -86,6 +91,7 @@ class Thumb extends SliderComponents {
 
   private handleThumbPointerDown(e: PointerEvent): void {
     e.preventDefault();
+    if (this.thumbElement === undefined) return;
     this.moved = e[this.direction] - (this.thumbElement.getBoundingClientRect()[this.startPoint]
       + (this.thumbElement.getBoundingClientRect()[this.size] / 2));
     this.checkZInd();

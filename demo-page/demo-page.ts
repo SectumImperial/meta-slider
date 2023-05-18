@@ -14,41 +14,41 @@ interface ElementPress {
 class DemoSlider {
   root: Element;
 
-  indicator!: Element | null;
+  indicator?: Element | null;
 
-  form!: Element | null;
+  form?: Element | null;
 
-  min!: number;
+  min?: number;
 
-  max!: number;
+  max?: number;
 
-  step!: number | null;
+  step?: number | null;
 
-  from!: number | null;
+  from?: number | null;
 
-  to!: number | null;
+  to?: number | null;
 
-  gap!: number | null;
+  gap?: number | null;
 
-  range!: boolean;
+  range?: boolean;
 
-  marks!: boolean;
+  marks?: boolean;
 
-  tip!: boolean;
+  tip?: boolean;
 
-  progress!: boolean;
+  progress?: boolean;
 
-  vertical!: boolean;
+  vertical?: boolean;
 
-  content!: Element | null;
+  content?: Element | null;
 
-  mapElements!: Map<string, ModelVal>;
+  mapElements?: Map<string, ModelVal>;
 
-  slider!: import('../src/components/Presenter/Presenter').default;
+  slider?: import('../src/components/Presenter/Presenter').default;
 
   thumb?: ElementPress | null;
 
-  stateObject!: {
+  stateObject?: {
     min: number;
     max: number;
     valueFrom: number;
@@ -75,6 +75,11 @@ class DemoSlider {
 
   private init() {
     this.findElements();
+    if (this.min === undefined || this.max === undefined
+      || this.marks === undefined || this.tip === undefined
+      || this.progress === undefined || this.range === undefined
+      || this.vertical === undefined) return;
+
     this.stateObject = {
       min: this.min,
       max: this.max,
@@ -121,7 +126,7 @@ class DemoSlider {
 
   private handleItemChange(e: InputEvent): void {
     this.toggleIndicator();
-
+    if (this.mapElements === undefined || this.slider === undefined) return;
     const { target } = e;
     if (target instanceof HTMLInputElement) {
       const { role } = target.dataset;
@@ -150,7 +155,7 @@ class DemoSlider {
   }
 
   private toggleIndicator() {
-    if (this.indicator !== null) {
+    if (this.indicator !== undefined && this.indicator !== null) {
       this.indicator.classList.toggle('main__slider-indicator_active');
     }
   }
@@ -234,9 +239,11 @@ class DemoSlider {
   }
 
   private updateForm() {
+    if (this.mapElements === undefined) return;
     this.mapElements.forEach((key: ModelVal, value: string) => {
       const element = this.form?.querySelector(`.slider__input[data-role = ${value}]`);
       if (element instanceof HTMLInputElement) {
+        if (this.slider === undefined) return;
         if (element && typeof this.slider.getValue(key) === 'number') {
           element.value = `${this.slider.getValue(`${key}`)}`;
         }

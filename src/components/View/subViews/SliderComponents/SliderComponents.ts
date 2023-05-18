@@ -10,7 +10,7 @@ import {
 class SliderComponents extends Observer {
   readonly size: SizePoint;
 
-  protected scaleElement!: HTMLDivElement;
+  protected scaleElement?: HTMLDivElement;
 
   protected readonly root: Element;
 

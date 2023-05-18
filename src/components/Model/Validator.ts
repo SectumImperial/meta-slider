@@ -9,37 +9,41 @@ import {
 class Validator {
   private DEFAULT_GAP = 20;
 
-  private min!: number;
+  private min: number;
 
-  private max!: number;
+  private max: number;
 
-  private valueFrom!: number;
+  private valueFrom: number;
 
-  private step!: number;
+  private step: number;
 
-  private resultObject!: ModelOptions;
+  private resultObject?: ModelOptions;
 
-  private stepPercent!: number;
+  private stepPercent?: number;
 
-  private valueTo!: number;
+  private valueTo?: number;
 
-  private thumbPercentFrom!: number;
+  private thumbPercentFrom?: number;
 
   private thumbPercentTo?: number;
 
   private scalePercentGap: number | undefined;
 
-  private isTip!: boolean;
+  private isTip?: boolean;
 
-  private isVertical!: boolean;
+  private isVertical?: boolean;
 
-  private isProgress!: boolean;
+  private isProgress?: boolean;
 
-  private scaleMarks!: boolean;
+  private scaleMarks?: boolean;
 
-  private isRange!: boolean;
+  private isRange?: boolean;
 
   constructor(readonly data: ModelInputState) {
+    this.min = 0;
+    this.max = 100;
+    this.valueFrom = 0;
+    this.step = 1;
     this.validateData(data);
   }
 
@@ -62,7 +66,7 @@ class Validator {
       coordsMove, scaleSize, keyEvent, thumbId,
     } = data;
 
-    if (keyEvent) {
+    if (keyEvent && this.stepPercent !== undefined && this.thumbPercentFrom !== undefined) {
       if (keyEvent === 'increment' && thumbId === 'valueFrom') {
         return this.thumbPercentFrom + this.stepPercent;
       }
@@ -120,6 +124,7 @@ class Validator {
   }
 
   public validateThumbId(movedTo: number): ThumbId {
+    if (this.thumbPercentFrom === undefined) return 'valueTo';
     if (!this.isRange) return 'valueFrom';
     if (movedTo < this.thumbPercentFrom) return 'valueFrom';
     if (this.thumbPercentTo !== undefined && movedTo > this.thumbPercentTo) return 'valueTo';
@@ -231,6 +236,7 @@ class Validator {
   }
 
   private checkRange(): void {
+    if (this.resultObject === undefined) return;
     if (Number.isNaN(this.min)) this.min = 0;
     if (Number.isNaN(this.max)) this.max = 10;
     if (this.min === this.max) {
@@ -245,6 +251,7 @@ class Validator {
   }
 
   private checkStep(): void {
+    if (this.resultObject === undefined) return;
     if (Number.isNaN(this.step)) this.step = 1;
     const allRange = this.findRange();
 
@@ -264,7 +271,7 @@ class Validator {
   private checkValues(): void {
     this.valueFrom = this.checkValue(this.valueFrom);
 
-    if (this.isRange) {
+    if (this.isRange && this.valueTo !== undefined) {
       this.valueTo = this.checkValue(this.valueTo);
     }
 
@@ -272,6 +279,7 @@ class Validator {
       [this.valueFrom, this.valueTo] = [this.valueTo, this.valueFrom];
     }
 
+    if (this.resultObject === undefined) return;
     this.resultObject.valueFrom = this.valueFrom;
     if (this.isRange) this.resultObject.valueTo = this.valueTo;
   }
@@ -302,6 +310,7 @@ class Validator {
   }
 
   private checkPercents(): void {
+    if (this.resultObject === undefined) return;
     this.thumbPercentFrom = this.checkPercent('valueFrom');
     this.resultObject.thumbPercentFrom = this.thumbPercentFrom;
     if (this.isRange) {
@@ -311,8 +320,10 @@ class Validator {
   }
 
   private checkPercent(value: ThumbId = 'valueFrom'): number {
-    const valOfRange = this[value] - this.min;
-    const currentPercent = Number((valOfRange / (this.findRange() / 100)).toFixed(3));
+    const variable = this[value];
+    if (variable === undefined) return 0;
+    const valueOfRange = variable - this.min;
+    const currentPercent = Number((valueOfRange / (this.findRange() / 100)).toFixed(3));
     return currentPercent;
   }
 }

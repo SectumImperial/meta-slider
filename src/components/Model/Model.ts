@@ -12,7 +12,7 @@ import {
 class Model {
   private state: ModelOptions;
 
-  private stepPercent!: number;
+  private stepPercent?: number;
 
   constructor(state: ModelOptions) {
     this.state = state;
@@ -54,6 +54,7 @@ class Model {
       min,
     } = this.state;
 
+    if (this.stepPercent === undefined) return;
     const nearestPrevCountStep = Math.floor(percentMove / this.stepPercent);
     const nearestNextCountStep = Math.ceil(percentMove / this.stepPercent);
 

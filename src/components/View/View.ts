@@ -4,11 +4,11 @@ import { SliderOptions } from 'Src/components/Interfaces';
 import Slider from './subViews/Slider/Slider';
 
 class View extends Observer {
-  root!: Element;
+  root?: Element;
 
-  slider!: Slider;
+  slider?: Slider;
 
-  protected isRange!: boolean;
+  protected isRange?: boolean;
 
   constructor(root: Element, protected readonly state: SliderOptions) {
     super();
@@ -16,6 +16,7 @@ class View extends Observer {
   }
 
   public updateSlider(data: SliderOptions): void {
+    if (this.slider === undefined) return;
     this.slider.setState(data);
   }
 
@@ -37,15 +38,22 @@ class View extends Observer {
   }
 
   private addSubscribeSlider(): void {
-    this.slider.thumbFrom.addSubscriber(SLIDER_EVENTS.VALUE_START_CHANGE, this.slider);
-    this.slider.thumbFrom.addSubscriber(SLIDER_EVENTS.KEY_DOWN, this.slider);
+    if (this.slider === undefined) return;
+    if (this.slider.thumbFrom !== undefined) {
+      this.slider.thumbFrom.addSubscriber(SLIDER_EVENTS.VALUE_START_CHANGE, this.slider);
+      this.slider.thumbFrom.addSubscriber(SLIDER_EVENTS.KEY_DOWN, this.slider);
+    }
+
     if (this.isRange && this.slider.thumbTo) {
       this.slider.thumbTo.addSubscriber(SLIDER_EVENTS.VALUE_START_CHANGE, this.slider);
       this.slider.thumbTo.addSubscriber(SLIDER_EVENTS.KEY_DOWN, this.slider);
     }
-    this.slider.scale.addSubscriber(SLIDER_EVENTS.SCALE_CLICKED, this.slider);
-    if (this.slider.isScaleMarks) {
-      this.slider.scaleMarks.addSubscriber(SLIDER_EVENTS.MARK_CLICKED, this.slider);
+
+    if (this.slider.scale !== undefined) {
+      this.slider.scale.addSubscriber(SLIDER_EVENTS.SCALE_CLICKED, this.slider);
+      if (this.slider.isScaleMarks && this.slider.scaleMarks !== undefined) {
+        this.slider.scaleMarks.addSubscriber(SLIDER_EVENTS.MARK_CLICKED, this.slider);
+      }
     }
     this.slider.addSubscriber(SLIDER_EVENTS.SCALE_CLICKED, this);
     this.slider.addSubscriber(SLIDER_EVENTS.DATA_COLLECTED, this);

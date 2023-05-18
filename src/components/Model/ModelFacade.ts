@@ -19,7 +19,7 @@ class ModelFacade extends Observer {
 
   private validState: ModelOptions;
 
-  private prevMove!: number;
+  private prevMove?: number;
 
   constructor(state: ModelInputState) {
     super();

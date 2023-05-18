@@ -3,11 +3,12 @@ import SliderComponents from '../SliderComponents/SliderComponents';
 import './scale.scss';
 
 class Scale extends SliderComponents {
-  scale!: HTMLDivElement;
+  scale: HTMLDivElement;
 
   constructor(root: HTMLDivElement, isVertical: boolean) {
     super(root, isVertical);
 
+    this.scale = SliderComponents.createElement('plugin-slider__scale js-plugin-slider__scale');
     this.handleScalePointerDown = this.handleScalePointerDown.bind(this);
     this.init();
   }
@@ -18,7 +19,6 @@ class Scale extends SliderComponents {
   }
 
   private init(): void {
-    this.scale = SliderComponents.createElement('plugin-slider__scale js-plugin-slider__scale');
     if (this.isVertical) this.scale.classList.add('plugin-slider__scale_vertical');
     if (!this.isVertical) this.scale.classList.add('plugin-slider__scale_horizontal');
     this.addScale();
