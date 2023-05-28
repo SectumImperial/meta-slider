@@ -39,20 +39,27 @@ class View extends Observer {
 
   private addSubscribeSlider(): void {
     if (this.slider === undefined) return;
-    if (this.slider.thumbFrom !== undefined) {
-      this.slider.thumbFrom.addSubscriber(SLIDER_EVENTS.VALUE_START_CHANGE, this.slider);
-      this.slider.thumbFrom.addSubscriber(SLIDER_EVENTS.KEY_DOWN, this.slider);
+    if (this.slider.classElements.thumbFrom !== undefined) {
+      this.slider.classElements.thumbFrom.addSubscriber(
+        SLIDER_EVENTS.VALUE_START_CHANGE,
+        this.slider,
+      );
+      this.slider.classElements.thumbFrom.addSubscriber(SLIDER_EVENTS.KEY_DOWN, this.slider);
     }
 
-    if (this.isRange && this.slider.thumbTo) {
-      this.slider.thumbTo.addSubscriber(SLIDER_EVENTS.VALUE_START_CHANGE, this.slider);
-      this.slider.thumbTo.addSubscriber(SLIDER_EVENTS.KEY_DOWN, this.slider);
+    if (this.isRange && this.slider.classElements.thumbTo) {
+      this.slider.classElements.thumbTo.addSubscriber(
+        SLIDER_EVENTS.VALUE_START_CHANGE,
+        this.slider,
+      );
+      this.slider.classElements.thumbTo.addSubscriber(SLIDER_EVENTS.KEY_DOWN, this.slider);
     }
 
-    if (this.slider.scale !== undefined) {
-      this.slider.scale.addSubscriber(SLIDER_EVENTS.SCALE_CLICKED, this.slider);
-      if (this.slider.isScaleMarks && this.slider.scaleMarks !== undefined) {
-        this.slider.scaleMarks.addSubscriber(SLIDER_EVENTS.MARK_CLICKED, this.slider);
+    if (this.slider.classElements.scale !== undefined) {
+      this.slider.classElements.scale.addSubscriber(SLIDER_EVENTS.SCALE_CLICKED, this.slider);
+      if (this.slider.booleanVariables.isScaleMarks
+        && this.slider.classElements.scaleMarks !== undefined) {
+        this.slider.classElements.scaleMarks.addSubscriber(SLIDER_EVENTS.MARK_CLICKED, this.slider);
       }
     }
     this.slider.addSubscriber(SLIDER_EVENTS.SCALE_CLICKED, this);

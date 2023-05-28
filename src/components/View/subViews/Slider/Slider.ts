@@ -15,53 +15,75 @@ import Tip from '../Tip/Tip';
 import './slider.scss';
 
 class Slider extends Observer {
-  tipValueFrom: number;
+  numberVariables: {
+    tipValueFrom: number | undefined;
+    thumbPercentFrom: number | undefined;
+    thumbPercentTo: number | undefined;
+    tipValueTo: number | undefined;
+  };
 
-  thumbPercentFrom: number;
+  dom: {
+    slider: undefined | HTMLDivElement;
+    scaleElement: undefined | HTMLDivElement;
+    root?: Element;
+  };
 
-  thumbPercentTo?: number;
+  booleanVariables: {
+    isProgress: boolean;
+    isRange: boolean;
+    isVertical: boolean;
+    isTip: boolean;
+    isScaleMarks: boolean;
+  };
 
-  tipValueTo?: number;
-
-  slider: undefined | HTMLDivElement;
-
-  scaleElement: undefined | HTMLDivElement;
-
-  isProgress: undefined | boolean;
-
-  isRange?: boolean;
-
-  isVertical: undefined | boolean;
-
-  isTip: undefined | boolean;
+  classElements: {
+    thumbFrom: Thumb | undefined;
+    thumbTo: Thumb | undefined;
+    scale: Scale | undefined;
+    scaleMarks: ScaleMarks | undefined;
+    tipFrom: Tip | undefined;
+    tipTo: Tip | undefined;
+    progress: Progress | undefined;
+    sliderComponents: SliderComponents | undefined;
+  };
 
   scaleMap: Map<number, number> | undefined;
-
-  thumbFrom?: Thumb;
-
-  thumbTo?: Thumb;
-
-  scale: undefined | Scale;
-
-  scaleMarks?: ScaleMarks;
-
-  tipFrom?: Tip;
-
-  tipTo?: Tip;
-
-  progress?: Progress;
-
-  sliderComponents?: SliderComponents;
-
-  isScaleMarks?: boolean;
-
-  root?: Element;
 
   constructor(root: Element, protected readonly state: SliderOptions) {
     super();
 
-    this.tipValueFrom = 0;
-    this.thumbPercentFrom = 0;
+    this.dom = {
+      slider: undefined,
+      scaleElement: undefined,
+      root,
+    };
+
+    this.numberVariables = {
+      tipValueFrom: undefined,
+      thumbPercentFrom: undefined,
+      thumbPercentTo: undefined,
+      tipValueTo: undefined,
+    };
+
+    this.booleanVariables = {
+      isProgress: false,
+      isRange: false,
+      isVertical: false,
+      isTip: false,
+      isScaleMarks: false,
+    };
+
+    this.classElements = {
+      thumbFrom: undefined,
+      thumbTo: undefined,
+      scale: undefined,
+      scaleMarks: undefined,
+      tipFrom: undefined,
+      tipTo: undefined,
+      progress: undefined,
+      sliderComponents: undefined,
+    };
+
     this.createVariables(root, state);
     this.init();
     this.setState(state);
@@ -77,9 +99,11 @@ class Slider extends Observer {
     data: SliderEventValChangedData | ScaleClickData,
     event: string,
   ): void {
-    if (this.sliderComponents === undefined || this.scaleElement === undefined) return;
-    const { size } = this.sliderComponents;
-    const scaleSize = this.scaleElement.getBoundingClientRect()[size];
+    if (this.dom === undefined) return;
+    if (this.classElements.sliderComponents === undefined
+      || this.dom.scaleElement === undefined) return;
+    const { size } = this.classElements.sliderComponents;
+    const scaleSize = this.dom.scaleElement.getBoundingClientRect()[size];
 
     if (event === SLIDER_EVENTS.VALUE_START_CHANGE) {
       const sliderData = { ...data, scaleSize };
@@ -108,52 +132,67 @@ class Slider extends Observer {
     thumbPercentTo: number | undefined,
     isRange: boolean,
   ) {
-    if (this.thumbFrom === undefined) return;
+    if (this.classElements.thumbFrom === undefined) return;
+    if (this.numberVariables === undefined) return;
+    if (this.dom === undefined) return;
 
-    this.thumbPercentFrom = thumbPercentFrom;
-    this.thumbFrom.setPosition(this.thumbPercentFrom);
+    this.numberVariables.thumbPercentFrom = thumbPercentFrom;
+    this.classElements.thumbFrom.setPosition(this.numberVariables.thumbPercentFrom);
 
-    if (isRange && this.slider !== undefined) {
-      const secondThumb = this.slider.querySelector('#valueTo');
+    if (isRange && this.dom.slider !== undefined) {
+      const secondThumb = this.dom.slider.querySelector('#valueTo');
       if (secondThumb === null && thumbPercentTo !== undefined) {
         this.setThumb('valueTo', thumbPercentTo);
       }
     }
 
-    if (isRange && thumbPercentTo !== undefined && this.thumbTo) {
-      this.thumbPercentTo = thumbPercentTo;
-      this.thumbTo.setPosition(this.thumbPercentTo);
+    if (isRange && thumbPercentTo !== undefined && this.classElements.thumbTo) {
+      this.numberVariables.thumbPercentTo = thumbPercentTo;
+      this.classElements.thumbTo.setPosition(this.numberVariables.thumbPercentTo);
     }
   }
 
   private setThumb(id: ThumbId, thumbPercent: number) {
     const thumb = id === 'valueTo' ? 'thumbTo' : 'thumbFrom';
-    if (this.scaleElement === undefined || this.isVertical === undefined) return;
-    this[thumb] = new Thumb({
-      root: this.scaleElement,
+    if (this.dom === undefined || this.booleanVariables === undefined) return;
+    if (this.dom.scaleElement === undefined
+      || this.booleanVariables.isVertical === undefined) return;
+    this.classElements[thumb] = new Thumb({
+      root: this.dom.scaleElement,
       thumbPercent,
       id,
-      isVertical: this.isVertical,
+      isVertical: this.booleanVariables.isVertical,
     });
   }
 
   private setTips(valueFrom: number, valueTo: number | undefined, isRange: boolean) {
-    const { isTip } = this;
-    if (isTip && this.tipFrom) {
-      this.tipValueFrom = valueFrom;
-      this.tipFrom.setPosition(this.thumbPercentFrom, this.tipValueFrom);
+    if (this.booleanVariables === undefined) return;
+    if (this.numberVariables === undefined) return;
+
+    const { isTip } = this.booleanVariables;
+    if (isTip && this.classElements.tipFrom) {
+      this.numberVariables.tipValueFrom = valueFrom;
+      if (this.numberVariables.thumbPercentFrom === undefined) return;
+      this.classElements.tipFrom.setPosition(
+        this.numberVariables.thumbPercentFrom,
+        this.numberVariables.tipValueFrom,
+      );
     }
 
     if (this.isNeedDoubleTip()) {
-      this.tipFrom?.setValueTip(`${valueFrom} - ${valueTo}`);
-      this.tipTo?.hideTip();
+      this.classElements.tipFrom?.setValueTip(`${valueFrom} - ${valueTo}`);
+      this.classElements.tipTo?.hideTip();
     } else {
-      this.tipTo?.showTip();
+      this.classElements.tipTo?.showTip();
     }
 
-    if (isRange && this.tipTo && valueTo !== undefined && this.thumbPercentTo) {
-      this.tipValueTo = valueTo;
-      this.tipTo.setPosition(this.thumbPercentTo, this.tipValueTo);
+    if (isRange
+      && this.classElements.tipTo && valueTo !== undefined && this.numberVariables.thumbPercentTo) {
+      this.numberVariables.tipValueTo = valueTo;
+      this.classElements.tipTo.setPosition(
+        this.numberVariables.thumbPercentTo,
+        this.numberVariables.tipValueTo,
+      );
     }
   }
 
@@ -162,14 +201,19 @@ class Slider extends Observer {
     const tip = valueDirection === 'valueFrom' ? 'tipFrom' : 'tipTo';
     const percentPosition = valueDirection === 'valueFrom' ? 'thumbPercentFrom' : 'thumbPercentTo';
 
-    if (valueDirection === 'valueTo' && this[percentPosition] === undefined) return;
-    if (this.scaleElement === undefined || this.isVertical === undefined) return;
+    if (this.numberVariables === undefined) return;
+    if (this.dom === undefined) return;
+    if (this.booleanVariables === undefined) return;
 
-    this[tip] = new Tip({
-      root: this.scaleElement,
-      percentPosition: this[percentPosition] as number,
+    if (valueDirection === 'valueTo' && this.numberVariables[percentPosition] === undefined) return;
+    if (this.dom.scaleElement === undefined
+      || this.booleanVariables.isVertical === undefined) return;
+
+    this.classElements[tip] = new Tip({
+      root: this.dom.scaleElement,
+      percentPosition: this.numberVariables[percentPosition] as number,
       valueTip: tipValue,
-      isVertical: this.isVertical,
+      isVertical: this.booleanVariables.isVertical,
     });
   }
 
@@ -178,32 +222,42 @@ class Slider extends Observer {
     thumbPercentTo: number | undefined,
     isRange: boolean,
   ) {
-    if (this.slider === undefined) return;
-    const progress = this.slider.querySelector('.plugin-slider__progress');
+    if (this.dom === undefined) return;
+    if (this.booleanVariables === undefined) return;
+    if (this.numberVariables === undefined) return;
+    if (this.dom.slider === undefined) return;
+
+    const progress = this.dom.slider.querySelector('.plugin-slider__progress');
     if (progress === null) {
       const positionEnd = typeof thumbPercentTo === 'number' ? thumbPercentTo : 0;
 
-      if (this.scaleElement === undefined || this.isVertical === undefined) return;
-      this.progress = new Progress({
-        root: this.scaleElement,
-        positionStart: this.thumbPercentFrom,
+      if (this.dom.scaleElement === undefined
+        || this.booleanVariables.isVertical === undefined
+        || this.numberVariables.thumbPercentFrom === undefined) return;
+      this.classElements.progress = new Progress({
+        root: this.dom.scaleElement,
+        positionStart: this.numberVariables.thumbPercentFrom,
         positionEnd,
-        isVertical: this.isVertical,
+        isVertical: this.booleanVariables.isVertical,
       });
     }
-    if (this.isProgress && isRange && thumbPercentTo) {
-      this.progress?.setProgressPosition(this.thumbPercentFrom, thumbPercentTo - thumbPercentFrom);
+    if (this.booleanVariables.isProgress && isRange && thumbPercentTo) {
+      this.classElements.progress?.setProgressPosition(
+        this.numberVariables.thumbPercentFrom,
+        thumbPercentTo - thumbPercentFrom,
+      );
     }
-    if (this.isProgress && thumbPercentTo === thumbPercentFrom) {
-      this.progress?.setProgressPosition(0, 0);
+    if (this.booleanVariables.isProgress && thumbPercentTo === thumbPercentFrom) {
+      this.classElements.progress?.setProgressPosition(0, 0);
     }
-    if (this.isProgress && !isRange) {
-      this.progress?.setProgressPosition(0, this.thumbPercentFrom);
+    if (this.booleanVariables.isProgress && !isRange) {
+      this.classElements.progress?.setProgressPosition(0, this.numberVariables.thumbPercentFrom);
     }
   }
 
   private init(): void {
-    this.slider = Slider.createSlider();
+    if (this.dom === undefined) return;
+    this.dom.slider = Slider.createSlider();
     this.createElements();
     this.addSlider();
   }
@@ -222,59 +276,81 @@ class Slider extends Observer {
       scaleMarks,
     } = state;
 
-    this.thumbPercentFrom = thumbPercentFrom;
-    if (thumbPercentTo) this.thumbPercentTo = thumbPercentTo;
+    if (this.numberVariables === undefined) return;
+    this.numberVariables.thumbPercentFrom = thumbPercentFrom;
+    if (thumbPercentTo) this.numberVariables.thumbPercentTo = thumbPercentTo;
 
-    this.isTip = isTip || false;
-    this.tipValueFrom = valueFrom || 0;
-    this.tipValueTo = valueTo || 0;
-    this.isProgress = isProgress || false;
-    this.isRange = isRange || false;
-    this.isVertical = isVertical || false;
+    if (this.booleanVariables === undefined) return;
+    this.booleanVariables.isTip = isTip || false;
+    this.numberVariables.tipValueFrom = valueFrom || 0;
+    this.numberVariables.tipValueTo = valueTo || 0;
+    this.booleanVariables.isProgress = isProgress || false;
+    this.booleanVariables.isRange = isRange || false;
+    this.booleanVariables.isVertical = isVertical || false;
     this.scaleMap = scaleMap;
-    this.isScaleMarks = scaleMarks;
-    this.root = root;
+    this.booleanVariables.isScaleMarks = scaleMarks;
+
+    if (this.dom === undefined) return;
+    this.dom.root = root;
   }
 
   private createElements(): void {
-    if (this.slider === undefined || this.isVertical === undefined) return;
-    this.sliderComponents = new SliderComponents(this.slider, this.isVertical);
-    this.scale = new Scale(this.slider, this.isVertical);
-    this.scaleElement = this.scale.getScale();
-    this.setThumb('valueFrom', this.thumbPercentFrom);
+    if (this.dom === undefined || this.booleanVariables === undefined
+      || this.numberVariables === undefined) return;
+    if (this.dom.slider === undefined || this.booleanVariables.isVertical === undefined) return;
+    if (this.numberVariables.thumbPercentFrom === undefined) return;
 
-    if (this.isRange && this.thumbPercentTo !== undefined) {
-      this.setThumb('valueTo', this.thumbPercentTo);
+    this.classElements.sliderComponents = new SliderComponents(
+      this.dom.slider,
+      this.booleanVariables.isVertical,
+    );
+
+    this.classElements.scale = new Scale(this.dom.slider, this.booleanVariables.isVertical);
+    this.dom.scaleElement = this.classElements.scale.getScale();
+    this.setThumb('valueFrom', this.numberVariables.thumbPercentFrom);
+
+    if (this.booleanVariables.isRange && this.numberVariables.thumbPercentTo !== undefined) {
+      this.setThumb('valueTo', this.numberVariables.thumbPercentTo);
     }
 
-    if (this.isTip) {
+    if (this.booleanVariables.isTip) {
       this.setTip('valueFrom');
     }
 
-    if (this.isTip && this.thumbPercentTo && this.isRange && this.tipValueTo !== undefined) {
+    if (this.booleanVariables.isTip && this.numberVariables.thumbPercentTo
+      && this.booleanVariables.isRange && this.numberVariables.tipValueTo !== undefined) {
       this.setTip('valueTo');
     }
 
-    if (this.isRange !== undefined) {
-      this.setProgress(this.thumbPercentFrom, 0, this.isRange);
+    if (this.booleanVariables.isRange !== undefined) {
+      this.setProgress(this.numberVariables.thumbPercentFrom, 0, this.booleanVariables.isRange);
     }
 
-    if (this.scaleMap && this.isScaleMarks) {
-      this.scaleMarks = new ScaleMarks(this.scaleElement, this.scaleMap, this.isVertical);
+    if (this.scaleMap && this.booleanVariables.isScaleMarks) {
+      this.classElements.scaleMarks = new ScaleMarks(
+        this.dom.scaleElement,
+        this.scaleMap,
+        this.booleanVariables.isVertical,
+      );
     }
   }
 
   private addSlider(): void {
-    if (this.root === undefined || this.slider === undefined) return;
-    this.root.append(this.slider);
+    if (this.dom === undefined) return;
+    if (this.dom.root === undefined || this.dom.slider === undefined) return;
+    this.dom.root.append(this.dom.slider);
   }
 
   private isNeedDoubleTip(): boolean {
-    if (this.thumbPercentTo === undefined || this.isRange === undefined
-      || this.thumbPercentFrom === undefined || this.isTip === undefined) return false;
+    if (this.booleanVariables === undefined || this.numberVariables === undefined) return false;
+    if (this.numberVariables.thumbPercentTo === undefined
+      || this.booleanVariables.isRange === undefined
+      || this.numberVariables.thumbPercentFrom === undefined
+      || this.booleanVariables.isTip === undefined) return false;
 
-    return ((this.thumbPercentTo - this.thumbPercentFrom <= 2)
-      || (this.thumbPercentTo === 0 && this.thumbPercentFrom === 0));
+    return ((this.numberVariables.thumbPercentTo - this.numberVariables.thumbPercentFrom <= 2)
+      || (this.numberVariables.thumbPercentTo === 0
+        && this.numberVariables.thumbPercentFrom === 0));
   }
 }
 

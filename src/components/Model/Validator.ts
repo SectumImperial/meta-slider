@@ -9,41 +9,49 @@ import {
 class Validator {
   private DEFAULT_GAP = 20;
 
-  private min: number;
+  booleanVariables: {
+    isTip: boolean;
+    isVertical: boolean;
+    isProgress: boolean;
+    scaleMarks: boolean;
+    isRange: boolean;
+  };
 
-  private max: number;
-
-  private valueFrom: number;
-
-  private step: number;
+  baseParams: {
+    min: number;
+    max: number;
+    valueFrom: number;
+    valueTo?: number | undefined;
+    step: number
+    stepPercent?: number | undefined;
+    thumbPercentFrom?: number | undefined;
+    thumbPercentTo?: number | undefined;
+  };
 
   private resultObject?: ModelOptions;
 
-  private stepPercent?: number;
-
-  private valueTo?: number;
-
-  private thumbPercentFrom?: number;
-
-  private thumbPercentTo?: number;
-
   private scalePercentGap: number | undefined;
 
-  private isTip?: boolean;
-
-  private isVertical?: boolean;
-
-  private isProgress?: boolean;
-
-  private scaleMarks?: boolean;
-
-  private isRange?: boolean;
-
   constructor(readonly data: ModelInputState) {
-    this.min = 0;
-    this.max = 100;
-    this.valueFrom = 0;
-    this.step = 1;
+    this.baseParams = {
+      min: 0,
+      max: 100,
+      valueFrom: 0,
+      step: 1,
+      valueTo: undefined,
+      stepPercent: 10,
+      thumbPercentFrom: undefined,
+      thumbPercentTo: undefined,
+    };
+
+    this.booleanVariables = {
+      isTip: false,
+      isVertical: false,
+      isProgress: false,
+      scaleMarks: false,
+      isRange: false,
+    };
+
     this.validateData(data);
   }
 
@@ -66,21 +74,22 @@ class Validator {
       coordsMove, scaleSize, keyEvent, thumbId,
     } = data;
 
-    if (keyEvent && this.stepPercent !== undefined && this.thumbPercentFrom !== undefined) {
+    if (keyEvent && this.baseParams.stepPercent !== undefined
+      && this.baseParams.thumbPercentFrom !== undefined) {
       if (keyEvent === 'increment' && thumbId === 'valueFrom') {
-        return this.thumbPercentFrom + this.stepPercent;
+        return this.baseParams.thumbPercentFrom + this.baseParams.stepPercent;
       }
 
       if (keyEvent === 'decrement' && thumbId === 'valueFrom') {
-        return this.thumbPercentFrom - this.stepPercent;
+        return this.baseParams.thumbPercentFrom - this.baseParams.stepPercent;
       }
 
-      if (keyEvent === 'increment' && thumbId === 'valueTo' && this.thumbPercentTo !== undefined) {
-        return this.thumbPercentTo + this.stepPercent;
+      if (keyEvent === 'increment' && thumbId === 'valueTo' && this.baseParams.thumbPercentTo !== undefined) {
+        return this.baseParams.thumbPercentTo + this.baseParams.stepPercent;
       }
 
-      if (keyEvent === 'decrement' && thumbId === 'valueTo' && this.thumbPercentTo !== undefined) {
-        return this.thumbPercentTo - this.stepPercent;
+      if (keyEvent === 'decrement' && thumbId === 'valueTo' && this.baseParams.thumbPercentTo !== undefined) {
+        return this.baseParams.thumbPercentTo - this.baseParams.stepPercent;
       }
     }
     if (coordsMove === undefined || scaleSize === undefined) return 0;
@@ -124,16 +133,17 @@ class Validator {
   }
 
   public validateThumbId(movedTo: number): ThumbId {
-    if (this.thumbPercentFrom === undefined) return 'valueTo';
-    if (!this.isRange) return 'valueFrom';
-    if (movedTo < this.thumbPercentFrom) return 'valueFrom';
-    if (this.thumbPercentTo !== undefined && movedTo > this.thumbPercentTo) return 'valueTo';
+    if (this.booleanVariables === undefined) return 'valueTo';
+    if (this.baseParams.thumbPercentFrom === undefined) return 'valueTo';
+    if (!this.booleanVariables.isRange) return 'valueFrom';
+    if (movedTo < this.baseParams.thumbPercentFrom) return 'valueFrom';
+    if (this.baseParams.thumbPercentTo !== undefined && movedTo > this.baseParams.thumbPercentTo) return 'valueTo';
 
-    if (movedTo > this.thumbPercentFrom
-      && this.thumbPercentTo !== undefined
-      && movedTo < this.thumbPercentTo) {
-      const diffFrom = movedTo - this.thumbPercentFrom;
-      const diffTo = this.thumbPercentTo - movedTo;
+    if (movedTo > this.baseParams.thumbPercentFrom
+      && this.baseParams.thumbPercentTo !== undefined
+      && movedTo < this.baseParams.thumbPercentTo) {
+      const diffFrom = movedTo - this.baseParams.thumbPercentFrom;
+      const diffTo = this.baseParams.thumbPercentTo - movedTo;
 
       if (diffFrom === diffTo || diffFrom < diffTo) return 'valueFrom';
       if (diffFrom > diffTo) return 'valueTo';
@@ -189,20 +199,21 @@ class Validator {
       valueTo,
     } = data;
 
-    this.min = min;
-    this.max = max;
-    this.valueFrom = valueFrom;
-    this.step = step;
+    this.baseParams.min = min;
+    this.baseParams.max = max;
+    this.baseParams.valueFrom = valueFrom;
+    this.baseParams.step = step;
     this.scalePercentGap = scalePercentGap;
     if (typeof this.scalePercentGap !== 'undefined' && typeof this.scalePercentGap !== 'number') {
       this.scalePercentGap = undefined;
     }
 
-    if (this.isRange && valueTo !== undefined) {
-      this.valueTo = valueTo;
+    if (this.booleanVariables === undefined) return;
+    if (this.booleanVariables.isRange && valueTo !== undefined) {
+      this.baseParams.valueTo = valueTo;
     }
 
-    this.stepPercent = this.step / (this.findRange() / 100);
+    this.baseParams.stepPercent = this.baseParams.step / (this.findRange() / 100);
   }
 
   private setBooleans(data: ModelInputState): object {
@@ -214,18 +225,19 @@ class Validator {
       scaleMarks,
     } = data;
 
-    this.isRange = typeof isRange === 'boolean' ? isRange : false;
-    this.isTip = typeof isTip === 'boolean' ? isTip : false;
-    this.isVertical = typeof isVertical === 'boolean' ? isVertical : false;
-    this.isProgress = typeof isProgress === 'boolean' ? isProgress : false;
-    this.scaleMarks = typeof scaleMarks === 'boolean' ? scaleMarks : false;
+    if (this.booleanVariables === undefined) return {};
+    this.booleanVariables.isRange = typeof isRange === 'boolean' ? isRange : false;
+    this.booleanVariables.isTip = typeof isTip === 'boolean' ? isTip : false;
+    this.booleanVariables.isVertical = typeof isVertical === 'boolean' ? isVertical : false;
+    this.booleanVariables.isProgress = typeof isProgress === 'boolean' ? isProgress : false;
+    this.booleanVariables.scaleMarks = typeof scaleMarks === 'boolean' ? scaleMarks : false;
 
     return {
-      isRange: this.isRange,
-      isTip: this.isTip,
-      isVertical: this.isVertical,
-      isProgress: this.isProgress,
-      scaleMarks: this.scaleMarks,
+      isRange: this.booleanVariables.isRange,
+      isTip: this.booleanVariables.isTip,
+      isVertical: this.booleanVariables.isVertical,
+      isProgress: this.booleanVariables.isProgress,
+      scaleMarks: this.booleanVariables.scaleMarks,
     };
   }
 
@@ -237,73 +249,77 @@ class Validator {
 
   private checkRange(): void {
     if (this.resultObject === undefined) return;
-    if (Number.isNaN(this.min)) this.min = 0;
-    if (Number.isNaN(this.max)) this.max = 10;
-    if (this.min === this.max) {
-      this.max = this.min + this.step;
+    if (Number.isNaN(this.baseParams.min)) this.baseParams.min = 0;
+    if (Number.isNaN(this.baseParams.max)) this.baseParams.max = 10;
+    if (this.baseParams.min === this.baseParams.max) {
+      this.baseParams.max = this.baseParams.min + this.baseParams.step;
     }
 
-    if (this.min > this.max) {
-      [this.min, this.max] = [this.max, this.min];
+    if (this.baseParams.min > this.baseParams.max) {
+      [this.baseParams.min, this.baseParams.max] = [this.baseParams.max, this.baseParams.min];
     }
-    this.resultObject.min = this.min;
-    this.resultObject.max = this.max;
+    this.resultObject.min = this.baseParams.min;
+    this.resultObject.max = this.baseParams.max;
   }
 
   private checkStep(): void {
     if (this.resultObject === undefined) return;
-    if (Number.isNaN(this.step)) this.step = 1;
+    if (Number.isNaN(this.baseParams.step)) this.baseParams.step = 1;
     const allRange = this.findRange();
 
-    if (this.step > allRange) {
-      this.step = allRange;
+    if (this.baseParams.step > allRange) {
+      this.baseParams.step = allRange;
     }
-    if (this.step < 0.001) this.step = 0.001;
-    if (!this.step) this.step = 1;
-    this.resultObject.step = this.step;
+    if (this.baseParams.step < 0.001) this.baseParams.step = 0.001;
+    if (!this.baseParams.step) this.baseParams.step = 1;
+    this.resultObject.step = this.baseParams.step;
   }
 
   private findRange(): number {
-    const result = this.max - this.min;
+    const result = this.baseParams.max - this.baseParams.min;
     return result;
   }
 
   private checkValues(): void {
-    this.valueFrom = this.checkValue(this.valueFrom);
+    if (this.booleanVariables === undefined) return;
 
-    if (this.isRange && this.valueTo !== undefined) {
-      this.valueTo = this.checkValue(this.valueTo);
+    this.baseParams.valueFrom = this.checkValue(this.baseParams.valueFrom);
+
+    if (this.booleanVariables.isRange && this.baseParams.valueTo !== undefined) {
+      this.baseParams.valueTo = this.checkValue(this.baseParams.valueTo);
     }
 
-    if (this.valueTo !== undefined && this.valueFrom > this.valueTo && this.isRange) {
-      [this.valueFrom, this.valueTo] = [this.valueTo, this.valueFrom];
+    if (this.baseParams.valueTo !== undefined && this.baseParams.valueFrom > this.baseParams.valueTo
+      && this.booleanVariables.isRange) {
+      [this.baseParams.valueFrom,
+      this.baseParams.valueTo] = [this.baseParams.valueTo, this.baseParams.valueFrom];
     }
 
     if (this.resultObject === undefined) return;
-    this.resultObject.valueFrom = this.valueFrom;
-    if (this.isRange) this.resultObject.valueTo = this.valueTo;
+    this.resultObject.valueFrom = this.baseParams.valueFrom;
+    if (this.booleanVariables.isRange) this.resultObject.valueTo = this.baseParams.valueTo;
   }
 
   private checkValue(value: number): number {
     let result = value;
     if (Number.isNaN(result)) result = 0;
-    if (result === this.max) {
-      result = this.max;
+    if (result === this.baseParams.max) {
+      result = this.baseParams.max;
       return result;
     }
 
-    if (result % this.step !== 0 && result !== this.min) {
-      const countStep = Math.round((result - this.min) / this.step);
-      const countVal = this.min + (this.step * countStep);
+    if (result % this.baseParams.step !== 0 && result !== this.baseParams.min) {
+      const countStep = Math.round((result - this.baseParams.min) / this.baseParams.step);
+      const countVal = this.baseParams.min + (this.baseParams.step * countStep);
       result = countVal;
     }
 
-    if (result > this.max) {
-      result = this.max;
+    if (result > this.baseParams.max) {
+      result = this.baseParams.max;
     }
 
-    if (result < this.min) {
-      result = this.min;
+    if (result < this.baseParams.min) {
+      result = this.baseParams.min;
     }
 
     return result;
@@ -311,18 +327,19 @@ class Validator {
 
   private checkPercents(): void {
     if (this.resultObject === undefined) return;
-    this.thumbPercentFrom = this.checkPercent('valueFrom');
-    this.resultObject.thumbPercentFrom = this.thumbPercentFrom;
-    if (this.isRange) {
-      this.thumbPercentTo = this.checkPercent('valueTo');
-      this.resultObject.thumbPercentTo = this.thumbPercentTo;
+    if (this.booleanVariables === undefined) return;
+    this.baseParams.thumbPercentFrom = this.checkPercent('valueFrom');
+    this.resultObject.thumbPercentFrom = this.baseParams.thumbPercentFrom;
+    if (this.booleanVariables.isRange) {
+      this.baseParams.thumbPercentTo = this.checkPercent('valueTo');
+      this.resultObject.thumbPercentTo = this.baseParams.thumbPercentTo;
     }
   }
 
   private checkPercent(value: ThumbId = 'valueFrom'): number {
-    const variable = this[value];
+    const variable = this.baseParams[value];
     if (variable === undefined) return 0;
-    const valueOfRange = variable - this.min;
+    const valueOfRange = variable - this.baseParams.min;
     const currentPercent = Number((valueOfRange / (this.findRange() / 100)).toFixed(3));
     return currentPercent;
   }

@@ -12,41 +12,34 @@ interface ElementPress {
 }
 
 class DemoSlider {
-  root: Element;
+  dom: {
+    root: Element;
+    indicator: Element | null;
+    form?: Element | null;
+    content?: Element | null;
+    thumb?: ElementPress | null;
+  };
 
-  indicator?: Element | null;
+  booleanVariables: {
+    range: boolean;
+    marks: boolean;
+    tip: boolean;
+    progress: boolean;
+    vertical: boolean;
+  };
 
-  form?: Element | null;
-
-  min?: number;
-
-  max?: number;
-
-  step?: number | null;
-
-  from?: number | null;
-
-  to?: number | null;
-
-  gap?: number | null;
-
-  range?: boolean;
-
-  marks?: boolean;
-
-  tip?: boolean;
-
-  progress?: boolean;
-
-  vertical?: boolean;
-
-  content?: Element | null;
+  numericVariables: {
+    min: number;
+    max: number;
+    step: number;
+    from: number | null;
+    to?: number | null;
+    gap?: number | null;
+  };
 
   mapElements?: Map<string, ModelVal>;
 
   slider?: import('../src/components/Presenter/Presenter').default;
-
-  thumb?: ElementPress | null;
 
   stateObject?: {
     min: number;
@@ -63,7 +56,32 @@ class DemoSlider {
   };
 
   constructor(root: Element) {
-    this.root = root;
+    this.dom = {
+      root,
+      indicator: null,
+      form: null,
+      content: null,
+      thumb: null,
+    };
+
+    this.numericVariables = {
+      min: 0,
+      max: 10,
+      step: 1,
+      from: 1,
+      to: null,
+      gap: null,
+    };
+
+    this.booleanVariables = {
+      range: false,
+      marks: false,
+      tip: false,
+      progress: false,
+      vertical: false,
+    };
+
+    if (this.dom !== undefined) this.dom.root = root;
 
     this.handleItemChange = this.handleItemChange.bind(this);
     this.handleContentPointerDown = this.handleContentPointerDown.bind(this);
@@ -75,23 +93,19 @@ class DemoSlider {
 
   private init() {
     this.findElements();
-    if (this.min === undefined || this.max === undefined
-      || this.marks === undefined || this.tip === undefined
-      || this.progress === undefined || this.range === undefined
-      || this.vertical === undefined) return;
 
     this.stateObject = {
-      min: this.min,
-      max: this.max,
-      valueFrom: this.from || 0,
-      valueTo: this.to || 0,
-      step: this.step || 1,
-      scalePercentGap: this.gap || 1,
-      scaleMarks: this.marks,
-      isTip: this.tip,
-      isProgress: this.progress,
-      isRange: this.range,
-      isVertical: this.vertical,
+      min: this.numericVariables.min,
+      max: this.numericVariables.max,
+      valueFrom: this.numericVariables.from || 0,
+      valueTo: this.numericVariables.to || 0,
+      step: this.numericVariables.step || 1,
+      scalePercentGap: this.numericVariables.gap || 1,
+      scaleMarks: this.booleanVariables.marks,
+      isTip: this.booleanVariables.tip,
+      isProgress: this.booleanVariables.progress,
+      isRange: this.booleanVariables.range,
+      isVertical: this.booleanVariables.vertical,
     };
 
     this.addSlider(this.stateObject);
@@ -101,9 +115,10 @@ class DemoSlider {
   }
 
   private addListeners() {
-    if (this.form) {
+    if (this.dom === undefined) return;
+    if (this.dom.form !== undefined && this.dom.form !== null) {
       const elements: ElementListener[] = [];
-      this.form.querySelectorAll('.slider__input').forEach((e) => {
+      this.dom.form.querySelectorAll('.slider__input').forEach((e) => {
         if (e) {
           elements.push(e);
         }
@@ -112,11 +127,11 @@ class DemoSlider {
       elements.forEach((e) => e.addEventListener('change', this.handleItemChange));
     }
 
-    this.content?.addEventListener('pointerdown', this.handleContentPointerDown);
-    this.content?.addEventListener('click', this.handleContentClick);
-    if (this.thumb) {
-      this.thumb?.addEventListener('keydown', this.handleThumbKeyPress);
-      this.thumb?.addEventListener(
+    this.dom.content?.addEventListener('pointerdown', this.handleContentPointerDown);
+    this.dom.content?.addEventListener('click', this.handleContentClick);
+    if (this.dom.thumb !== null) {
+      this.dom.thumb?.addEventListener('keydown', this.handleThumbKeyPress);
+      this.dom.thumb?.addEventListener(
         'touchmove',
         this.handleThumbTouchMove,
         { passive: true },
@@ -125,6 +140,8 @@ class DemoSlider {
   }
 
   private handleItemChange(e: InputEvent): void {
+    if (this.dom === undefined) return;
+
     this.toggleIndicator();
     if (this.mapElements === undefined || this.slider === undefined) return;
     const { target } = e;
@@ -144,7 +161,7 @@ class DemoSlider {
       if (valueForm !== undefined) {
         this.slider.setValue(`${param}`, valueForm);
         if (param !== 'valueFrom' && param !== 'valueTo') {
-          if (this.content) this.content.innerHTML = '';
+          if (this.dom.content) this.dom.content.innerHTML = '';
           this.addSlider(this.slider.getState());
         }
         this.updateForm();
@@ -155,93 +172,102 @@ class DemoSlider {
   }
 
   private toggleIndicator() {
-    if (this.indicator !== undefined && this.indicator !== null) {
-      this.indicator.classList.toggle('main__slider-indicator_active');
+    if (this.dom === undefined) return;
+    if (this.dom.indicator !== undefined && this.dom.indicator !== null) {
+      this.dom.indicator.classList.toggle('main__slider-indicator_active');
     }
   }
 
   private addSlider(options: ModelInputState) {
-    if (!this.content) return;
-    this.slider = $(this.content).sliderPlugin(options);
+    if (this.dom === undefined) return;
+    if (!this.dom.content) return;
+    this.slider = $(this.dom.content).sliderPlugin(options);
   }
 
   private findElements() {
-    this.indicator = this.root.querySelector('.main__slider-indicator');
+    if (this.dom === undefined) return;
+    if (this.dom.root === undefined) return;
+    this.dom.indicator = this.dom.root.querySelector('.main__slider-indicator');
     this.mapElements = new Map();
 
-    this.content = this.root.querySelector('.slider__content');
-    this.form = this.root.querySelector('.slider__form');
-    if (!this.form) return;
+    this.dom.content = this.dom.root.querySelector('.slider__content');
+    this.dom.form = this.dom.root.querySelector('.slider__form');
+    if (!this.dom.form) return;
     const min = <HTMLInputElement>
-      this.form.querySelector('.slider__input[data-role = min]');
-    this.min = Number(min.value);
+      this.dom.form.querySelector('.slider__input[data-role = min]');
+    if (this.numericVariables === undefined) return;
+    this.numericVariables.min = Number(min.value);
     this.mapElements.set('min', 'min');
 
     const max = <HTMLInputElement>
-      this.form.querySelector('.slider__input[data-role = max]');
-    this.max = Number(max.value);
+      this.dom.form.querySelector('.slider__input[data-role = max]');
+    this.numericVariables.max = Number(max.value);
     this.mapElements.set('max', 'max');
 
     const step = <HTMLInputElement>
-      this.form.querySelector('.slider__input[data-role = step]');
-    this.step = Number(step.value);
+      this.dom.form.querySelector('.slider__input[data-role = step]');
+    this.numericVariables.step = Number(step.value);
     this.mapElements.set('step', 'step');
 
     const from = <HTMLInputElement>
-      this.form.querySelector('.slider__input[data-role = from]');
-    this.from = Number(from.value);
-    from.step = `${this.step}`;
+      this.dom.form.querySelector('.slider__input[data-role = from]');
+    this.numericVariables.from = Number(from.value);
+
+    from.step = `${this.numericVariables.step}`;
     this.mapElements.set('from', 'valueFrom');
 
     const to = <HTMLInputElement>
-      this.form.querySelector('.slider__input[data-role = to]');
-    this.to = Number(to.value);
-    to.step = `${this.step}`;
+      this.dom.form.querySelector('.slider__input[data-role = to]');
+    this.numericVariables.to = Number(to.value);
+    to.step = `${this.numericVariables.step}`;
     this.mapElements.set('to', 'valueTo');
 
     const gap = <HTMLInputElement>
-      this.form.querySelector('.slider__input[data-role = gap]');
-    if (gap.value) this.gap = Number(gap.value);
+      this.dom.form.querySelector('.slider__input[data-role = gap]');
+    if (gap.value) this.numericVariables.gap = Number(gap.value);
     this.mapElements.set('gap', 'scalePercentGap');
 
     const range = <HTMLInputElement>
-      this.form.querySelector('.slider__input[data-role = range]');
-    this.range = range.checked;
-    if (this.range) to.disabled = false;
-    if (!this.range) to.disabled = true;
+      this.dom.form.querySelector('.slider__input[data-role = range]');
+
+    if (this.booleanVariables === undefined) return;
+    this.booleanVariables.range = range.checked;
+    if (this.booleanVariables.range) to.disabled = false;
+    if (!this.booleanVariables.range) to.disabled = true;
     this.mapElements.set('range', 'isRange');
 
     const marks = <HTMLInputElement>
-      this.form.querySelector('.slider__input[data-role = marks]');
-    this.marks = marks.checked;
-    if (this.marks) gap.disabled = false;
-    if (!this.marks) gap.disabled = true;
+      this.dom.form.querySelector('.slider__input[data-role = marks]');
+    this.booleanVariables.marks = marks.checked;
+    if (this.booleanVariables.marks) gap.disabled = false;
+    if (!this.booleanVariables.marks) gap.disabled = true;
     this.mapElements.set('marks', 'scaleMarks');
 
     const tip = <HTMLInputElement>
-      this.form.querySelector('.slider__input[data-role = tip]');
-    this.tip = tip.checked;
+      this.dom.form.querySelector('.slider__input[data-role = tip]');
+    this.booleanVariables.tip = tip.checked;
     this.mapElements.set('tip', 'isTip');
 
     const progress = <HTMLInputElement>
-      this.form.querySelector('.slider__input[data-role = progress]');
-    this.progress = progress.checked;
+      this.dom.form.querySelector('.slider__input[data-role = progress]');
+    this.booleanVariables.progress = progress.checked;
     this.mapElements.set('progress', 'isProgress');
 
     const vertical = <HTMLInputElement>
-      this.form.querySelector('.slider__input[data-role = vertical]');
-    this.vertical = vertical.checked;
+      this.dom.form.querySelector('.slider__input[data-role = vertical]');
+    this.booleanVariables.vertical = vertical.checked;
     this.mapElements.set('vertical', 'isVertical');
 
-    if (this.content?.querySelector('.plugin-slider__thumb')) {
-      this.thumb = this.content?.querySelector('.plugin-slider__thumb');
+    if (this.dom.content?.querySelector('.plugin-slider__thumb')) {
+      this.dom.thumb = this.dom.content?.querySelector('.plugin-slider__thumb');
     }
   }
 
   private updateForm() {
     if (this.mapElements === undefined) return;
     this.mapElements.forEach((key: ModelVal, value: string) => {
-      const element = this.form?.querySelector(`.slider__input[data-role = ${value}]`);
+      if (this.dom === undefined) return;
+      const element = this.dom.form?.querySelector(`.slider__input[data-role = ${value}]`);
       if (element instanceof HTMLInputElement) {
         if (this.slider === undefined) return;
         if (element && typeof this.slider.getValue(key) === 'number') {
@@ -268,18 +294,20 @@ class DemoSlider {
   }
 
   private handleContentPointerDown() {
+    if (this.dom === undefined) return;
     this.toggleIndicator();
     const handlePointerMove = () => {
       this.updateForm();
     };
     const handlePointerUp = () => {
-      this.content?.removeEventListener('pointermove', handlePointerMove);
-      this.content?.removeEventListener('pointerup', handlePointerUp);
+      if (this.dom === undefined) return;
+      this.dom.content?.removeEventListener('pointermove', handlePointerMove);
+      this.dom.content?.removeEventListener('pointerup', handlePointerUp);
       this.toggleIndicator();
     };
 
-    this.content?.addEventListener('pointermove', handlePointerMove);
-    this.content?.addEventListener('pointerup', handlePointerUp);
+    this.dom.content?.addEventListener('pointermove', handlePointerMove);
+    this.dom.content?.addEventListener('pointerup', handlePointerUp);
   }
 
   private handleThumbKeyPress(e: KeyboardEvent): void {
