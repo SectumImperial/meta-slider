@@ -7,7 +7,7 @@ import {
   SliderOptions,
   StepsMap,
   ThumbId,
-  ValidateSliderData,
+  ValidSliderData,
 } from 'Src/components/Interfaces';
 import Model from './Model';
 import Validator from './Validator';
@@ -56,7 +56,7 @@ class ModelFacade extends Observer {
     return this.model.getState()[`${value}`];
   }
 
-  public update(data: ValidateSliderData): void {
+  public update(data: ValidSliderData): void {
     const typeData = data.percent === undefined ? 'scaleMove' : 'markMove';
 
     if (typeData === 'scaleMove') {

@@ -3,7 +3,7 @@ import {
   ModelOptions,
   StepsMap,
   ThumbId,
-  ValidateSliderData,
+  ValidSliderData,
 } from 'Src/components/Interfaces';
 
 class Validator {
@@ -69,7 +69,7 @@ class Validator {
     return this.resultObject;
   }
 
-  public performMoveToPercent(data: ValidateSliderData): number {
+  public performMoveToPercent(data: ValidSliderData): number {
     const {
       coordsMove, scaleSize, keyEvent, thumbId,
     } = data;

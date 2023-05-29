@@ -70,7 +70,7 @@ interface SliderEventValChangedData {
   keyEvent?: KeyEvent,
 }
 
-interface ValidateSliderData {
+interface ValidSliderData {
   coordsMove: number,
   scaleSize: number,
   thumbId?: string,
@@ -126,7 +126,7 @@ export {
   ModelOptions,
   ModelVal,
   SliderOptions,
-  ValidateSliderData,
+  ValidSliderData,
   ThumbId,
   ThumbValPercent,
   HandleMoveModel,
