@@ -3,7 +3,7 @@ import SliderComponents from '../SliderComponents/SliderComponents';
 import './thumb.scss';
 
 class Thumb extends SliderComponents {
-  moved?: number;
+  private moved?: number;
 
   thumbPercent: number;
 

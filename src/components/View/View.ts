@@ -4,9 +4,9 @@ import { SliderOptions } from 'Src/components/Interfaces';
 import Slider from './subViews/Slider/Slider';
 
 class View extends Observer {
-  root?: Element;
+  private root?: Element;
 
-  slider?: Slider;
+  private slider?: Slider;
 
   protected isRange?: boolean;
 
@@ -27,6 +27,22 @@ class View extends Observer {
     if (event === SLIDER_EVENTS.VALUE_CHANGED) {
       this.updateSlider(data);
     }
+  }
+
+  public getRoot(): Element | undefined {
+    return this.root;
+  }
+
+  public setRoot(root: Element) {
+    this.root = root;
+  }
+
+  public getSlider(): Slider | undefined {
+    return this.slider;
+  }
+
+  public setSlider(slider: Slider) {
+    this.slider = slider;
   }
 
   private init(root: Element, state: SliderOptions): void {

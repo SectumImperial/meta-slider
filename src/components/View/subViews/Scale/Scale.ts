@@ -3,7 +3,7 @@ import SliderComponents from '../SliderComponents/SliderComponents';
 import './scale.scss';
 
 class Scale extends SliderComponents {
-  scale: HTMLDivElement;
+  public scale: HTMLDivElement;
 
   constructor(root: HTMLDivElement, isVertical: boolean) {
     super(root, isVertical);
