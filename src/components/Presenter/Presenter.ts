@@ -1,6 +1,6 @@
 import { MODEL_EVENTS, SLIDER_EVENTS } from 'Src/Observer/events';
 import Observer from 'Src/Observer/Observer';
-import { ModelInputState, ModelVal, SliderOptions } from 'Src/components/Interfaces';
+import { ModelInputState, ModelValue, SliderOptions } from 'Src/components/Interfaces';
 import View from '../View/View';
 import ModelFacade from '../Model/ModelFacade';
 
@@ -25,11 +25,11 @@ class Presenter extends Observer {
     this.modelFacade.setState(state);
   }
 
-  public setValue(param: ModelVal, value: number | boolean): void {
+  public setValue(param: ModelValue, value: number | boolean): void {
     this.modelFacade.setValue(param, value);
   }
 
-  public getValue(param: ModelVal): number | boolean | undefined {
+  public getValue(param: ModelValue): number | boolean | undefined {
     return this.modelFacade.getValue(param);
   }
 

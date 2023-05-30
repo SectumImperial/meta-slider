@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { ModelInputState, ModelVal } from 'Src/components/Interfaces';
+import { ModelInputState, ModelValue } from 'Src/components/Interfaces';
 import '../src/slider';
 import './styles.scss';
 
@@ -37,7 +37,7 @@ class DemoSlider {
     gap?: number | null;
   };
 
-  mapElements?: Map<string, ModelVal>;
+  mapElements?: Map<string, ModelValue>;
 
   slider?: import('../src/components/Presenter/Presenter').default;
 
@@ -265,7 +265,7 @@ class DemoSlider {
 
   private updateForm() {
     if (this.mapElements === undefined) return;
-    this.mapElements.forEach((key: ModelVal, value: string) => {
+    this.mapElements.forEach((key: ModelValue, value: string) => {
       if (this.dom === undefined) return;
       const element = this.dom.form?.querySelector(`.slider__input[data-role = ${value}]`);
       if (element instanceof HTMLInputElement) {

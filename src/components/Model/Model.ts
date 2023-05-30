@@ -1,12 +1,12 @@
 import {
   ModelOptions,
-  ModelVal,
+  ModelValue,
   ThumbId,
   ThumbValPercent,
   HandleMoveModel,
   HandleMoveModelFrom,
   HandleMoveModelTo,
-  isValTheSamePos,
+  isValueTheSamePos,
 } from 'Src/components/Interfaces';
 
 class Model {
@@ -32,7 +32,7 @@ class Model {
     this.findSuitablePercent(movedTo, thumb);
   }
 
-  public getValue(val: ModelVal): number | undefined | boolean {
+  public getValue(val: ModelValue): number | undefined | boolean {
     return this.state[`${val}`];
   }
 
@@ -130,7 +130,7 @@ class Model {
       thumbPercentTo,
     } = this.state;
 
-    if (this.isValTheSamePos({
+    if (this.isValueTheSamePos({
       value,
       valueAnotherThumb: valueTo,
       thumbPercent: thumbPercentTo,
@@ -153,7 +153,7 @@ class Model {
       thumbPercentFrom,
     } = this.state;
 
-    if (this.isValTheSamePos({
+    if (this.isValueTheSamePos({
       value,
       valueAnotherThumb: valueFrom,
       thumbPercent: thumbPercentFrom,
@@ -166,7 +166,7 @@ class Model {
     }
   }
 
-  private isValTheSamePos(values: isValTheSamePos) {
+  private isValueTheSamePos(values: isValueTheSamePos) {
     const {
       value,
       valueAnotherThumb,

@@ -32,7 +32,7 @@ interface SliderOptions extends ModelOptions {
   scaleMap?: Map<number, number>
 }
 
-type ModelVal = 'min' | 'max' | 'valueFrom' | 'step' | 'valueTo' | 'scaleMarks' | 'scalePercentGap'
+type ModelValue = 'min' | 'max' | 'valueFrom' | 'step' | 'valueTo' | 'scaleMarks' | 'scalePercentGap'
   | 'isTip' | 'isProgress' | 'isRange' | 'isVertical';
 type ThumbId = 'valueFrom' | 'valueTo'
 type StartPoint = 'top' | 'left';
@@ -98,7 +98,7 @@ interface TipData {
   isVertical: boolean,
 }
 
-interface isValTheSamePos {
+interface isValueTheSamePos {
   value: number | undefined,
   valueAnotherThumb: number | undefined,
   thumbPercent: number | undefined,
@@ -122,9 +122,11 @@ interface ModelSetVal {
   thumb: ThumbId
 }
 
+type Marks = Map<number, number>;
+
 export {
   ModelOptions,
-  ModelVal,
+  ModelValue,
   SliderOptions,
   ValidSliderData,
   ThumbId,
@@ -135,7 +137,7 @@ export {
   SliderEventValChangedData,
   ProgressData,
   TipData,
-  isValTheSamePos,
+  isValueTheSamePos,
   StepsMap,
   StartPoint,
   SizePoint,
@@ -144,4 +146,5 @@ export {
   ModelSetVal,
   ModelInputState,
   KeyEvent,
+  Marks,
 };

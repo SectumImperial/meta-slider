@@ -1,8 +1,9 @@
+import { Marks } from 'Src/components/Interfaces';
 import SliderComponents from '../SliderComponents/SliderComponents';
 import './scaleMarks.scss';
 
 class ScaleMarks extends SliderComponents {
-  public marks: Map<number, number>;
+  public marks: Marks;
 
   constructor(root: HTMLDivElement, marks: Map<number, number>, isVertical: boolean) {
     super(root, isVertical);

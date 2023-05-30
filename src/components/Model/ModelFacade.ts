@@ -3,7 +3,7 @@ import { MODEL_EVENTS } from 'Src/Observer/events';
 import {
   ModelInputState,
   ModelOptions,
-  ModelVal,
+  ModelValue,
   SliderOptions,
   StepsMap,
   ThumbId,
@@ -52,7 +52,7 @@ class ModelFacade extends Observer {
     return this.validator;
   }
 
-  public getValue(value: ModelVal) {
+  public getValue(value: ModelValue) {
     return this.model.getState()[`${value}`];
   }
 
@@ -90,7 +90,7 @@ class ModelFacade extends Observer {
     }
   }
 
-  public setValue(param: ModelVal, value: number | boolean): void {
+  public setValue(param: ModelValue, value: number | boolean): void {
     const oldState = this.model.getState();
     const newState = { ...oldState, [param]: value };
     const validState = this.validator.validateData(newState);
