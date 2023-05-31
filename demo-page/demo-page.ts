@@ -118,7 +118,7 @@ class DemoSlider {
     if (this.dom === undefined) return;
     if (this.dom.form !== undefined && this.dom.form !== null) {
       const elements: ElementListener[] = [];
-      this.dom.form.querySelectorAll('.slider__input').forEach((e) => {
+      this.dom.form.querySelectorAll('.js-slider__input').forEach((e) => {
         if (e) {
           elements.push(e);
         }
@@ -187,48 +187,48 @@ class DemoSlider {
   private findElements() {
     if (this.dom === undefined) return;
     if (this.dom.root === undefined) return;
-    this.dom.indicator = this.dom.root.querySelector('.main__slider-indicator');
+    this.dom.indicator = this.dom.root.querySelector('.js-main__slider-indicator');
     this.mapElements = new Map();
 
-    this.dom.content = this.dom.root.querySelector('.slider__content');
-    this.dom.form = this.dom.root.querySelector('.slider__form');
+    this.dom.content = this.dom.root.querySelector('.js-slider__content');
+    this.dom.form = this.dom.root.querySelector('.js-slider__form');
     if (!this.dom.form) return;
     const min = <HTMLInputElement>
-      this.dom.form.querySelector('.slider__input[data-role = min]');
+      this.dom.form.querySelector('.js-slider__input[data-role = min]');
     if (this.numericVariables === undefined) return;
     this.numericVariables.min = Number(min.value);
     this.mapElements.set('min', 'min');
 
     const max = <HTMLInputElement>
-      this.dom.form.querySelector('.slider__input[data-role = max]');
+      this.dom.form.querySelector('.js-slider__input[data-role = max]');
     this.numericVariables.max = Number(max.value);
     this.mapElements.set('max', 'max');
 
     const step = <HTMLInputElement>
-      this.dom.form.querySelector('.slider__input[data-role = step]');
+      this.dom.form.querySelector('.js-slider__input[data-role = step]');
     this.numericVariables.step = Number(step.value);
     this.mapElements.set('step', 'step');
 
     const from = <HTMLInputElement>
-      this.dom.form.querySelector('.slider__input[data-role = from]');
+      this.dom.form.querySelector('.js-slider__input[data-role = from]');
     this.numericVariables.from = Number(from.value);
 
     from.step = `${this.numericVariables.step}`;
     this.mapElements.set('from', 'valueFrom');
 
     const to = <HTMLInputElement>
-      this.dom.form.querySelector('.slider__input[data-role = to]');
+      this.dom.form.querySelector('.js-slider__input[data-role = to]');
     this.numericVariables.to = Number(to.value);
     to.step = `${this.numericVariables.step}`;
     this.mapElements.set('to', 'valueTo');
 
     const gap = <HTMLInputElement>
-      this.dom.form.querySelector('.slider__input[data-role = gap]');
+      this.dom.form.querySelector('.js-slider__input[data-role = gap]');
     if (gap.value) this.numericVariables.gap = Number(gap.value);
     this.mapElements.set('gap', 'scalePercentGap');
 
     const range = <HTMLInputElement>
-      this.dom.form.querySelector('.slider__input[data-role = range]');
+      this.dom.form.querySelector('.js-slider__input[data-role = range]');
 
     if (this.booleanVariables === undefined) return;
     this.booleanVariables.range = range.checked;
@@ -237,29 +237,29 @@ class DemoSlider {
     this.mapElements.set('range', 'isRange');
 
     const marks = <HTMLInputElement>
-      this.dom.form.querySelector('.slider__input[data-role = marks]');
+      this.dom.form.querySelector('.js-slider__input[data-role = marks]');
     this.booleanVariables.marks = marks.checked;
     if (this.booleanVariables.marks) gap.disabled = false;
     if (!this.booleanVariables.marks) gap.disabled = true;
     this.mapElements.set('marks', 'scaleMarks');
 
     const tip = <HTMLInputElement>
-      this.dom.form.querySelector('.slider__input[data-role = tip]');
+      this.dom.form.querySelector('.js-slider__input[data-role = tip]');
     this.booleanVariables.tip = tip.checked;
     this.mapElements.set('tip', 'isTip');
 
     const progress = <HTMLInputElement>
-      this.dom.form.querySelector('.slider__input[data-role = progress]');
+      this.dom.form.querySelector('.js-slider__input[data-role = progress]');
     this.booleanVariables.progress = progress.checked;
     this.mapElements.set('progress', 'isProgress');
 
     const vertical = <HTMLInputElement>
-      this.dom.form.querySelector('.slider__input[data-role = vertical]');
+      this.dom.form.querySelector('.js-slider__input[data-role = vertical]');
     this.booleanVariables.vertical = vertical.checked;
     this.mapElements.set('vertical', 'isVertical');
 
-    if (this.dom.content?.querySelector('.plugin-slider__thumb')) {
-      this.dom.thumb = this.dom.content?.querySelector('.plugin-slider__thumb');
+    if (this.dom.content?.querySelector('.js-plugin-slider__thumb')) {
+      this.dom.thumb = this.dom.content?.querySelector('.js-plugin-slider__thumb');
     }
   }
 
@@ -267,7 +267,7 @@ class DemoSlider {
     if (this.mapElements === undefined) return;
     this.mapElements.forEach((key: ModelValue, value: string) => {
       if (this.dom === undefined) return;
-      const element = this.dom.form?.querySelector(`.slider__input[data-role = ${value}]`);
+      const element = this.dom.form?.querySelector(`.js-slider__input[data-role = ${value}]`);
       if (element instanceof HTMLInputElement) {
         if (this.slider === undefined) return;
         if (element && typeof this.slider.getValue(key) === 'number') {
@@ -339,4 +339,4 @@ class DemoSlider {
   }
 }
 
-document.querySelectorAll('.main__slider').forEach((e) => new DemoSlider(e));
+document.querySelectorAll('.js-main__slider').forEach((e) => new DemoSlider(e));

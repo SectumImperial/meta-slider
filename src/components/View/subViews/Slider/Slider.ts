@@ -227,7 +227,7 @@ class Slider extends Observer {
     if (this.numberVariables === undefined) return;
     if (this.dom.slider === undefined) return;
 
-    const progress = this.dom.slider.querySelector('.plugin-slider__progress');
+    const progress = this.dom.slider.querySelector('.js-plugin-slider__progress');
     if (progress === null) {
       const positionEnd = typeof thumbPercentTo === 'number' ? thumbPercentTo : 0;
 

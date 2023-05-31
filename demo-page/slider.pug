@@ -15,100 +15,100 @@ mixin slider(options = {})
     } = options
 
   .slider
-    .slider__content 
+    .slider__content.js-slider__content
     .slider__nav
-      form(action="POST", method="get").slider__form
+      form(action="POST", method="get").slider__form.js-slider__form
         label.slider__label
-          span.slider__descr min:
+          span.slider__description min:
           input(
             type = 'number',
             value = min,
             data-role = 'min',
-            class = 'slider__input',
+            class = 'slider__input js-slider__input',
           ) 
         label.slider__label
-          span.slider__descr max:
+          span.slider__description max:
           input(
             type = 'number',
             value = max,
             data-role = 'max',
-            class = 'slider__input',
+            class = 'slider__input js-slider__input',
           ) 
         label.slider__label
-          span.slider__descr step:
+          span.slider__description step:
           input(
             type = 'number',
             value = step,
             min = 1,
             data-role = 'step',
-            class = 'slider__input',
+            class = 'slider__input js-slider__input',
           ) 
         label.slider__label
-          span.slider__descr from:
+          span.slider__description from:
           input(
             type = 'number',
             step = step
             value = from,
             data-role = 'from',
-            class = 'slider__input',
+            class = 'slider__input js-slider__input',
           ) 
         label.slider__label
-          span.slider__descr to:
+          span.slider__description to:
           input(
             type = 'number',
             value = to,
             step = step
             disabled = !range,
             data-role = 'to',
-            class = 'slider__input',
+            class = 'slider__input js-slider__input',
           ) 
         label.slider__label
-          span.slider__descr marks:
+          span.slider__description marks:
           input(
             type = 'checkbox',
             checked = marks,
             data-role = 'marks',
-            class = 'slider__input',
+            class = 'slider__input js-slider__input',
           ) 
         label.slider__label
-          span.slider__descr marks gap:
+          span.slider__description marks gap:
           input(
             type = 'number',
             value = gap,
             min = 1,
             data-role = 'gap',
-            class = 'slider__input',
+            class = 'slider__input js-slider__input',
             disabled = !marks,
           ) 
         label.slider__label
-          span.slider__descr tip:
+          span.slider__description tip:
           input(
             type = 'checkbox',
             checked = tip,
             data-role = 'tip',
-            class = 'slider__input',
+            class = 'slider__input js-slider__input',
           ) 
         label.slider__label
-          span.slider__descr range:
+          span.slider__description range:
           input(
             type = 'checkbox',
             checked = range,
             data-role = 'range',
-            class = 'slider__input',
+            class = 'slider__input js-slider__input',
           ) 
         label.slider__label
-          span.slider__descr progress:
+          span.slider__description progress:
           input(
             type = 'checkbox',
             checked = progress,
             data-role = 'progress',
-            class = 'slider__input',
+            class = 'slider__input js-slider__input',
           ) 
         label.slider__label
-          span.slider__descr vertical:
+          span.slider__description vertical:
           input(
             type = 'checkbox',
             checked = vertical,
             data-role = 'vertical',
-            class = 'slider__input',
+            class = 'slider__input js-slider__input',
           )
