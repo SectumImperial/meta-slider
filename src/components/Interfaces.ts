@@ -73,7 +73,7 @@ interface SliderEventValChangedData {
 interface ValidSliderData {
   coordsMove: number,
   scaleSize: number,
-  thumbId?: string,
+  thumbId?: ThumbId,
   keyEvent?: KeyEvent,
   percent?: number,
   value?: number,

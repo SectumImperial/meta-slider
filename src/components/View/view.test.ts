@@ -63,7 +63,7 @@ describe('The View component tests', () => {
     expect(thumb).toHaveLength(1);
   });
 
-  test('Thumb should have correct style left if pos. horiz.', () => {
+  test('Thumb should have correct style left if pos. horizontal.', () => {
     const thumb = root.querySelector('.js-plugin-slider__thumb') as HTMLDivElement;
     expect(thumb.style.left).toBe(`${initialState.thumbPercentFrom}%`);
   });
