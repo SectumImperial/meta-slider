@@ -1,7 +1,6 @@
 import { defaults } from 'jest-config';
 import type { Config } from '@jest/types';
 
-// Sync object
 const config: Config.InitialOptions = {
   verbose: true,
   preset: 'ts-jest',
@@ -10,11 +9,16 @@ const config: Config.InitialOptions = {
   collectCoverageFrom: [
     '**/*.{ts,tsx}',
     '!**/node_modules/**',
+    '!jest.config.ts**',
+    '!**/state.ts**',
+    '!**/slider.ts**',
   ],
 
   moduleNameMapper: {
     '\\.(css|scss)$': '<rootDir>/styleMock.js',
   },
+
+  modulePaths: ['<rootDir>'],
 };
 
 export default config;

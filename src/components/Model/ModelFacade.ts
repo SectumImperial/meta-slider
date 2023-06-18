@@ -97,7 +97,7 @@ class ModelFacade extends Observer {
     this.emit(MODEL_EVENTS.VALUE_CHANGED, this.model.getState());
   }
 
-  private validGapMarks(): StepsMap {
+  public validGapMarks(): StepsMap {
     const gap = this.model.getState().scalePercentGap || 20;
     const { min, max, step } = this.model.getState();
     const sliderMarks = this.validator.validateMarks({

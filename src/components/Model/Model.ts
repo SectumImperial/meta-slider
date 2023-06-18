@@ -29,7 +29,8 @@ class Model {
   }
 
   public updateStateMove(movedTo: number, thumb: ThumbId): void {
-    this.findSuitablePercent(movedTo, thumb);
+    const valueThumbObject = this.findSuitablePercent(movedTo, thumb);
+    this.handleMove(valueThumbObject);
   }
 
   public getValue(val: ModelValue): number | undefined | boolean {
@@ -47,14 +48,14 @@ class Model {
     this.stepPercent = Number((this.state.step / this.findValPercent()));
   }
 
-  private findSuitablePercent(percentMove: number, thumb: ThumbId) {
+  private findSuitablePercent(percentMove: number, thumb: ThumbId): HandleMoveModel {
     const {
       step,
       max,
       min,
     } = this.state;
 
-    if (this.stepPercent === undefined) return;
+    if (this.stepPercent === undefined) this.stepPercent = 1;
     const nearestPrevCountStep = Math.floor(percentMove / this.stepPercent);
     const nearestNextCountStep = Math.ceil(percentMove / this.stepPercent);
 
@@ -87,11 +88,11 @@ class Model {
     }
     if (percent === undefined) percent = this.stepPercent * nearestPrevCountStep;
 
-    this.handleMove({
+    return {
       value,
       thumb,
       percent,
-    });
+    };
   }
 
   private handleMove(values: HandleMoveModel): void {
@@ -199,11 +200,11 @@ class Model {
 
   private updateMoved(val: number, percent: number, thumb: ThumbId): void {
     if (Number.isNaN(val) || percent === undefined) throw new Error('Something wrong with setting new values');
-    const thumbPecent = ThumbValPercent[thumb];
+    const thumbPercent = ThumbValPercent[thumb];
 
     this.setState({
       [thumb]: val,
-      [thumbPecent]: percent,
+      [thumbPercent]: percent,
     });
   }
 }

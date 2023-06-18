@@ -1,9 +1,10 @@
+import { ValidSliderData } from 'Src/components/Interfaces';
 import ModelFacade from './ModelFacade';
 import Model from './Model';
 import Validator from './Validator';
 
-describe('The modelFacede tests', () => {
-  let modelFacede: ModelFacade;
+describe('The modelFacade tests', () => {
+  let modelFacade: ModelFacade;
 
   const testData = {
     min: 0,
@@ -26,13 +27,24 @@ describe('The modelFacede tests', () => {
     max: 10,
     valueFrom: 11,
     step: 123,
-    valueTo: undefined,
+    valueTo: 32,
     scalePercentGap: 5,
     scaleMarks: false,
     isTip: true,
     isProgress: true,
     isRange: true,
     isVertical: false,
+  };
+
+  const mapTests = {
+    ...testData,
+    scaleMarks: true,
+  };
+
+  const updateData: ValidSliderData = {
+    coordsMove: 6,
+    scaleSize: 1076.546875,
+    thumbId: 'valueTo',
   };
 
   const dataWrong = {
@@ -54,14 +66,19 @@ describe('The modelFacede tests', () => {
   };
 
   const dataCorrectTwoThumbs = {
-    ...testDataWrongTwoThumbs,
-    max: 20,
     min: 10,
+    max: 20,
     step: 10,
     thumbPercentFrom: 0,
-    thumbPercentTo: 0,
+    thumbPercentTo: 100,
     valueFrom: 10,
-    valueTo: 10,
+    valueTo: 20,
+    scalePercentGap: 5,
+    scaleMarks: false,
+    isTip: true,
+    isProgress: true,
+    isRange: true,
+    isVertical: false,
   };
 
   const correctChangedData = {
@@ -76,40 +93,61 @@ describe('The modelFacede tests', () => {
   };
 
   beforeEach(() => {
-    modelFacede = new ModelFacade(testData);
+    modelFacade = new ModelFacade(testData);
   });
 
-  test('The modelFacade must be an instance of ModelFacade', () => {
-    expect(modelFacede).toBeInstanceOf(ModelFacade);
+  test('must be an instance of ModelFacade', () => {
+    expect(modelFacade).toBeInstanceOf(ModelFacade);
   });
 
-  test('The facade should return a Model instance', () => {
-    expect(modelFacede.getModel()).toBeInstanceOf(Model);
+  test('should return a Model instance', () => {
+    expect(modelFacade.getModel()).toBeInstanceOf(Model);
   });
 
-  test('The facade should return a Validator instance', () => {
-    expect(modelFacede.getValidator()).toBeInstanceOf(Validator);
+  test('should return a Validator instance', () => {
+    expect(modelFacade.getValidator()).toBeInstanceOf(Validator);
   });
 
-  test('The facade should return a valid data', () => {
-    modelFacede = new ModelFacade(dataWrong);
-    expect(modelFacede.getState()).toStrictEqual(dataCorrect);
+  test('should return a valid data', () => {
+    modelFacade = new ModelFacade(dataWrong);
+    expect(modelFacade.getState()).toStrictEqual(dataCorrect);
   });
 
-  test('The facade should return a valid data with two thumbs', () => {
-    modelFacede = new ModelFacade(testDataWrongTwoThumbs);
-    expect(modelFacede.getState()).toStrictEqual(dataCorrectTwoThumbs);
+  test('should return a valid data with two thumbs', () => {
+    modelFacade = new ModelFacade(testDataWrongTwoThumbs);
+    expect(modelFacade.getState()).toStrictEqual(dataCorrectTwoThumbs);
   });
 
-  test('The facade should set values', () => {
-    modelFacede = new ModelFacade(testData);
-    modelFacede.setValue('max', 20);
-    expect(modelFacede.getState()).toStrictEqual(correctChangedData);
+  test('should set values', () => {
+    modelFacade = new ModelFacade(testData);
+    modelFacade.setValue('max', 20);
+    expect(modelFacade.getState()).toStrictEqual(correctChangedData);
   });
 
-  test('The facade should set correct values', () => {
-    modelFacede = new ModelFacade(testData);
-    modelFacede.setValue('isRange', 20);
-    expect(modelFacede.getState()).toStrictEqual(correctChangedValData);
+  test('should set correct values', () => {
+    modelFacade = new ModelFacade(testData);
+    modelFacade.setValue('isRange', 20);
+    expect(modelFacade.getState()).toStrictEqual(correctChangedValData);
+  });
+
+  test('should return correct value', () => {
+    modelFacade = new ModelFacade(testData);
+    expect(modelFacade.getValue('valueFrom')).toStrictEqual(testData.valueFrom);
+  });
+
+  test('should return correct type of scale marks', () => {
+    modelFacade = new ModelFacade(mapTests);
+    expect(modelFacade.validGapMarks()).toBeInstanceOf(Map);
+  });
+
+  test('should correct set data', () => {
+    modelFacade = new ModelFacade(testData);
+    modelFacade.setState(dataCorrect);
+    expect(modelFacade.getState()).toStrictEqual(dataCorrect);
+  });
+
+  test('update should return nothing', () => {
+    modelFacade = new ModelFacade(testData);
+    expect(modelFacade.update(updateData)).toStrictEqual(undefined);
   });
 });

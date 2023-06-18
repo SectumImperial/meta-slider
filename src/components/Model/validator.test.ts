@@ -1,3 +1,4 @@
+import { ValidSliderData, ModelOptions } from 'Src/components/Interfaces';
 import Validator from './Validator';
 
 const initialStateOneThumb = {
@@ -132,6 +133,60 @@ describe('The validation of data tests', () => {
     thumbPercentTo: 100,
   };
 
+  const oldStateValidatePercent = {
+    ...initialStateOneThumb,
+    min: 0,
+    max: 100,
+    valueFrom: 10,
+    valueTo: 0,
+    step: 1,
+    thumbPercentFrom: 10,
+  };
+
+  const newStateValidatePercent = {
+    ...initialStateOneThumb,
+    min: 0,
+    max: 100,
+    valueFrom: 10,
+    valueTo: 0,
+    step: 1,
+    thumbPercentFrom: 10,
+  };
+
+  const oldStateValidPercentTwoThumbs = {
+    min: 0,
+    max: 100,
+    valueFrom: 0,
+    valueTo: 0,
+    step: 1,
+    scalePercentGap: 10,
+    scaleMarks: true,
+    isTip: false,
+    isProgress: false,
+    isRange: true,
+    isVertical: false,
+    thumbPercentFrom: 0,
+    thumbPercentTo: 0,
+    scaleMap: {},
+  };
+
+  const newStateValidPercentTwoThumbs = {
+    min: 0,
+    max: 100,
+    valueFrom: 0,
+    valueTo: 10,
+    step: 1,
+    scalePercentGap: 10,
+    scaleMarks: true,
+    isTip: false,
+    isProgress: false,
+    isRange: true,
+    isVertical: false,
+    thumbPercentFrom: 0,
+    thumbPercentTo: 10,
+    scaleMap: {},
+  };
+
   test('Step can not be bigger than all range', () => {
     validator = new Validator(dataValSmallWrong);
     expect(validator.validateData(dataStepWrong)).toEqual(dataStepCorrect);
@@ -160,5 +215,56 @@ describe('The validation of data tests', () => {
   test('Value from cannot be bigger than value to', () => {
     validator = new Validator(dataValSmallWrong);
     expect(validator.validateData(dataFromToWrong)).toEqual(dataFromToCorrect);
+  });
+
+  test('Should validate thumbId', () => {
+    validator = new Validator(initialStateTwoThumb);
+    const thumb = validator.validateThumbId(1);
+    expect(thumb).toEqual('valueFrom');
+  });
+
+  test('Should correct perform move coords to percent', () => {
+    const move = {
+      coordsMove: 1,
+      thumbId: 'valueFrom',
+      scaleSize: 1076.546875,
+    };
+
+    validator = new Validator({
+      ...initialStateOneThumb,
+      min: 0,
+      max: 100,
+    });
+    const movePercent = validator.performMoveToPercent(move as ValidSliderData);
+    expect(movePercent).toEqual(0.09);
+  });
+
+  test('Should correct perform move coords to percent by keyboard', () => {
+    const move = {
+      keyEvent: 'increment',
+      thumbId: 'valueFrom',
+    };
+
+    validator = new Validator({
+      ...initialStateOneThumb,
+      min: 0,
+      max: 100,
+    });
+    const movePercent = validator.performMoveToPercent(move as ValidSliderData);
+    expect(movePercent).toEqual(1);
+  });
+
+  test('Should correct validate percent by click on marks wit one thumb', () => {
+    const percent = validator.validatePercent(10, 10, oldStateValidatePercent as ModelOptions);
+    expect(percent).toEqual(newStateValidatePercent);
+  });
+
+  test('Should correct validate percent by click on marks with two thumb', () => {
+    const percent = validator.validatePercent(
+      10,
+      10,
+      oldStateValidPercentTwoThumbs as ModelOptions,
+    );
+    expect(percent).toEqual(newStateValidPercentTwoThumbs);
   });
 });

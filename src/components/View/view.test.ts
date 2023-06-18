@@ -48,6 +48,17 @@ describe('The View component tests', () => {
     expect(view).toBeInstanceOf(View);
   });
 
+  test('should return correct root', () => {
+    expect(view.getRoot()).toStrictEqual(root);
+  });
+
+  test('should set correct root', () => {
+    const newRoot = document.createElement('div');
+    newRoot.className = 'new-slider__wrapper';
+    view.setRoot(newRoot);
+    expect(view.getRoot()).toStrictEqual(newRoot);
+  });
+
   test('Slider should exist', () => {
     const slider = root.querySelectorAll('.js-plugin-slider');
     expect(slider).toHaveLength(1);

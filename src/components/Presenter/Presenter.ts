@@ -21,7 +21,7 @@ class Presenter extends Observer {
     return this.modelFacade.getState();
   }
 
-  public setNewState(state: ModelInputState): void {
+  public setState(state: ModelInputState): void {
     this.modelFacade.setState(state);
   }
 

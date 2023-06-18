@@ -48,7 +48,7 @@ const options = {
 ## Methods
 
 - `getState()`: return the current state.
-- `setNewState(state)`: set new state
+- `setState(state)`: set new state
 - `setValue(value: string, param of string: number | boolean)`: set value. Possible value for set is: `min: number`, `max: number`, `valueFrom: number`, `step: number`, `valueTo: number`, `scaleMarks: boolean`, `scalePercentGap: number`, `isTip: boolean`, `isProgress: boolean`, `isRange: boolean`, `isVertical: boolean`
 - `getValue(value: string)`: return value. The possible values correspond to the options parameters.
 

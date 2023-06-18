@@ -33,27 +33,27 @@ describe('The model tests', () => {
     model = new ModelFacade(testState).getModel();
   });
 
-  test('The model must be an instance of Model', () => {
+  test('must be an instance of Model', () => {
     expect(model).toBeInstanceOf(Model);
   });
 
-  test('The model must have defined min', () => {
+  test('must have defined min', () => {
     expect(model.getValue('min')).toBeDefined();
   });
 
-  test('The model must have defined max', () => {
+  test('must have defined max', () => {
     expect(model.getValue('max')).toBeDefined();
   });
 
-  test('The model must have defined value', () => {
+  test('must have defined value', () => {
     expect(model.getValue('valueFrom')).toBeDefined();
   });
 
-  test('The model must have defined step', () => {
+  test('must have defined step', () => {
     expect(model.getValue('step')).toBeDefined();
   });
 
-  test('The model should return correct percent of curr. val', () => {
+  test('should return correct percent of curr. val', () => {
     const { valueFrom, min, max } = testState;
     const range = max - min;
     const percent = Number(((valueFrom / range) * 100).toFixed(3));
@@ -61,7 +61,7 @@ describe('The model tests', () => {
     expect(model.getPercentVal()).toEqual(percent);
   });
 
-  test('The model should return correct value after moving thumb', () => {
+  test('should return correct value after moving thumb', () => {
     model.setState(testState);
     model.updateStateMove(50, 'valueFrom');
     expect(model.getState()).toEqual(stateRangeAfterMove);

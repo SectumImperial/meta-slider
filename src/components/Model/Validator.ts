@@ -185,7 +185,6 @@ class Validator {
       const result = this.validateData(newDate);
       return result;
     }
-
     return oldState;
   }
 
@@ -282,7 +281,6 @@ class Validator {
 
   private checkValues(): void {
     if (this.booleanVariables === undefined) return;
-
     this.baseParams.valueFrom = this.checkValue(this.baseParams.valueFrom);
 
     if (this.booleanVariables.isRange && this.baseParams.valueTo !== undefined) {
