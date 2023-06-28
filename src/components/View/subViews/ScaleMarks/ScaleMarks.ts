@@ -22,7 +22,7 @@ class ScaleMarks extends SliderComponents {
     this.root.addEventListener('click', this.handleRootClick);
   }
 
-  private handleRootClick(e: Event) {
+  private handleRootClick(e: Event): void {
     const target = e.target as HTMLElement;
     if (target === null) return;
     const { value, percent } = target.dataset;

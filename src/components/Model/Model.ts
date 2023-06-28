@@ -3,9 +3,9 @@ import {
   ModelValue,
   ThumbId,
   ThumbValPercent,
-  HandleMoveModel,
-  HandleMoveModelFrom,
-  HandleMoveModelTo,
+  HandledMoveModel,
+  HandledMoveModelFrom,
+  HandledMoveModelTo,
   isValueTheSamePos,
 } from 'Src/components/Interfaces';
 
@@ -48,7 +48,7 @@ class Model {
     this.stepPercent = Number((this.state.step / this.findValPercent()));
   }
 
-  private findSuitablePercent(percentMove: number, thumb: ThumbId): HandleMoveModel {
+  private findSuitablePercent(percentMove: number, thumb: ThumbId): HandledMoveModel {
     const {
       step,
       max,
@@ -95,7 +95,7 @@ class Model {
     };
   }
 
-  private handleMove(values: HandleMoveModel): void {
+  private handleMove(values: HandledMoveModel): void {
     const {
       value,
       thumb,
@@ -119,7 +119,7 @@ class Model {
     }
   }
 
-  private handleMoveFrom(values: HandleMoveModelFrom): void {
+  private handleMoveFrom(values: HandledMoveModelFrom): void {
     const {
       value,
       thumb,
@@ -142,7 +142,7 @@ class Model {
     } else if (value !== undefined) this.updateMoved(value, percent, thumb);
   }
 
-  private handleMoveTo(values: HandleMoveModelTo): void {
+  private handleMoveTo(values: HandledMoveModelTo): void {
     const {
       value,
       thumb,

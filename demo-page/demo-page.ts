@@ -91,7 +91,7 @@ class DemoSlider {
     this.init();
   }
 
-  private init() {
+  public init() {
     this.findElements();
 
     this.stateObject = {
@@ -114,7 +114,7 @@ class DemoSlider {
     this.addListeners();
   }
 
-  private addListeners() {
+  public addListeners() {
     if (this.dom === undefined) return;
     if (this.dom.form !== undefined && this.dom.form !== null) {
       const elements: ElementListener[] = [];
@@ -139,7 +139,7 @@ class DemoSlider {
     }
   }
 
-  private handleItemChange(e: InputEvent): void {
+  public handleItemChange(e: InputEvent): void {
     if (this.dom === undefined) return;
 
     this.toggleIndicator();
@@ -171,20 +171,20 @@ class DemoSlider {
     this.toggleIndicator();
   }
 
-  private toggleIndicator() {
+  public toggleIndicator() {
     if (this.dom === undefined) return;
     if (this.dom.indicator !== undefined && this.dom.indicator !== null) {
       this.dom.indicator.classList.toggle('main__slider-indicator_active');
     }
   }
 
-  private addSlider(options: ModelInputState) {
+  public addSlider(options: ModelInputState) {
     if (this.dom === undefined) return;
     if (!this.dom.content) return;
     this.slider = $(this.dom.content).sliderPlugin(options);
   }
 
-  private findElements() {
+  public findElements() {
     if (this.dom === undefined) return;
     if (this.dom.root === undefined) return;
     this.dom.indicator = this.dom.root.querySelector('.js-main__slider-indicator');
@@ -263,7 +263,7 @@ class DemoSlider {
     }
   }
 
-  private updateForm() {
+  public updateForm() {
     if (this.mapElements === undefined) return;
     this.mapElements.forEach((key: ModelValue, value: string) => {
       if (this.dom === undefined) return;
@@ -287,13 +287,13 @@ class DemoSlider {
     });
   }
 
-  private handleContentClick() {
+  public handleContentClick() {
     this.toggleIndicator();
     this.updateForm();
     this.toggleIndicator();
   }
 
-  private handleContentPointerDown() {
+  public handleContentPointerDown() {
     if (this.dom === undefined) return;
     this.toggleIndicator();
     const handlePointerMove = () => {
@@ -310,7 +310,7 @@ class DemoSlider {
     this.dom.content?.addEventListener('pointerup', handlePointerUp);
   }
 
-  private handleThumbKeyPress(e: KeyboardEvent): void {
+  public handleThumbKeyPress(e: KeyboardEvent): void {
     this.toggleIndicator();
 
     const { key } = e;
@@ -321,7 +321,7 @@ class DemoSlider {
     this.toggleIndicator();
   }
 
-  private handleThumbTouchMove() {
+  public handleThumbTouchMove() {
     this.toggleIndicator();
     const handleThumbTouchMoveStart = (e: TouchEvent) => {
       e.stopImmediatePropagation();
@@ -340,3 +340,5 @@ class DemoSlider {
 }
 
 document.querySelectorAll('.js-main__slider').forEach((e) => new DemoSlider(e));
+
+export default DemoSlider;

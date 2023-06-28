@@ -43,19 +43,19 @@ const ThumbValPercent = {
   valueTo: 'thumbPercentTo',
 };
 
-interface HandleMoveModel {
+interface HandledMoveModel {
   value: number | undefined,
   thumb: ThumbId,
   percent: number,
 }
 
-interface HandleMoveModelFrom {
+interface HandledMoveModelFrom {
   value: number | undefined,
   thumb: ThumbId,
   percent: number,
 }
 
-interface HandleMoveModelTo {
+interface HandledMoveModelTo {
   value: number | undefined,
   thumb: ThumbId,
   percent: number,
@@ -131,9 +131,9 @@ export {
   ValidSliderData,
   ThumbId,
   ThumbValPercent,
-  HandleMoveModel,
-  HandleMoveModelFrom,
-  HandleMoveModelTo,
+  HandledMoveModel,
+  HandledMoveModelFrom,
+  HandledMoveModelTo,
   SliderEventValChangedData,
   ProgressData,
   TipData,

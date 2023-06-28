@@ -38,7 +38,7 @@ class SliderComponents extends Observer {
     return element;
   }
 
-  protected performPointerMove(thumbPos: number, id: string): void {
+  public performPointerMove(thumbPos: number, id: string): void {
     const handleThumbPointerMove = (e: PointerEvent) => {
       e.preventDefault();
       const elemSize = this.root.getBoundingClientRect()[this.startPoint];
@@ -58,7 +58,7 @@ class SliderComponents extends Observer {
     document.addEventListener('pointerup', handleThumbPointerUp);
   }
 
-  protected performTouchMove(thumbPos: number, id: ThumbId): void {
+  public performTouchMove(thumbPos: number, id: ThumbId): void {
     const handleThumbTouchMove = (e: TouchEvent) => {
       e.stopImmediatePropagation();
       const elemSize = this.root.getBoundingClientRect()[this.startPoint];
@@ -78,7 +78,7 @@ class SliderComponents extends Observer {
     document.addEventListener('touchend', handleThumbTouchEnd);
   }
 
-  protected performKeyDown(keyEvent: KeyEvent, id: ThumbId): void {
+  public performKeyDown(keyEvent: KeyEvent, id: ThumbId): void {
     this.emit(SLIDER_EVENTS.KEY_DOWN, {
       keyEvent,
       thumbId: id,

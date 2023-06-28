@@ -12,6 +12,7 @@ const config: Config.InitialOptions = {
     '!jest.config.ts**',
     '!**/state.ts**',
     '!**/slider.ts**',
+    '!**/Demo-page.ts**',
   ],
 
   moduleNameMapper: {

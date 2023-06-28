@@ -148,6 +148,6 @@ describe('The modelFacade tests', () => {
 
   test('update should return nothing', () => {
     modelFacade = new ModelFacade(testData);
-    expect(modelFacade.update(updateData)).toStrictEqual(undefined);
+    expect(modelFacade.update(updateData)).toBeUndefined();
   });
 });
