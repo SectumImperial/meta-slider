@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import { ModelInputState, ModelValue } from 'Src/components/Interfaces';
 import '../src/slider';
 import './styles.scss';
