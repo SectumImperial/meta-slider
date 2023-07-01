@@ -1,4 +1,4 @@
-import { ValidSliderData, ModelOptions } from 'Src/components/Interfaces';
+import { ValidSliderData, ModelOptions } from '@src/components/Interfaces';
 import Validator from './Validator';
 
 const initialStateOneThumb = {

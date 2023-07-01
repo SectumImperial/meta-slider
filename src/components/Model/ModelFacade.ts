@@ -1,5 +1,5 @@
-import Observer from 'Src/Observer/Observer';
-import { MODEL_EVENTS } from 'Src/Observer/events';
+import Observer from '@src/Observer/Observer';
+import { MODEL_EVENTS } from '@src/Observer/events';
 import {
   ModelInputState,
   ModelOptions,
@@ -7,7 +7,7 @@ import {
   SliderOptions,
   StepsMap,
   ValidSliderData,
-} from 'Src/components/Interfaces';
+} from '@src/components/Interfaces';
 import Model from './Model';
 import Validator from './Validator';
 

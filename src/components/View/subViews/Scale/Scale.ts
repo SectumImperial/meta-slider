@@ -1,4 +1,4 @@
-import { SLIDER_EVENTS } from 'Src/Observer/events';
+import { SLIDER_EVENTS } from '@src/Observer/events';
 import SliderComponents from '../SliderComponents/SliderComponents';
 import './scale.scss';
 

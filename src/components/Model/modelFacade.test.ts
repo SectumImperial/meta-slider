@@ -1,4 +1,4 @@
-import { ValidSliderData } from 'Src/components/Interfaces';
+import { ValidSliderData } from '@src/components/Interfaces';
 import ModelFacade from './ModelFacade';
 import Model from './Model';
 import Validator from './Validator';

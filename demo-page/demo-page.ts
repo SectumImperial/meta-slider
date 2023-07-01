@@ -1,4 +1,5 @@
-import { ModelInputState, ModelValue } from 'Src/components/Interfaces';
+import $ from 'jquery';
+import { ModelInputState, ModelValue } from '@src/components/Interfaces';
 import '../src/slider';
 import './styles.scss';
 
@@ -287,9 +288,7 @@ class DemoSlider {
   }
 
   public handleContentClick() {
-    this.toggleIndicator();
     this.updateForm();
-    this.toggleIndicator();
   }
 
   public handleContentPointerDown() {

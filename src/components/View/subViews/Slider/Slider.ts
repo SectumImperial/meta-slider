@@ -1,11 +1,11 @@
-import Observer from 'Src/Observer/Observer';
-import { SLIDER_EVENTS } from 'Src/Observer/events';
+import Observer from '@src/Observer/Observer';
+import { SLIDER_EVENTS } from '@src/Observer/events';
 import {
   SliderOptions,
   SliderEventValChangedData,
   ScaleClickData,
   ThumbId,
-} from 'Src/components/Interfaces';
+} from '@src/components/Interfaces';
 import Progress from '../Progress/Progress';
 import Scale from '../Scale/Scale';
 import ScaleMarks from '../ScaleMarks/ScaleMarks';

@@ -54,13 +54,13 @@ const options = {
 
 ## Commands
 Clone:
-`` git clone https://github.com/SectumImperial/meta-toxin.git``
+`` git clone https://github.com/SectumImperial/meta-slider.git``
 
 - `npm run start` - Command to start the dev server
 - `npm run build` - Command for the project build
 - `npm run lint` - Command to check syntax
 - `npm run test` - Command to run tests
-- `npm run transpile` - Command to transpile TS inro JS. 
+- `npm run transpile` - Command to transpile TS into JS. 
 
 ## Diagram 
 

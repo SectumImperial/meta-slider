@@ -1,4 +1,4 @@
-import { Marks } from 'Src/components/Interfaces';
+import { Marks } from '@src/components/Interfaces';
 import SliderComponents from '../SliderComponents/SliderComponents';
 import './scaleMarks.scss';
 

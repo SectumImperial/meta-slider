@@ -7,7 +7,7 @@ import {
   HandledMoveModelFrom,
   HandledMoveModelTo,
   isValueTheSamePos,
-} from 'Src/components/Interfaces';
+} from '@src/components/Interfaces';
 
 class Model {
   private state: ModelOptions;

@@ -1,6 +1,6 @@
-import { MODEL_EVENTS, SLIDER_EVENTS } from 'Src/Observer/events';
-import Observer from 'Src/Observer/Observer';
-import { ModelInputState, ModelValue, SliderOptions } from 'Src/components/Interfaces';
+import { MODEL_EVENTS, SLIDER_EVENTS } from '@src/Observer/events';
+import Observer from '@src/Observer/Observer';
+import { ModelInputState, ModelValue, SliderOptions } from '@src/components/Interfaces';
 import View from '../View/View';
 import ModelFacade from '../Model/ModelFacade';
 

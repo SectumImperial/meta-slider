@@ -63,10 +63,10 @@ module.exports = {
   },
   optimization: optimization(),
   resolve: {
-    extensions: ['.ts', '.tsx', '.js'],
     alias: {
-      'Src': path.resolve(__dirname, './src'),
+      '@src': path.resolve(__dirname, './src'),
     },
+    extensions: ['.ts', '.tsx', '.js'],
   },
   plugins: [
     new HtmlWebpackPlugin({

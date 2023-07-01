@@ -1,6 +1,6 @@
-import Observer from 'Src/Observer/Observer';
-import { SLIDER_EVENTS } from 'Src/Observer/events';
-import { SliderOptions } from 'Src/components/Interfaces';
+import Observer from '@src/Observer/Observer';
+import { SLIDER_EVENTS } from '@src/Observer/events';
+import { SliderOptions } from '@src/components/Interfaces';
 import Slider from './subViews/Slider/Slider';
 
 class View extends Observer {

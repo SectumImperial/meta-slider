@@ -1,4 +1,4 @@
-import { ProgressData } from 'Src/components/Interfaces';
+import { ProgressData } from '@src/components/Interfaces';
 import SliderComponents from '../SliderComponents/SliderComponents';
 import './progress.scss';
 

@@ -1,4 +1,4 @@
-import { ThumbArgs, ThumbId } from 'Src/components/Interfaces';
+import { ThumbArgs, ThumbId } from '@src/components/Interfaces';
 import SliderComponents from '../SliderComponents/SliderComponents';
 import './thumb.scss';
 

@@ -1,11 +1,11 @@
-import Observer from 'Src/Observer/Observer';
-import { SLIDER_EVENTS } from 'Src/Observer/events';
+import Observer from '@src/Observer/Observer';
+import { SLIDER_EVENTS } from '@src/Observer/events';
 import {
   KeyEvent,
   SizePoint,
   StartPoint,
   ThumbId,
-} from 'Src/components/Interfaces';
+} from '@src/components/Interfaces';
 
 class SliderComponents extends Observer {
   readonly size: SizePoint;

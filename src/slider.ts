@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import Presenter from './components/Presenter/Presenter';
 import initialState from './state';
 
