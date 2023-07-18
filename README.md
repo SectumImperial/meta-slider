@@ -62,6 +62,11 @@ Clone:
 - `npm run test` - Command to run tests
 - `npm run transpile` - Command to transpile TS into JS. 
 
+
+## Used plugins
+
+- JQuery: "^3.6.1",
+
 ## Diagram 
 
 ![UML-diagram](https://github.com/SectumImperial/meta-slider/blob/master/slder.png "diagram")

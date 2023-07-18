@@ -28,7 +28,12 @@
     "jest/no-identical-title": "error",
     "jest/prefer-to-have-length": "warn",
     "jest/valid-expect": "error",
-    "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": true
+      }
+    ],
     "import/extensions": [
       "error",
       "ignorePackages",
@@ -38,7 +43,74 @@
         "ts": "never",
         "tsx": "never"
       }
-   ]
+    ],
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "FunctionDeclaration[generator=true]",
+        "message": "Generators are allowed."
+      },
+      {
+        "selector": "FunctionDeclaration[async=true]",
+        "message": "Async functions are allowed."
+      },
+      {
+        "selector": "FunctionExpression[generator=true]",
+        "message": "Generators are allowed."
+      },
+      {
+        "selector": "FunctionExpression[async=true]",
+        "message": "Async functions are allowed."
+      },
+      {
+        "selector": "ArrowFunctionExpression[generator=true]",
+        "message": "Generators are allowed."
+      },
+      {
+        "selector": "ArrowFunctionExpression[async=true]",
+        "message": "Async functions are allowed."
+      },
+      {
+        "selector": "MethodDefinition[value.generator=true]",
+        "message": "Generators are allowed."
+      },
+      {
+        "selector": "MethodDefinition[value.async=true]",
+        "message": "Async functions are allowed."
+      },
+      {
+        "selector": "FunctionDeclaration[generator=true] > BlockStatement",
+        "message": "Generators are allowed."
+      },
+      {
+        "selector": "FunctionDeclaration[async=true] > BlockStatement",
+        "message": "Async functions are allowed."
+      },
+      {
+        "selector": "FunctionExpression[generator=true] > BlockStatement",
+        "message": "Generators are allowed."
+      },
+      {
+        "selector": "FunctionExpression[async=true] > BlockStatement",
+        "message": "Async functions are allowed."
+      },
+      {
+        "selector": "ArrowFunctionExpression[generator=true] > BlockStatement",
+        "message": "Generators are allowed."
+      },
+      {
+        "selector": "ArrowFunctionExpression[async=true] > BlockStatement",
+        "message": "Async functions are allowed."
+      },
+      {
+        "selector": "MethodDefinition[value.generator=true] > FunctionExpression > BlockStatement",
+        "message": "Generators are allowed."
+      },
+      {
+        "selector": "MethodDefinition[value.async=true] > FunctionExpression > BlockStatement",
+        "message": "Async functions are allowed."
+      }
+    ]
   },
   "settings": {
     "import/resolver": {
@@ -49,7 +121,7 @@
           ".ts",
           ".tsx"
         ]
-      }
+      },
     }
-}
+  }
 }
