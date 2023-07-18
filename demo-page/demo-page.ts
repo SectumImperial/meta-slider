@@ -4,7 +4,7 @@ import '../src/slider';
 import './styles.scss';
 
 class DemoSlider {
-  dom: {
+  private dom: {
     root: Element;
     indicator: Element | null;
     form?: Element | null;
@@ -12,7 +12,7 @@ class DemoSlider {
     thumb?: Element | null;
   };
 
-  booleanVariables: {
+  private booleanVariables: {
     range: boolean;
     marks: boolean;
     tip: boolean;
@@ -20,7 +20,7 @@ class DemoSlider {
     vertical: boolean;
   };
 
-  numericVariables: {
+  private numericVariables: {
     min: number;
     max: number;
     step: number;
@@ -29,11 +29,9 @@ class DemoSlider {
     gap?: number | null;
   };
 
-  mapElements?: Map<string, ModelValue>;
-
-  slider?: import('../src/components/Presenter/Presenter').default;
-
-  formValues: Map<string, string>;
+  private mapElements: Map<string, ModelValue> | undefined;
+  private slider: import('../src/components/Presenter/Presenter').default | undefined;
+  private formValues: Map<string, string>;
 
   constructor(root: Element) {
     this.dom = {
@@ -78,8 +76,20 @@ class DemoSlider {
     this.addListeners();
   }
 
-  public addListeners() {
-    if (!this.dom.form) return;
+  public static getFormValues(form: HTMLFormElement): Map<string, string> {
+    const formValues = new Map<string, string>();
+    const formElements = Array.from(form.querySelectorAll('.js-slider__input[data-role]'));
+    formElements.forEach((element: Element) => {
+      const key = element.getAttribute('data-role');
+      if (key !== null && element instanceof HTMLInputElement) {
+        formValues.set(key, element.value);
+      }
+    });
+    return formValues;
+  }
+
+  private addListeners() {
+    if (this.dom.form === undefined || this.dom.form === null) return;
 
     const elements = Array.from(this.dom.form.querySelectorAll('.js-slider__input'));
     elements.forEach((element: Element) => {
@@ -102,19 +112,7 @@ class DemoSlider {
     }
   }
 
-  static getFormValues(form: HTMLFormElement): Map<string, string> {
-    const formValues = new Map<string, string>();
-    const formElements = Array.from(form.querySelectorAll('.js-slider__input[data-role]'));
-    formElements.forEach((element: Element) => {
-      const key = element.getAttribute('data-role');
-      if (key !== null && element instanceof HTMLInputElement) {
-        formValues.set(key, element.value);
-      }
-    });
-    return formValues;
-  }
-
-  public toggleIndicator() {
+  private toggleIndicator() {
     if (this.dom.indicator) {
       this.dom.indicator.classList.toggle('main__slider-indicator_active');
       setTimeout(() => {
@@ -125,7 +123,7 @@ class DemoSlider {
     }
   }
 
-  public handleItemChange(e: InputEvent): void {
+  private handleItemChange(e: InputEvent): void {
     const { target } = e;
 
     if (target instanceof HTMLInputElement) {
@@ -154,7 +152,7 @@ class DemoSlider {
     }
   }
 
-  public hasFormChanged(form: HTMLFormElement): boolean {
+  private hasFormChanged(form: HTMLFormElement): boolean {
     const newFormValues = DemoSlider.getFormValues(form);
     if (newFormValues.size !== this.formValues.size) {
       this.formValues = newFormValues;
@@ -169,33 +167,29 @@ class DemoSlider {
     return false;
   }
 
-  private handleFormChange = () => {
+  private handleFormChange() {
     this.updateForm();
     if (this.hasFormChanged(this.dom.form as HTMLFormElement)) {
       this.toggleIndicator();
     }
     this.findElements();
-  };
+  }
 
-  public createSlider(options: ModelInputState) {
+  private createSlider(options: ModelInputState) {
     if (this.dom.content === undefined || this.dom.content === null) return;
     this.slider = $(this.dom.content).sliderPlugin(options);
     this.handleFormChange();
   }
 
-  public findElements() {
+  private findElements() {
     this.dom.indicator = this.dom.root.querySelector('.js-main__slider-indicator');
     this.dom.form = this.dom.root.querySelector('.js-slider__form');
-    if (this.dom.form === null || this.dom.form === undefined) return;
+    if (!this.dom.form) return;
 
     const selector = (role: string) => {
-      if (this.dom.form) {
-        return this.dom.form.querySelector(`.js-slider__input[data-role="${role}"]`);
-      }
-      return null;
+      return this.dom.form?.querySelector(`.js-slider__input[data-role="${role}"]`);
     };
 
-    this.mapElements = new Map<string, ModelValue>();
     this.mapElements = new Map<string, ModelValue>();
     this.numericVariables.min = Number((selector('min') as HTMLInputElement)?.value);
     this.mapElements.set('min', 'min');
@@ -243,7 +237,7 @@ class DemoSlider {
     this.mapElements.set('vertical', 'isVertical');
 
     this.dom.content = this.dom.root.querySelector('.js-slider__content');
-    this.dom.thumb = this.dom.content?.querySelector('.js-plugin-slider__thumb') ?? null;
+    this.dom.thumb = this.dom.content?.querySelector('.js-plugin-slider__thumb') || null;
 
     if (this.dom.form !== undefined) {
       this.formValues = DemoSlider.getFormValues(this.dom.form as HTMLFormElement);
@@ -251,8 +245,7 @@ class DemoSlider {
   }
 
   private updateForm() {
-    if (this.mapElements === undefined || this.dom === undefined
-      || this.slider === undefined) return;
+    if (this.mapElements === undefined || this.dom.form === undefined || this.slider === undefined) return;
 
     this.mapElements.forEach((value: string, key: string) => {
       const element = this.dom.form?.querySelector(`.js-slider__input[data-role="${key}"]`) as HTMLInputElement | null;
@@ -261,21 +254,20 @@ class DemoSlider {
       const sliderValue = this.slider?.getValue(value as ModelValue);
       if (typeof sliderValue === 'number') {
         element.value = `${sliderValue}`;
-        console.log(sliderValue);
       } else if (typeof sliderValue === 'boolean') {
         element.checked = sliderValue;
       }
     });
   }
 
-  public handleContentClick: EventListener = (e: Event) => {
+  private handleContentClick: EventListener = (e: Event) => {
     const target = e.target as Element;
-    if (target && !target.classList.contains('js-plugin-slider')) {
+    if (target !== undefined && !target.classList.contains('js-plugin-slider')) {
       this.handleFormChange();
     }
   };
 
-  public handleContentPointerDown() {
+  private handleContentPointerDown() {
     const handlePointerMove = () => {
       this.handleFormChange();
     };
@@ -289,14 +281,14 @@ class DemoSlider {
     this.dom.content?.addEventListener('pointerup', handlePointerUp);
   }
 
-  public handleThumbKeyPress(e: KeyboardEvent): void {
+  private handleThumbKeyPress(e: KeyboardEvent): void {
     const { key } = e;
     if (['ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown'].includes(key)) {
       this.handleFormChange();
     }
   }
 
-  public handleThumbTouchMove() {
+  private handleThumbTouchMove() {
     const handleThumbTouchMoveStart = (e: TouchEvent) => {
       e.stopImmediatePropagation();
       this.handleFormChange();
