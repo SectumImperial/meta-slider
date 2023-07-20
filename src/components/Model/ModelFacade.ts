@@ -13,18 +13,13 @@ import Validator from './Validator';
 
 class ModelFacade extends Observer {
   private model: Model;
-
   private validator: Validator;
-
-  private validState: ModelOptions;
-
-  private prevMove?: number;
 
   constructor(state: ModelInputState) {
     super();
     this.validator = new Validator(state);
-    this.validState = this.validator.validateData(state);
-    this.model = new Model(this.validState);
+    const validState = this.validator.validateData(state);
+    this.model = new Model(validState);
   }
 
   public setState(state: ModelInputState): void {
@@ -43,28 +38,17 @@ class ModelFacade extends Observer {
     return this.model.getState();
   }
 
-  public getModel(): Model {
-    return this.model;
-  }
-
-  public getValidator(): Validator {
-    return this.validator;
-  }
-
   public getValue(value: ModelValue) {
-    return this.model.getState()[`${value}`];
+    return this.model.getState()[value];
   }
 
   public update(data: ValidSliderData): void {
-    const typeData: 'scaleMove' | 'markMove' = data.percent === undefined ? 'scaleMove' : 'markMove';
+    const isScaleMove = data.percent === undefined;
 
-    if (typeData === 'scaleMove') {
+    if (isScaleMove) {
       const movedTo = this.validator.performMoveToPercent(data);
-      let { thumbId } = data;
-      if (thumbId === undefined) thumbId = this.validator.validateThumbId(movedTo);
-      if (movedTo === this.prevMove) return;
+      const thumbId = data.thumbId ?? this.validator.validateThumbId(movedTo);
 
-      this.prevMove = movedTo;
       this.model.updateStateMove(movedTo, thumbId);
       const newState = this.model.getState();
       const validState = this.validator.validateData(newState);
@@ -78,12 +62,13 @@ class ModelFacade extends Observer {
       } else {
         this.emit(MODEL_EVENTS.VALUE_CHANGED, this.model.getState());
       }
-    }
-
-    if (data.percent !== undefined && data.value !== undefined && typeData === 'markMove') {
+    } else {
       const { percent, value } = data;
-      const oldState = this.model.getState();
-      const performedData = this.validator.validatePercent(percent, value, oldState);
+      const performedData = this.validator.validatePercent(
+        percent!,
+        value!,
+        this.model.getState()
+      );
       this.model.setState(performedData);
       this.emit(MODEL_EVENTS.VALUE_CHANGED, this.model.getState());
     }
@@ -91,19 +76,16 @@ class ModelFacade extends Observer {
 
   public setValue(param: ModelValue, value: number | boolean): void {
     const oldState = this.model.getState();
-    const newState = { ...oldState, [param]: value };
+    const newState: ModelOptions = { ...oldState, [param]: value };
     const validState = this.validator.validateData(newState);
     this.model.setState(validState);
     this.emit(MODEL_EVENTS.VALUE_CHANGED, this.model.getState());
   }
 
   public validGapMarks(): StepsMap {
-    const gap = this.model.getState().scalePercentGap || 20;
-    const { min, max, step } = this.model.getState();
-    const sliderMarks = this.validator.validateMarks({
-      min, max, step, gap,
-    });
-
+    const { scalePercentGap, min, max, step } = this.model.getState();
+    const gap = scalePercentGap ?? 20;
+    const sliderMarks = this.validator.validateMarks({ min, max, step, gap });
     return sliderMarks;
   }
 }
