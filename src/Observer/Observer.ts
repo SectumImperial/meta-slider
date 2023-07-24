@@ -7,7 +7,7 @@ interface Observers {
 }
 
 abstract class Observer {
-  public observers: Observers = {};
+  public observers: Observers = Object.create(null);
 
   public addSubscriber(event: string, observer: ValueObserverEntry): void {
     if (this.observers[event]) {
@@ -19,7 +19,7 @@ abstract class Observer {
   }
 
   public removeSubscriber(event: string, observer: ValueObserverEntry): void {
-    this.observers[event].filter((obs) => obs !== observer);
+    this.observers[event] = (this.observers[event] || []).filter((obs) => obs !== observer);
   }
 
   public emit(event: string, data: object): void {
