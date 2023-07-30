@@ -47,9 +47,16 @@ class ModelFacade extends Observer {
 
     if (isScaleMove) {
       const movedTo = this.validator.performMoveToPercent(data);
-      const thumbId = data.thumbId ?? this.validator.validateThumbId(movedTo);
 
-      this.model.updateStateMove(movedTo, thumbId);
+      if (data.thumbId !== undefined) {
+        this.model.handleMouseMove(movedTo, data.thumbId);
+      } 
+
+      if (data.thumbId === undefined) {
+        const thumbId = this.validator.validateThumbId(movedTo);
+        this.model.handleSliderClick(movedTo, thumbId);
+      }
+
       const newState = this.model.getState();
       const validState = this.validator.validateData(newState);
       this.model.setState(validState);

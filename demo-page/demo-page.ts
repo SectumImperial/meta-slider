@@ -96,7 +96,7 @@ class DemoSlider {
       if (element instanceof HTMLElement) {
         const { role } = element.dataset;
         if (role) {
-          element.addEventListener('change ', (e: Event) => {
+          element.addEventListener('change', (e: Event) => {
             const inputEvent = e as InputEvent;
             this.handleItemChange(inputEvent);
           });
