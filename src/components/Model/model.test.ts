@@ -29,9 +29,9 @@ describe('The model tests', () => {
     step: 1,
   };
 
-  beforeEach(() => {
-    model = new ModelFacade(testState).getModel();
-  });
+  // beforeEach(() => {
+  //   model = new ModelFacade(testState);
+  // });
 
   test('must be an instance of Model', () => {
     expect(model).toBeInstanceOf(Model);
@@ -63,7 +63,7 @@ describe('The model tests', () => {
 
   test('should return correct value after moving thumb', () => {
     model.setState(testState);
-    model.updateStateMove(50, 'valueFrom');
+    model.handleMouseMove(50, 'valueFrom');
     expect(model.getState()).toEqual(stateRangeAfterMove);
   });
 });
