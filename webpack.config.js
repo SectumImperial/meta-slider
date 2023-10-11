@@ -55,12 +55,13 @@ module.exports = {
   },
 
   devServer: {
-    open: '/index.html',
-    static: {	
-      directory: './src',	
-      watch: true,	
+    open: true,
+    static: {
+      directory: path.join(__dirname, './'),
+      watch: true,
     },
   },
+
   optimization: optimization(),
   resolve: {
     alias: {

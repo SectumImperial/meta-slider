@@ -26,7 +26,6 @@ class DemoSlider {
     step: number;
     from: number | null;
     to?: number | null;
-    gap?: number | null;
   };
 
   private mapElements: Map<string, ModelValue> | undefined;
@@ -48,7 +47,6 @@ class DemoSlider {
       step: 1,
       from: 1,
       to: null,
-      gap: null,
     };
 
     this.booleanVariables = {
@@ -210,10 +208,6 @@ class DemoSlider {
     to.step = `${this.numericVariables.step}`;
     this.mapElements.set('to', 'valueTo');
 
-    const gap = selector('gap') as HTMLInputElement;
-    this.numericVariables.gap = gap.value !== undefined ? Number(gap.value) : null;
-    this.mapElements.set('gap', 'scalePercentGap');
-
     const range = selector('range') as HTMLInputElement;
     this.booleanVariables.range = range.checked;
     to.disabled = !this.booleanVariables.range;
@@ -221,7 +215,6 @@ class DemoSlider {
 
     const marks = selector('marks') as HTMLInputElement;
     this.booleanVariables.marks = marks.checked;
-    gap.disabled = !this.booleanVariables.marks;
     this.mapElements.set('marks', 'scaleMarks');
 
     const tip = selector('tip') as HTMLInputElement;
@@ -310,7 +303,6 @@ class DemoSlider {
       valueFrom: this.numericVariables.from || 0,
       valueTo: this.numericVariables.to || 0,
       step: this.numericVariables.step || 1,
-      scalePercentGap: this.numericVariables.gap || 1,
       scaleMarks: this.booleanVariables.marks,
       isTip: this.booleanVariables.tip,
       isProgress: this.booleanVariables.progress,

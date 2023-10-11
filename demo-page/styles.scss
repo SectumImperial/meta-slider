@@ -5,14 +5,22 @@
   justify-content: center;
   align-items: center;
 
-  background: #0f0c29;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #24243e, #302b63, #0f0c29);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #24243e, #302b63, #0f0c29); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
+  background: #0f0c29; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #24243e,
+    #302b63,
+    #0f0c29
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #24243e,
+    #302b63,
+    #0f0c29
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
   min-height: 100vh;
 }
-
 
 .main {
   width: 100%;
@@ -41,7 +49,7 @@
     background: white;
     border: 1px solid red;
     border-radius: 20px;
-    
+
     &_active {
       background: red;
       box-shadow: 0 0 12px white;
@@ -72,7 +80,7 @@
 
   &__nav {
     max-width: 350px;
-    justify-self: center
+    justify-self: center;
   }
 
   &__form {
@@ -91,7 +99,7 @@
     align-items: center;
     gap: 10px;
     padding: 2px;
-    pointer-events: none; 
+    pointer-events: none;
   }
 
   &__description,

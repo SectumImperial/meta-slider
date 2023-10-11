@@ -1,5 +1,6 @@
 import { Marks } from '@src/components/Interfaces';
 import SliderComponents from '../SliderComponents/SliderComponents';
+import  { MIN_SPACE } from './constants'
 import './scaleMarks.scss';
 
 class ScaleMarks extends SliderComponents {
@@ -10,15 +11,18 @@ class ScaleMarks extends SliderComponents {
     this.marks = marks;
 
     this.handleRootClick = this.handleRootClick.bind(this);
+    this.adjustMarkVisibility = this.adjustMarkVisibility.bind(this);
     this.init();
   }
 
   private init(): void {
     this.createMarks();
     this.addListeners();
+    this.adjustMarkVisibility();
   }
 
   private addListeners(): void {
+    window.addEventListener('resize', this.adjustMarkVisibility);
     this.root.addEventListener('click', this.handleRootClick);
   }
 
@@ -51,6 +55,31 @@ class ScaleMarks extends SliderComponents {
     mark.append(markValue);
 
     this.root.append(mark);
+  }
+
+  private adjustMarkVisibility(): void {
+    const markElements = Array.from(this.root.querySelectorAll('.plugin-slider__mark')) as HTMLElement[];
+  
+    let lastVisibleMarkPercent: number | null = null;
+
+    markElements.forEach((mark: HTMLElement) => {
+      const markPercent = Number(mark.querySelector('.plugin-slider__mark-value')?.getAttribute('data-percent'));
+  
+      if (lastVisibleMarkPercent === null) {
+        mark.style.visibility = 'visible';
+        lastVisibleMarkPercent = markPercent;
+        return;
+      }
+  
+      const distanceToLast = markPercent - lastVisibleMarkPercent;
+  
+      if (distanceToLast < MIN_SPACE) {
+        mark.style.visibility = 'hidden';
+      } else {
+        mark.style.visibility = 'visible';
+        lastVisibleMarkPercent = markPercent;
+      }
+    });
   }
 }
 

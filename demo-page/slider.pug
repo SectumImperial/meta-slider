@@ -71,16 +71,6 @@ mixin slider(options = {})
             class = 'slider__input js-slider__input',
           ) 
         label.slider__label
-          span.slider__description marks gap:
-          input(
-            type = 'number',
-            value = gap,
-            min = 1,
-            data-role = 'gap',
-            class = 'slider__input js-slider__input',
-            disabled = !marks,
-          ) 
-        label.slider__label
           span.slider__description tip:
           input(
             type = 'checkbox',
