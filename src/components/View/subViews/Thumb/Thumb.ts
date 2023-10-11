@@ -4,12 +4,11 @@ import './thumb.scss';
 
 class Thumb extends SliderComponents {
   private moved?: number;
-
   thumbPercent: number;
-
   thumbElement?: HTMLDivElement;
-
   thumbId: ThumbId;
+  minValue: number;
+  maxValue: number;
 
   constructor(values: ThumbArgs) {
     const {
@@ -17,11 +16,15 @@ class Thumb extends SliderComponents {
       thumbPercent = 0,
       id = 'valueFrom',
       isVertical,
+      minValue,
+      maxValue
     } = values;
 
     super(root, isVertical);
     this.thumbPercent = thumbPercent;
     this.thumbId = id;
+    this.minValue = minValue;
+    this.maxValue = maxValue;
 
     this.handleThumbPointerDown = this.handleThumbPointerDown.bind(this);
     this.handleThumbKeyDown = this.handleThumbKeyDown.bind(this);
@@ -30,7 +33,7 @@ class Thumb extends SliderComponents {
   }
 
   private init(): void {
-    this.thumbElement = SliderComponents.createElement('plugin-slider__thumb js-plugin-slider__thumb');
+    this.thumbElement = this.createThumb();
     this.thumbElement.id = this.thumbId;
     this.thumbElement.tabIndex = 1;
     this.root.append(this.thumbElement);
@@ -43,6 +46,9 @@ class Thumb extends SliderComponents {
     this.checkZInd();
     if (this.thumbElement !== undefined) {
       this.thumbElement.style[this.startPoint] = `${this.thumbPercent}%`;
+
+      const scaleValue = this.minValue + (this.thumbPercent / 100) * (this.maxValue - this.minValue);
+      this.thumbElement.setAttribute('aria-valuenow', scaleValue.toString());
     }
   }
 
@@ -52,6 +58,26 @@ class Thumb extends SliderComponents {
 
   public getThumbId(): ThumbId {
     return this.thumbId;
+  }
+
+  private addListeners(): void {
+    if (this.thumbElement === undefined) return;
+    this.thumbElement.addEventListener('pointerdown', this.handleThumbPointerDown);
+    this.thumbElement.addEventListener('keydown', this.handleThumbKeyDown);
+    this.thumbElement.addEventListener(
+      'touchstart',
+      this.handleThumbTouch,
+    );
+  }
+
+  private createThumb(): HTMLDivElement {
+    const thumbElement = SliderComponents.createElement('plugin-slider__thumb js-plugin-slider__thumb');
+    thumbElement.setAttribute('role', 'slider');
+    thumbElement.setAttribute('aria-valuemin', this.minValue.toString());
+    thumbElement.setAttribute('aria-valuemax', this.maxValue.toString());
+    thumbElement.setAttribute('aria-valuenow', this.thumbPercent.toString());
+    thumbElement.setAttribute('aria-label', 'Value slider');
+    return thumbElement;
   }
 
   private checkZInd(): void {
@@ -68,16 +94,6 @@ class Thumb extends SliderComponents {
     if (this.thumbId === 'valueTo' && this.thumbPercent > 0) {
       this.thumbElement.style.zIndex = '5';
     }
-  }
-
-  private addListeners(): void {
-    if (this.thumbElement === undefined) return;
-    this.thumbElement.addEventListener('pointerdown', this.handleThumbPointerDown);
-    this.thumbElement.addEventListener('keydown', this.handleThumbKeyDown);
-    this.thumbElement.addEventListener(
-      'touchstart',
-      this.handleThumbTouch,
-    );
   }
 
   private handleThumbTouch(e: TouchEvent): void {

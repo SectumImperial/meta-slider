@@ -162,6 +162,8 @@ class Slider extends Observer {
       thumbPercent,
       id,
       isVertical: this.booleanVariables.isVertical,
+      minValue: this.state.min,
+      maxValue: this.state.max,
     });
   }
 

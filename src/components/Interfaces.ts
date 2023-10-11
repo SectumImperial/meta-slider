@@ -113,6 +113,8 @@ interface ThumbArgs {
   thumbPercent: number,
   id: ThumbId,
   isVertical: boolean,
+  minValue: number,
+  maxValue: number,
 }
 
 interface ModelSetVal {
