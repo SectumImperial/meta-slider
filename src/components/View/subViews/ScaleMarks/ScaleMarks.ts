@@ -1,6 +1,6 @@
 import { Marks } from '@src/components/Interfaces';
 import SliderComponents from '../SliderComponents/SliderComponents';
-import  { MIN_SPACE } from './constants'
+import  { MIN_SPACE, MARKS_HIDDEN } from './constants'
 import './scaleMarks.scss';
 
 class ScaleMarks extends SliderComponents {
@@ -18,17 +18,15 @@ class ScaleMarks extends SliderComponents {
   private init(): void {
     this.createMarks();
     this.addListeners();
-    this.adjustMarkVisibility();
+    this.adjustMarkVisibility(); 
   }
 
   private addListeners(): void {
-    window.addEventListener('resize', this.adjustMarkVisibility);
     this.root.addEventListener('click', this.handleRootClick);
   }
 
   private handleRootClick(e: Event): void {
     const target = e.target as HTMLElement;
-    if (target === null) return;
     const { value, percent } = target.dataset;
     if (target.classList.contains('plugin-slider__mark-value')) {
       if (percent !== undefined) {
@@ -58,26 +56,25 @@ class ScaleMarks extends SliderComponents {
   }
 
   private adjustMarkVisibility(): void {
-    const markElements = Array.from(this.root.querySelectorAll('.plugin-slider__mark')) as HTMLElement[];
-  
-    let lastVisibleMarkPercent: number | null = null;
+    const markElements = Array.from(this.root.querySelectorAll('.plugin-slider__mark'));
+    let lastVisibleMarkPosition: number | null = null;
 
-    markElements.forEach((mark: HTMLElement) => {
+    markElements.forEach((mark) => {
       const markPercent = Number(mark.querySelector('.plugin-slider__mark-value')?.getAttribute('data-percent'));
-  
-      if (lastVisibleMarkPercent === null) {
-        mark.style.visibility = 'visible';
-        lastVisibleMarkPercent = markPercent;
+
+      if (lastVisibleMarkPosition === null) {
+        mark.classList.remove(`${MARKS_HIDDEN}`); 
+        lastVisibleMarkPosition = markPercent;
         return;
       }
-  
-      const distanceToLast = markPercent - lastVisibleMarkPercent;
-  
+
+      const distanceToLast = markPercent - lastVisibleMarkPosition;
+
       if (distanceToLast < MIN_SPACE) {
-        mark.style.visibility = 'hidden';
+        mark.classList.add(`${MARKS_HIDDEN}`);
       } else {
-        mark.style.visibility = 'visible';
-        lastVisibleMarkPercent = markPercent;
+        mark.classList.remove(`${MARKS_HIDDEN}`);
+        lastVisibleMarkPosition = markPercent;
       }
     });
   }

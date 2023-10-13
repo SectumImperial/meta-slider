@@ -33,6 +33,10 @@
         height: 6px;
       }
     }
+
+    &_hidden {
+      visibility: hidden;
+    }
   }
 
   &__mark-value {
