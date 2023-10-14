@@ -1,12 +1,13 @@
-import { Marks } from '@src/components/Interfaces';
+import { Marks, MarkValue, MarkPercent } from '@src/components/Interfaces';
 import SliderComponents from '../SliderComponents/SliderComponents';
 import  { MIN_SPACE, MARKS_HIDDEN } from './constants'
 import './scaleMarks.scss';
 
 class ScaleMarks extends SliderComponents {
+  
   public marks: Marks;
 
-  constructor(root: HTMLDivElement, marks: Map<number, number>, isVertical: boolean) {
+  constructor(root: HTMLDivElement, marks: Marks, isVertical: boolean) {
     super(root, isVertical);
     this.marks = marks;
 
@@ -36,10 +37,10 @@ class ScaleMarks extends SliderComponents {
   }
 
   private createMarks(): void {
-    this.marks.forEach((value: number, percent: number) => this.createMark(value, percent));
+    this.marks.forEach((value: MarkValue, percent: MarkPercent) => this.createMark(value, percent));
   }
 
-  private createMark(percent: number, value: number): void {
+  private createMark(percent: MarkPercent, value: MarkValue): void {
     const mark = SliderComponents.createElement('plugin-slider__mark js-plugin-slider__mark');
     mark.classList.add(`plugin-slider__mark_${this.mod}`);
     mark.style[this.startPoint] = `${percent}%`;

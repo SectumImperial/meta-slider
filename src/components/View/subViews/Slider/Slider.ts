@@ -15,28 +15,8 @@ import Tip from '../Tip/Tip';
 import './slider.scss';
 
 class Slider extends Observer {
-  numberVariables: {
-    tipValueFrom: number | undefined;
-    thumbPercentFrom: number | undefined;
-    thumbPercentTo: number | undefined;
-    tipValueTo: number | undefined;
-  };
 
-  dom: {
-    slider: undefined | HTMLDivElement;
-    scaleElement: undefined | HTMLDivElement;
-    root?: Element;
-  };
-
-  booleanVariables: {
-    isProgress: boolean;
-    isRange: boolean;
-    isVertical: boolean;
-    isTip: boolean;
-    isScaleMarks: boolean;
-  };
-
-  classElements: {
+  public classElements: {
     thumbFrom: Thumb | undefined;
     thumbTo: Thumb | undefined;
     scale: Scale | undefined;
@@ -47,7 +27,28 @@ class Slider extends Observer {
     sliderComponents: SliderComponents | undefined;
   };
 
-  scaleMap: Map<number, number> | undefined;
+  public booleanVariables: {
+    isProgress: boolean;
+    isRange: boolean;
+    isVertical: boolean;
+    isTip: boolean;
+    isScaleMarks: boolean;
+  };
+
+  private numberVariables: {
+    tipValueFrom: number | undefined;
+    thumbPercentFrom: number | undefined;
+    thumbPercentTo: number | undefined;
+    tipValueTo: number | undefined;
+  };
+
+  private dom: {
+    slider: undefined | HTMLDivElement;
+    scaleElement: undefined | HTMLDivElement;
+    root?: Element;
+  };
+
+  private scaleMap: Map<number, number> | undefined;
 
   constructor(root: Element, protected readonly state: SliderOptions) {
     super();

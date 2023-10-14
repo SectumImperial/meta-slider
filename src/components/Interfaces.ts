@@ -124,7 +124,9 @@ interface ModelSetVal {
   thumb: ThumbId
 }
 
-type Marks = Map<number, number>;
+type MarkValue = number;
+type MarkPercent = number;
+type Marks = Map<MarkPercent, MarkValue>;
 
 export {
   ModelOptions,
@@ -149,4 +151,6 @@ export {
   ModelInputState,
   KeyEvent,
   Marks,
+  MarkPercent,
+  MarkValue,
 };
