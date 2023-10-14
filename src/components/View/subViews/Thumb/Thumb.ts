@@ -115,6 +115,7 @@ class Thumb extends SliderComponents {
   }
 
   private handleThumbKeyDown(e: KeyboardEvent): void {
+    if(e.key === 'Tab') return;
     e.preventDefault();
     const { key } = e;
     if (key === 'ArrowLeft' || key === 'ArrowUp' || key === 'ArrowRight' || key === 'ArrowDown') e.preventDefault();
