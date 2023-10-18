@@ -128,6 +128,30 @@ type MarkValue = number;
 type MarkPercent = number;
 type Marks = Map<MarkPercent, MarkValue>;
 
+
+
+interface SliderBooleans {
+  isProgress: boolean;
+  isRange: boolean;
+  isVertical: boolean;
+  isTip: boolean;
+  isScaleMarks: boolean;
+}
+
+interface SliderNumbers {
+  tipValueFrom: number;
+  thumbPercentFrom: number;
+  thumbPercentTo: number | undefined;
+  tipValueTo: number | undefined;
+}
+
+interface SliderDOM {
+  slider?: HTMLDivElement;
+  scaleElement?: HTMLDivElement;
+  root?: Element;
+}
+
+
 export {
   ModelOptions,
   ModelValue,
@@ -153,4 +177,7 @@ export {
   Marks,
   MarkPercent,
   MarkValue,
+  SliderBooleans,
+  SliderNumbers,
+  SliderDOM,
 };

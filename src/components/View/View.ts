@@ -55,6 +55,8 @@ class View extends Observer {
 
   private addSubscribeSlider(): void {
     if (this.slider === undefined) return;
+    if (this.slider.classElements === undefined) return;
+    if (this.slider.booleanVariables === undefined) return;
     if (this.slider.classElements.thumbFrom !== undefined) {
       this.slider.classElements.thumbFrom.addSubscriber(
         SLIDER_EVENTS.VALUE_START_CHANGE,

@@ -60,8 +60,8 @@ class Slider extends Observer {
     };
 
     this.numberVariables = {
-      tipValueFrom: undefined,
-      thumbPercentFrom: undefined,
+      tipValueFrom: 0,
+      thumbPercentFrom: 0,
       thumbPercentTo: undefined,
       tipValueTo: undefined,
     };
@@ -214,7 +214,7 @@ class Slider extends Observer {
 
     this.classElements[tip] = new Tip({
       root: this.dom.scaleElement,
-      percentPosition: this.numberVariables[percentPosition] as number,
+      percentPosition: this.numberVariables[percentPosition]  ?? 0,
       valueTip: tipValue,
       isVertical: this.booleanVariables.isVertical,
     });

@@ -20,7 +20,7 @@ describe('Scale tests', () => {
     root.innerHTML = '';
   });
 
-  test('The scale must be instance of the Scale', () => {
+  it('The scale must be instance of the Scale', () => {
     expect(scale).toBeInstanceOf(Scale);
   });
 });

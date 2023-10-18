@@ -1,11 +1,9 @@
-import { defaults } from 'jest-config';
-import type { Config } from '@jest/types';
+import type { Config } from '@jest/types'; 
 
 const config: Config.InitialOptions = {
   verbose: true,
   preset: 'ts-jest',
   testEnvironment: 'node',
-  moduleFileExtensions: [...defaults.moduleFileExtensions, 'ts', 'tsx'],
   collectCoverageFrom: [
     '**/*.{ts,tsx}',
     '!**/node_modules/**',
@@ -16,6 +14,7 @@ const config: Config.InitialOptions = {
   ],
 
   moduleNameMapper: {
+    '^@src/(.*)$': '<rootDir>/src/$1',
     '\\.(css|scss)$': '<rootDir>/styleMock.js',
   },
 

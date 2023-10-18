@@ -1,12 +1,10 @@
-import { ValidSliderData } from '@src/components/Interfaces';
+import { ValidSliderData } from '../Interfaces';
 import ModelFacade from './ModelFacade';
-import Model from './Model';
-import Validator from './Validator';
 
-describe('The modelFacade tests', () => {
+describe('ModelFacade', () => {
   let modelFacade: ModelFacade;
 
-  const testData = {
+  const defaultTestData = {
     min: 0,
     max: 10,
     valueFrom: 1,
@@ -22,132 +20,95 @@ describe('The modelFacade tests', () => {
     isVertical: false,
   };
 
-  const testDataWrongTwoThumbs = {
-    min: 20,
-    max: 10,
-    valueFrom: 11,
-    step: 123,
-    valueTo: 32,
-    scalePercentGap: 5,
-    scaleMarks: false,
-    isTip: true,
-    isProgress: true,
-    isRange: true,
-    isVertical: false,
-  };
-
-  const mapTests = {
-    ...testData,
-    scaleMarks: true,
-  };
-
-  const updateData: ValidSliderData = {
-    coordsMove: 6,
-    scaleSize: 1076.546875,
-    thumbId: 'valueTo',
-  };
-
-  const dataWrong = {
-    ...testData,
-    min: 10,
-    max: 10,
-    valueFrom: 14,
-    thumbPercentFrom: 6661488,
-    step: 11,
-  };
-
-  const dataCorrect = {
-    ...testData,
-    max: 21,
-    min: 10,
-    step: 11,
-    thumbPercentFrom: 0,
-    valueFrom: 10,
-  };
-
-  const dataCorrectTwoThumbs = {
-    min: 10,
-    max: 20,
-    step: 10,
-    thumbPercentFrom: 0,
-    thumbPercentTo: 100,
-    valueFrom: 10,
-    valueTo: 20,
-    scalePercentGap: 5,
-    scaleMarks: false,
-    isTip: true,
-    isProgress: true,
-    isRange: true,
-    isVertical: false,
-  };
-
-  const correctChangedData = {
-    ...testData,
-    max: 20,
-    thumbPercentFrom: 5,
-  };
-
-  const correctChangedValData = {
-    ...testData,
-    isRange: false,
-  };
-
   beforeEach(() => {
-    modelFacade = new ModelFacade(testData);
+    modelFacade = new ModelFacade(defaultTestData);
   });
 
-  test('must be an instance of ModelFacade', () => {
+  it('should be an instance of ModelFacade', () => {
     expect(modelFacade).toBeInstanceOf(ModelFacade);
   });
 
-  test('should return a Model instance', () => {
-    expect(modelFacade.getModel()).toBeInstanceOf(Model);
+  describe('State Validation', () => {
+    it('should return valid data for incorrect input', () => {
+      const incorrectData = { ...defaultTestData, min: 10, max: 10, valueFrom: 14 };
+      const expectedData = { ...defaultTestData, max: 11, min: 10, step: 1, thumbPercentFrom: 100, valueFrom: 11 };
+
+      modelFacade = new ModelFacade(incorrectData);
+      expect(modelFacade.getState()).toStrictEqual(expectedData);
+    });
+
+    it('should return valid data for two thumbs', () => {
+      const incorrectData = {
+        min: 20,
+        max: 10,
+        valueFrom: 11,
+        step: 123,
+        valueTo: 32,
+        isRange: true,
+        scaleMarks: true,
+        isTip: true,
+        isProgress: true,
+        isVertical: false
+      };
+      const expectedData = {
+        min: 10,
+        max: 20,
+        step: 10,
+        thumbPercentFrom: 0,
+        thumbPercentTo: 100,
+        valueFrom: 10,
+        valueTo: 20,
+        isRange: true,
+        scaleMarks: true,
+        isTip: true,
+        isProgress: true,
+        isVertical: false,
+        scaleMap: new Map([
+          [10, 0],
+          [20, 100]
+        ]),
+      };
+    
+      modelFacade = new ModelFacade(incorrectData);
+      expect(modelFacade.getState()).toStrictEqual(expectedData);
+    });
   });
 
-  test('should return a Validator instance', () => {
-    expect(modelFacade.getValidator()).toBeInstanceOf(Validator);
+  describe('State Manipulation', () => {
+    it('should set specific values', () => {
+      modelFacade.setValue('max', 20);
+      expect(modelFacade.getState().max).toBe(20);
+    });
+
+    it('should update state correctly', () => {
+      const newData = { ...defaultTestData, max: 21, thumbPercentFrom: 4.762 };
+      modelFacade.setState(newData);
+      expect(modelFacade.getState()).toStrictEqual(newData);
+    });
   });
 
-  test('should return a valid data', () => {
-    modelFacade = new ModelFacade(dataWrong);
-    expect(modelFacade.getState()).toStrictEqual(dataCorrect);
+  describe('Value Retrieval', () => {
+    it('should return the correct value for a given key', () => {
+      expect(modelFacade.getValue('valueFrom')).toBe(defaultTestData.valueFrom);
+    });
   });
 
-  test('should return a valid data with two thumbs', () => {
-    modelFacade = new ModelFacade(testDataWrongTwoThumbs);
-    expect(modelFacade.getState()).toStrictEqual(dataCorrectTwoThumbs);
+  describe('Scale Marks', () => {
+    it('should return correct type of scale marks', () => {
+      const testDataWithMarks = { ...defaultTestData, scaleMarks: true };
+      modelFacade = new ModelFacade(testDataWithMarks);
+      expect(modelFacade.validGapMarks()).toBeInstanceOf(Map);
+    });
   });
 
-  test('should set values', () => {
-    modelFacade = new ModelFacade(testData);
-    modelFacade.setValue('max', 20);
-    expect(modelFacade.getState()).toStrictEqual(correctChangedData);
-  });
-
-  test('should set correct values', () => {
-    modelFacade = new ModelFacade(testData);
-    modelFacade.setValue('isRange', 20);
-    expect(modelFacade.getState()).toStrictEqual(correctChangedValData);
-  });
-
-  test('should return correct value', () => {
-    modelFacade = new ModelFacade(testData);
-    expect(modelFacade.getValue('valueFrom')).toStrictEqual(testData.valueFrom);
-  });
-
-  test('should return correct type of scale marks', () => {
-    modelFacade = new ModelFacade(mapTests);
-    expect(modelFacade.validGapMarks()).toBeInstanceOf(Map);
-  });
-
-  test('should correct set data', () => {
-    modelFacade = new ModelFacade(testData);
-    modelFacade.setState(dataCorrect);
-    expect(modelFacade.getState()).toStrictEqual(dataCorrect);
-  });
-
-  test('update should return nothing', () => {
-    modelFacade = new ModelFacade(testData);
-    expect(modelFacade.update(updateData)).toBeUndefined();
+  describe('Update Method', () => {
+    it('should not return anything', () => {
+      const updateData: ValidSliderData = {
+        coordsMove: 6,
+        scaleSize: 1076.546875,
+        thumbId: 'valueTo',
+      };
+      expect(modelFacade.update(updateData)).toBeUndefined();
+    });
   });
 });

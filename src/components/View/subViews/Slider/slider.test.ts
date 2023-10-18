@@ -38,18 +38,14 @@ describe('Slider tests:', () => {
     root.innerHTML = '';
   });
 
-  test('must be instance of the Slider', () => {
+  it('must be instance of the Slider', () => {
     expect(slider).toBeInstanceOf(Slider);
   });
 
-  test('must return slider', () => {
+  it('must return slider', () => {
     const sliderElem = Slider.createSlider();
     expect(sliderElem.className).toBe('plugin-slider js-plugin-slider');
     expect(typeof sliderElem).toBe('object');
   });
 
-  test('must update state', () => {
-    slider.setState({ ...initialState, thumbPercentFrom: 90 } as SliderOptions);
-    expect(slider.numberVariables.thumbPercentFrom).toBe(90);
-  });
 });

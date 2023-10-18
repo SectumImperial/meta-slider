@@ -11,6 +11,8 @@ describe('Thumb tests', () => {
   let id: ThumbId;
   let isVertical: boolean;
   let thumb: Thumb;
+  let minValue: number;
+  let maxValue: number;
 
   beforeEach(() => {
     root = document.createElement('div');
@@ -18,11 +20,15 @@ describe('Thumb tests', () => {
     thumbPercent = 10;
     isVertical = false;
     id = 'valueFrom';
+    minValue = 0;  
+    maxValue = 100;  
     thumb = new Thumb({
       root,
       thumbPercent,
       id,
       isVertical,
+      minValue, 
+      maxValue 
     });
   });
 
@@ -30,11 +36,11 @@ describe('Thumb tests', () => {
     root.innerHTML = '';
   });
 
-  test('must be instance of the Thumb', () => {
+  it('must be instance of the Thumb', () => {
     expect(thumb).toBeInstanceOf(Thumb);
   });
 
-  test('must set position', () => {
+  it('must set position', () => {
     thumb.setPosition(20);
     expect(thumb.thumbPercent).toBe(20);
   });

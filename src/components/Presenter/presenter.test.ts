@@ -55,25 +55,25 @@ describe('The presenter tests', () => {
     presenter = new Presenter(root, initialState);
   });
 
-  test('must be instance of the Presenter', () => {
+  it('must be instance of the Presenter', () => {
     expect(presenter).toBeInstanceOf(Presenter);
   });
 
-  test('should return correct state', () => {
+  it('should return correct state', () => {
     expect(presenter.getState()).toStrictEqual(outputState);
   });
 
-  test('should set correct state', () => {
+  it('should set correct state', () => {
     presenter.setState(setWrongState);
     expect(presenter.getState()).toStrictEqual(outputState);
   });
 
-  test('should set correct value', () => {
+  it('should set correct value', () => {
     presenter.setValue('valueFrom', 20);
     expect(presenter.getState()).toStrictEqual(outputSetValueState);
   });
 
-  test('should return correct value', () => {
+  it('should return correct value', () => {
     const value = presenter.getValue('valueFrom');
     expect(value).toStrictEqual(presenter.getState().valueFrom);
   });

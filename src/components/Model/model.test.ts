@@ -1,69 +1,53 @@
 import Model from './Model';
-import ModelFacade from './ModelFacade';
+import { ModelOptions } from '../Interfaces';
 
-const testState = {
+const initialState: ModelOptions = {
   min: 0,
-  max: 10,
-  valueFrom: 1,
-  valueTo: undefined,
-  thumbPercentTo: undefined,
+  max: 100,
+  valueFrom: 10,
+  valueTo: 90,
   step: 1,
-  scalePercentGap: 5,
-  scaleMarks: true,
-  isTip: true,
-  isProgress: true,
-  isRange: false,
-  isVertical: false,
+  isRange: true,
+  thumbPercentFrom: 10,
+  thumbPercentTo: 90,
+  scaleMarks: false,  
+  isTip: false,      
+  isProgress: false,  
+  isVertical: false  
 };
 
-describe('The model tests', () => {
-  let model: Model;
+let model: Model;
 
-  const stateRangeAfterMove = {
-    ...testState,
-    isRange: false,
-    min: 0,
-    max: 10,
-    valueFrom: 5,
-    thumbPercentFrom: 50,
-    step: 1,
-  };
-
-  // beforeEach(() => {
-  //   model = new ModelFacade(testState);
-  // });
-
-  test('must be an instance of Model', () => {
-    expect(model).toBeInstanceOf(Model);
+describe('Model Class Tests', () => {
+  beforeEach(() => {
+    model = new Model(initialState);
   });
 
-  test('must have defined min', () => {
-    expect(model.getValue('min')).toBeDefined();
+  it('should initialize with the correct state', () => {
+    expect(model.getState()).toEqual(initialState);
   });
 
-  test('must have defined max', () => {
-    expect(model.getValue('max')).toBeDefined();
+  it('should update the state correctly', () => {
+    model.setState({ valueFrom: 20 });
+    expect(model.getState().valueFrom).toBe(20);
   });
 
-  test('must have defined value', () => {
-    expect(model.getValue('valueFrom')).toBeDefined();
+  it('should handle slider click correctly', () => {
+    model.handleSliderClick(50, 'valueFrom');
+    expect(model.getState().valueFrom).toBeCloseTo(50);
   });
 
-  test('must have defined step', () => {
-    expect(model.getValue('step')).toBeDefined();
+  it('should handle mouse move correctly', () => {
+    model.handleMouseMove(60, 'valueFrom');
+    expect(model.getState().valueFrom).toBeCloseTo(60);
   });
 
-  test('should return correct percent of curr. val', () => {
-    const { valueFrom, min, max } = testState;
-    const range = max - min;
-    const percent = Number(((valueFrom / range) * 100).toFixed(3));
-
-    expect(model.getPercentVal()).toEqual(percent);
+  it('should return the correct value', () => {
+    expect(model.getValue('valueFrom')).toBe(10);
   });
 
-  test('should return correct value after moving thumb', () => {
-    model.setState(testState);
-    model.handleMouseMove(50, 'valueFrom');
-    expect(model.getState()).toEqual(stateRangeAfterMove);
+  it('should return the correct percent value', () => {
+    expect(model.getPercentVal()).toBeCloseTo(10);
   });
+
 });
