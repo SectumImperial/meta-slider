@@ -141,7 +141,7 @@ class Slider extends Observer {
     this.classElements.thumbFrom.setPosition(this.numberVariables.thumbPercentFrom);
 
     if (isRange && this.dom.slider !== undefined) {
-      const secondThumb = this.dom.slider.querySelector('#valueTo');
+      const secondThumb = this.dom.slider.querySelector(`[data-thumb-attr="valueTo"`); 
       if (secondThumb === null && thumbPercentTo !== undefined) {
         this.setThumb('valueTo', thumbPercentTo);
       }
@@ -158,6 +158,7 @@ class Slider extends Observer {
     if (this.dom === undefined || this.booleanVariables === undefined) return;
     if (this.dom.scaleElement === undefined
       || this.booleanVariables.isVertical === undefined) return;
+
     this.classElements[thumb] = new Thumb({
       root: this.dom.scaleElement,
       thumbPercent,
