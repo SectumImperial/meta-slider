@@ -4,7 +4,7 @@ import {
   SliderOptions,
   SliderEventValChangedData,
   ScaleClickData,
-  ThumbId,
+  ThumbAttr,
 } from '@src/components/Interfaces';
 import Progress from '../Progress/Progress';
 import Scale from '../Scale/Scale';
@@ -153,15 +153,15 @@ class Slider extends Observer {
     }
   }
 
-  private setThumb(id: ThumbId, thumbPercent: number) {
-    const thumb = id === 'valueTo' ? 'thumbTo' : 'thumbFrom';
+  private setThumb(attr: ThumbAttr, thumbPercent: number) {
+    const thumb = attr === 'valueTo' ? 'thumbTo' : 'thumbFrom';
     if (this.dom === undefined || this.booleanVariables === undefined) return;
     if (this.dom.scaleElement === undefined
       || this.booleanVariables.isVertical === undefined) return;
     this.classElements[thumb] = new Thumb({
       root: this.dom.scaleElement,
       thumbPercent,
-      id,
+      attr: attr,
       isVertical: this.booleanVariables.isVertical,
       minValue: this.state.min,
       maxValue: this.state.max,

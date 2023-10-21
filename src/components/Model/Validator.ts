@@ -2,7 +2,7 @@ import {
   ModelInputState,
   ModelOptions,
   StepsMap,
-  ThumbId,
+  ThumbAttr,
   ValidSliderData,
 } from '@src/components/Interfaces';
 
@@ -72,22 +72,22 @@ class Validator {
   }
 
   public performMoveToPercent(data: ValidSliderData): number {
-    const { coordsMove, scaleSize, keyEvent, thumbId } = data;
+    const { coordsMove, scaleSize, keyEvent, ThumbAttr } = data;
 
     if (keyEvent !== undefined && this.baseParams.stepPercent !== undefined && this.baseParams.thumbPercentFrom !== undefined) {
-      if (keyEvent === 'increment' && thumbId === 'valueFrom') {
+      if (keyEvent === 'increment' && ThumbAttr === 'valueFrom') {
         return this.baseParams.thumbPercentFrom + this.baseParams.stepPercent;
       }
 
-      if (keyEvent === 'decrement' && thumbId === 'valueFrom') {
+      if (keyEvent === 'decrement' && ThumbAttr === 'valueFrom') {
         return this.baseParams.thumbPercentFrom - this.baseParams.stepPercent;
       }
 
-      if (keyEvent === 'increment' && thumbId === 'valueTo' && this.baseParams.thumbPercentTo !== undefined) {
+      if (keyEvent === 'increment' && ThumbAttr === 'valueTo' && this.baseParams.thumbPercentTo !== undefined) {
         return this.baseParams.thumbPercentTo + this.baseParams.stepPercent;
       }
 
-      if (keyEvent === 'decrement' && thumbId === 'valueTo' && this.baseParams.thumbPercentTo !== undefined) {
+      if (keyEvent === 'decrement' && ThumbAttr === 'valueTo' && this.baseParams.thumbPercentTo !== undefined) {
         return this.baseParams.thumbPercentTo - this.baseParams.stepPercent;
       }
     }
@@ -126,7 +126,7 @@ class Validator {
     return mapSteps;
   }
 
-  public validateThumbId(movedTo: number): ThumbId {
+  public validateThumbAttr(movedTo: number): ThumbAttr {
     if (this.baseParams.thumbPercentFrom === undefined) return 'valueTo';
     if (!this.booleanVariables.isRange) return 'valueFrom';
     if (movedTo < this.baseParams.thumbPercentFrom) return 'valueFrom';
@@ -287,8 +287,11 @@ class Validator {
     }
   }
 
-  private checkPercent(value: ThumbId): number {
-    const variable = this.baseParams[value];
+  private checkPercent(value: ThumbAttr): number {
+    let variable: number | undefined = 0;
+    if (value in this.baseParams) {
+      variable = (this.baseParams as any)[value] as number;
+    }
     if (variable === undefined) return 0;
     const valueOfRange = variable - this.baseParams.min;
     const currentPercent = Number((valueOfRange / (this.findRange() / 100)).toFixed(3));

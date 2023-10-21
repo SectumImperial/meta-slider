@@ -2,13 +2,13 @@
  * @jest-environment jsdom
  */
 
-import { ThumbId } from '../../../Interfaces';
+import { ThumbAttr } from '../../../Interfaces';
 import Thumb from './Thumb';
 
 describe('Thumb tests', () => {
   let root: HTMLElement;
   let thumbPercent: number;
-  let id: ThumbId;
+  let id: ThumbAttr;
   let isVertical: boolean;
   let thumb: Thumb;
   let minValue: number;

@@ -1,4 +1,4 @@
-import { ThumbArgs, ThumbId } from '@src/components/Interfaces';
+import { ThumbArgs, ThumbAttr } from '@src/components/Interfaces';
 import SliderComponents from '../SliderComponents/SliderComponents';
 import './thumb.scss';
 
@@ -6,7 +6,7 @@ class Thumb extends SliderComponents {
   private moved?: number;
   thumbPercent: number;
   thumbElement?: HTMLDivElement;
-  thumbId: ThumbId;
+  thumbAttr: ThumbAttr;
   minValue: number;
   maxValue: number;
 
@@ -14,7 +14,7 @@ class Thumb extends SliderComponents {
     const {
       root,
       thumbPercent = 0,
-      id = 'valueFrom',
+      attr = 'valueFrom',
       isVertical,
       minValue,
       maxValue
@@ -22,7 +22,7 @@ class Thumb extends SliderComponents {
 
     super(root, isVertical);
     this.thumbPercent = thumbPercent;
-    this.thumbId = id;
+    this.thumbAttr = attr;
     this.minValue = minValue;
     this.maxValue = maxValue;
 
@@ -34,7 +34,7 @@ class Thumb extends SliderComponents {
 
   private init(): void {
     this.thumbElement = this.createThumb();
-    this.thumbElement.id = this.thumbId;
+    this.thumbElement.setAttribute('data-thumb-attr', this.thumbAttr);
     this.thumbElement.tabIndex = 1;
     this.root.append(this.thumbElement);
     this.setPosition(this.thumbPercent);
@@ -56,8 +56,8 @@ class Thumb extends SliderComponents {
     return this.thumbElement;
   }
 
-  public getThumbId(): ThumbId {
-    return this.thumbId;
+  public getThumbAttr(): ThumbAttr {
+    return this.thumbAttr;
   }
 
   private addListeners(): void {
@@ -82,16 +82,16 @@ class Thumb extends SliderComponents {
 
   private checkZInd(): void {
     if (this.thumbElement === undefined) return;
-    if (this.thumbId === 'valueFrom' && this.thumbPercent === 100) {
+    if (this.thumbAttr === 'valueFrom' && this.thumbPercent === 100) {
       this.thumbElement.style.zIndex = '10';
     }
-    if (this.thumbId === 'valueFrom' && this.thumbPercent < 100) {
+    if (this.thumbAttr === 'valueFrom' && this.thumbPercent < 100) {
       this.thumbElement.style.zIndex = '5';
     }
-    if (this.thumbId === 'valueTo' && this.thumbPercent === 0) {
+    if (this.thumbAttr === 'valueTo' && this.thumbPercent === 0) {
       this.thumbElement.style.zIndex = '10';
     }
-    if (this.thumbId === 'valueTo' && this.thumbPercent > 0) {
+    if (this.thumbAttr === 'valueTo' && this.thumbPercent > 0) {
       this.thumbElement.style.zIndex = '5';
     }
   }
@@ -102,7 +102,7 @@ class Thumb extends SliderComponents {
     const sizeElement = this.thumbElement.getBoundingClientRect()[this.startPoint];
     this.moved = e.touches[0][this.direction] - (sizeElement
       + (this.thumbElement.getBoundingClientRect()[this.size] / 2));
-    super.performTouchMove(this.moved, this.thumbId);
+    super.performTouchMove(this.moved, this.thumbAttr);
   }
 
   private handleThumbPointerDown(e: PointerEvent): void {
@@ -111,7 +111,7 @@ class Thumb extends SliderComponents {
     this.moved = e[this.direction] - (this.thumbElement.getBoundingClientRect()[this.startPoint]
       + (this.thumbElement.getBoundingClientRect()[this.size] / 2));
     this.checkZInd();
-    super.performPointerMove(this.moved, this.thumbId);
+    super.performPointerMove(this.moved, this.thumbAttr);
   }
 
   private handleThumbKeyDown(e: KeyboardEvent): void {
@@ -120,11 +120,11 @@ class Thumb extends SliderComponents {
     const { key } = e;
     if (key === 'ArrowLeft' || key === 'ArrowUp' || key === 'ArrowRight' || key === 'ArrowDown') e.preventDefault();
     if ((key === 'ArrowLeft' && !this.isVertical) || (key === 'ArrowUp' && this.isVertical)) {
-      super.performKeyDown('decrement', this.thumbId);
+      super.performKeyDown('decrement', this.thumbAttr);
     }
 
     if ((key === 'ArrowRight' && !this.isVertical) || (key === 'ArrowDown' && this.isVertical)) {
-      super.performKeyDown('increment', this.thumbId);
+      super.performKeyDown('increment', this.thumbAttr);
     }
   }
 }

@@ -14,13 +14,15 @@ class Scale extends SliderComponents {
   }
 
   public getScale(): HTMLDivElement {
-    if (!this.scale) this.scale = SliderComponents.createElement('plugin-slider__scale');
+    if (!this.scale) {
+      this.scale = SliderComponents.createElement('plugin-slider__scale');
+    }
     return this.scale;
   }
 
   private init(): void {
-    if (this.isVertical) this.scale.classList.add('plugin-slider__scale_vertical');
-    if (!this.isVertical) this.scale.classList.add('plugin-slider__scale_horizontal');
+    const scaleClass = this.isVertical ? 'plugin-slider__scale_vertical' : 'plugin-slider__scale_horizontal';
+    this.scale.classList.add(scaleClass);
     this.addScale();
     this.addListeners();
   }
@@ -34,16 +36,19 @@ class Scale extends SliderComponents {
   }
 
   private handleScalePointerDown(e: PointerEvent): void {
-    const { target } = e;
-    if (!(target as Element).closest('.plugin-slider__scale')) return;
-    if ((target as Element).classList.contains('plugin-slider__mark-value')) return;
+    const target = e.target as Element;
 
-    const scaleSize = this.scale.getBoundingClientRect()[this.size];
+    if (!target.closest('.plugin-slider__scale') || target.classList.contains('plugin-slider__mark-value')) {
+      return;
+    }
 
-    const scaleStart = this.scale.getBoundingClientRect()[this.startPoint];
+    const scaleRect = this.scale.getBoundingClientRect();
+    const scaleSize = scaleRect[this.size];
+    const scaleStart = scaleRect[this.startPoint];
     const coordsMove = e[this.direction] - scaleStart;
 
     if (coordsMove > scaleSize || coordsMove < 0) return;
+
     this.emitData(coordsMove, scaleSize);
   }
 

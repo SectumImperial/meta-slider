@@ -1,7 +1,7 @@
 import {
   ModelOptions,
   ModelValue,
-  ThumbId,
+  ThumbAttr,
 } from '@src/components/Interfaces';
 
 class Model {
@@ -19,15 +19,15 @@ class Model {
     return this.state;
   }
 
-  public handleSliderClick = (clickPos: number, thumb: ThumbId): void => {
+  public handleSliderClick = (clickPos: number, thumb: ThumbAttr): void => {
     const valueThumbObject = this.findSuitablePercent(clickPos);
     this.updateStateMove(valueThumbObject.value, thumb);
   };
 
-  public handleMouseMove = (movedTo: number, thumb: ThumbId): void => {
+  public handleMouseMove = (movedTo: number, thumb: ThumbAttr): void => {
     const valueThumbObject = this.findPercent(movedTo, thumb);
     const { value } = valueThumbObject;
-    if (value !== undefined) this.updateStateMove(value, thumb);
+    if (value !== undefined && typeof value === 'number') this.updateStateMove(value, thumb);
   };
 
   public getValue = (val: ModelValue): number | undefined | boolean => {
@@ -58,15 +58,22 @@ class Model {
     };
   }
 
-  private findPercent(percentMove: number, thumb: ThumbId) {
+  private findPercent(percentMove: number, thumb: ThumbAttr) {
     const { min, max, step, isRange } = this.state;
     const percentValue = thumb === 'valueFrom' ? 'thumbPercentFrom' : 'thumbPercentTo';
   
     let currentPercent = this.state[percentValue];
-    let currentValue = this.state[thumb];
-  
+    let currentValue = this.state[thumb as keyof ModelOptions];
+
     if (currentValue === undefined) currentValue = min;
-    if (currentPercent === undefined) currentPercent = (currentValue - min) / (max - min) * 100;
+    if (currentPercent === undefined) {
+      if (typeof currentValue === 'number') {
+        if (currentPercent === undefined) currentPercent = (currentValue - min) / (max - min) * 100;
+      } else {
+        currentValue = min;
+        currentPercent = (currentValue - min) / (max - min) * 100;
+      }
+    }
   
     const nextPercent = currentPercent + (100 / this.getStepsCount());
     const prevPercent = currentPercent - (100 / this.getStepsCount());
@@ -88,6 +95,7 @@ class Model {
       : percentMove <= prevPercent ? nearestNextPercent
       : percentMove;
   
+    if(typeof value !== 'number') throw new Error('value should be a number');
     if (thumb === 'valueFrom' && this.state.valueTo !== undefined && value > this.state.valueTo && isRange) {
       const { valueTo, thumbPercentTo } = this.state;
       return {
@@ -114,7 +122,7 @@ class Model {
     return Math.ceil((this.state.max - this.state.min) / this.state.step);
   };
 
-  private updateStateMove = (val: number, thumb: ThumbId): void => {
+  private updateStateMove = (val: number, thumb: ThumbAttr): void => {
     if (Number.isNaN(val) || val < this.state.min || val > this.state.max) {
       throw new Error('Invalid value provided while updating the model.');
     }

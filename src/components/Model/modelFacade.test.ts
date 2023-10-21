@@ -106,7 +106,7 @@ describe('ModelFacade', () => {
       const updateData: ValidSliderData = {
         coordsMove: 6,
         scaleSize: 1076.546875,
-        thumbId: 'valueTo',
+        ThumbAttr: 'valueTo',
       };
       expect(modelFacade.update(updateData)).toBeUndefined();
     });

@@ -34,7 +34,7 @@ interface SliderOptions extends ModelOptions {
 
 type ModelValue = 'min' | 'max' | 'valueFrom' | 'step' | 'valueTo' | 'scaleMarks' | 'scalePercentGap'
   | 'isTip' | 'isProgress' | 'isRange' | 'isVertical';
-type ThumbId = 'valueFrom' | 'valueTo'
+type ThumbAttr = string
 type StartPoint = 'top' | 'left';
 type SizePoint = 'height' | 'width';
 
@@ -45,19 +45,19 @@ const ThumbValPercent = {
 
 interface HandledMoveModel {
   value: number | undefined,
-  thumb: ThumbId,
+  thumb: ThumbAttr,
   percent: number,
 }
 
 interface HandledMoveModelFrom {
   value: number | undefined,
-  thumb: ThumbId,
+  thumb: ThumbAttr,
   percent: number,
 }
 
 interface HandledMoveModelTo {
   value: number | undefined,
-  thumb: ThumbId,
+  thumb: ThumbAttr,
   percent: number,
 }
 
@@ -65,7 +65,7 @@ type KeyEvent = 'decrement' | 'increment';
 
 interface SliderEventValChangedData {
   coordsMove: number,
-  thumbId: ThumbId,
+  ThumbAttr: ThumbAttr,
   isVertical: boolean,
   keyEvent?: KeyEvent,
 }
@@ -73,7 +73,7 @@ interface SliderEventValChangedData {
 interface ValidSliderData {
   coordsMove: number,
   scaleSize: number,
-  thumbId?: ThumbId,
+  ThumbAttr?: ThumbAttr,
   keyEvent?: KeyEvent,
   percent?: number,
   value?: number,
@@ -103,7 +103,7 @@ interface isValueTheSamePos {
   valueAnotherThumb: number | undefined,
   thumbPercent: number | undefined,
   thumb: string,
-  idVal: ThumbId;
+  idVal: ThumbAttr;
 }
 
 type StepsMap = Map<number, number>;
@@ -111,7 +111,7 @@ type StepsMap = Map<number, number>;
 interface ThumbArgs {
   root: HTMLElement,
   thumbPercent: number,
-  id: ThumbId,
+  attr: ThumbAttr,
   isVertical: boolean,
   minValue: number,
   maxValue: number,
@@ -121,7 +121,7 @@ interface ModelSetVal {
   halfMove: number,
   halfStep: number,
   nearStepPercent: number,
-  thumb: ThumbId
+  thumb: ThumbAttr
 }
 
 type MarkValue = number;
@@ -157,7 +157,7 @@ export {
   ModelValue,
   SliderOptions,
   ValidSliderData,
-  ThumbId,
+  ThumbAttr,
   ThumbValPercent,
   HandledMoveModel,
   HandledMoveModelFrom,
