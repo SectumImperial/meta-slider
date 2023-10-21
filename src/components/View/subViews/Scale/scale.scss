@@ -2,22 +2,23 @@
   &__scale {
     position: absolute;
     background: white;
-    width: 1000px;
-   
+
     border-radius: 10px;
 
     cursor: pointer;
 
-    &_vertical {
-      height: 100%;
-      width: 5px;
-      min-height: 100px;
-    };
+    &_orientation {
+      &_vertical {
+        height: 100%;
+        width: 5px;
+        min-height: 100px;
+      }
 
-    &_horizontal {
-      width: 100%;
-      height: 5px;
-      min-width: 100px;
+      &_horizontal {
+        width: 100%;
+        height: 5px;
+        min-width: 100px;
+      }
     }
   }
 }

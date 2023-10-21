@@ -1,4 +1,4 @@
-.plugin-slider {  
+.plugin-slider {
   &__mark {
     position: absolute;
     display: flex;
@@ -48,7 +48,7 @@
     }
 
     &_vertical {
-      transform: translateY(-50%); 
+      transform: translateY(-50%);
     }
   }
 }

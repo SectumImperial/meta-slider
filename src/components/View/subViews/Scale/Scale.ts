@@ -21,7 +21,7 @@ class Scale extends SliderComponents {
   }
 
   private init(): void {
-    const scaleClass = this.isVertical ? 'plugin-slider__scale_vertical' : 'plugin-slider__scale_horizontal';
+    const scaleClass = this.isVertical ? 'plugin-slider__scale_orientation_vertical' : 'plugin-slider__scale_orientation_horizontal';
     this.scale.classList.add(scaleClass);
     this.addScale();
     this.addListeners();
