@@ -3,34 +3,38 @@ import { ModelInputState, ModelValue } from '@src/components/Interfaces';
 import '../src/slider';
 import './styles.scss';
 
+interface IDomElements {
+  root: Element;
+  indicator: Element | null;
+  form?: Element | null;
+  content?: Element | null;
+  thumb?: Element | null;
+}
+
+interface IBooleanVariables {
+  range: boolean;
+  marks: boolean;
+  tip: boolean;
+  progress: boolean;
+  vertical: boolean;
+}
+
+interface INumericVariables {
+  min: number;
+  max: number;
+  step: number;
+  from: number | null;
+  to?: number | null;
+}
+
 class DemoSlider {
-  private dom: {
-    root: Element;
-    indicator: Element | null;
-    form?: Element | null;
-    content?: Element | null;
-    thumb?: Element | null;
-  };
-
-  private booleanVariables: {
-    range: boolean;
-    marks: boolean;
-    tip: boolean;
-    progress: boolean;
-    vertical: boolean;
-  };
-
-  private numericVariables: {
-    min: number;
-    max: number;
-    step: number;
-    from: number | null;
-    to?: number | null;
-  };
 
   private mapElements: Map<string, ModelValue> | undefined;
   private slider: import('../src/components/Presenter/Presenter').default | undefined;
   private formValues: Map<string, string>;
+  private dom: IDomElements;
+  private booleanVariables: IBooleanVariables;
+  private numericVariables: INumericVariables;
 
   constructor(root: Element) {
     this.dom = {
@@ -40,7 +44,7 @@ class DemoSlider {
       content: null,
       thumb: null,
     };
-
+  
     this.numericVariables = {
       min: 0,
       max: 10,
@@ -48,7 +52,7 @@ class DemoSlider {
       from: 1,
       to: null,
     };
-
+  
     this.booleanVariables = {
       range: false,
       marks: false,
@@ -56,6 +60,9 @@ class DemoSlider {
       progress: false,
       vertical: false,
     };
+  
+    this.formValues = new Map<string, string>();
+
 
     this.handleItemChange = this.handleItemChange.bind(this);
     this.handleContentPointerDown = this.handleContentPointerDown.bind(this);
@@ -63,11 +70,10 @@ class DemoSlider {
     this.handleThumbKeyPress = this.handleThumbKeyPress.bind(this);
     this.handleThumbTouchMove = this.handleThumbTouchMove.bind(this);
     this.handleFormChange = this.handleFormChange.bind(this);
+  
     this.init();
-
-    this.formValues = DemoSlider.getFormValues(this.dom.form as HTMLFormElement);
   }
-
+  
   public init() {
     this.findElements();
     this.createSlider(this.getSliderOptions());
